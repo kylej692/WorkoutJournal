@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, FlatList, Alert} from 'react-native';
 import Header from './components/Header';
 import ListItem from './components/ListItem';
 import AddItem from './components/AddItem';
+import AddLogButton from './components/AddLogButton';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
@@ -38,6 +39,9 @@ const App = () => {
         data={items} 
         renderItem={({item}) => <ListItem item={item} deleteItem={deleteItem} />}
       />
+      <View style={styles.button}>
+        <AddLogButton />
+      </View>
     </View>
   );
 };
@@ -45,6 +49,11 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 4, 
+    right: 1,
   },
 });
 
