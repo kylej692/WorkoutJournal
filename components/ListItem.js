@@ -1,34 +1,38 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { Container, Header, Content, Card, CardItem, Text, Body } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 
-const ListItem = ({ item, deleteItem }) => {
-  return (
-    <TouchableOpacity style={styles.listItem}>
-        <View style={styles.listItemView}>
-            <Text style={styles.listItemText}>{item.text}</Text>
-            <Icon name="closecircle" size={20} color="firebrick" 
-            onPress={() => deleteItem(item.id)}/>
-        </View>
-    </TouchableOpacity>
-  );
-};
+const LogEntry = ({ item, deleteItem }) => {
+    var today = new Date();
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    var date = (months[today.getMonth()])+' '+today.getDate()+', '+today.getFullYear();
+    var count = 0;
+    return (
+            <Content padder>
+                <Header style={{ backgroundColor: "#AB96FF" }}><Text>{date}</Text></Header>
+                    {item.workouts.map((workout) => {
+                        return (
+                            <Card>
+                                <CardItem header bordered>
+                                    <Text>{workout.name}</Text>
+                                </CardItem>
+                                    {workout.sets.map((set) => {
+                                        return (
+                                        <CardItem bordered>
+                                            <Body>
+                                                <Text>
+                                                    {"Reps: " + set.reps + "     " + "Weight: " + set.weight}
+                                                </Text>
+                                            </Body>
+                                        </CardItem>
+                                        )})
+                                    }
+                            </Card>
+                            )
+                        })
+                    }
+            </Content>
+    );
+}
 
-const styles = StyleSheet.create({
-    listItem: {
-        padding: 15,
-        backgroundColor: '#f8f8f8',
-        borderBottomWidth: 1,
-        borderColor: '#eee'
-    },
-    listItemView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    listItemText: {
-        fontSize: 18
-    }
-});
-
-export default ListItem;
+export default LogEntry;

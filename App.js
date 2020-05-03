@@ -8,10 +8,9 @@ import { uuid } from 'uuidv4';
 
 const App = () => {
   const [items, setItems] = useState([
-    {id: uuid(), text: 'Bench Press'},
-    {id: uuid(), text: 'Squats'},
-    {id: uuid(), text: 'Deadlift'},
-    {id: uuid(), text: 'Overhead Press'}
+    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}, {name: 'Inclined Bench Press', sets: [{reps: 10, weight: 35}, {reps: 10, weight: 35}]}]},
+    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}]},
+    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}]}]}
   ]);
 
   const deleteItem = (id) => {
