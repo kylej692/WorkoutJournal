@@ -7,25 +7,28 @@ const LogEntry = ({ item, deleteItem }) => {
             <Content padder>
                 <Header style={{ height: 30, alignItems: "center", flexDirection: "row", backgroundColor: "#C1C1C1" }}>
                     <Text style={{ fontSize: 17, marginRight: "auto" }}>{item.time.date + "    "}</Text>
-                    <Text style={{ fontSize: 15 }}>{item.time.start + "-" + item.time.end}</Text>
+                    <Text style={{ fontSize: 13 }}>{item.time.start + "-" + item.time.end}</Text>
                 </Header>
                 {item.workouts.map((workout) => {
                     count = 0;
                     return (
                         <Card>
-                            <CardItem header bordered style={{ height: 40 }}>
-                                <Text style={{ color:"black", fontWeight: "bold" }}>{workout.name}</Text>
+                            <CardItem header bordered style={{ height: 45, borderBottomWidth: 1, borderColor: "black" }}>
+                                <Text style={{ color:"black", fontWeight: "bold", fontSize: 19 }}>{workout.name}</Text>
                             </CardItem>
+                            <CardItem bordered style={{ height: 40, borderBottomWidth: 1, borderColor: "black" }}>
+                                <Text style={{ color:"black" }}>{"Set"}</Text>
+                                <Text style={{ color:"black", marginLeft: 130 }}>{"Reps"}</Text>
+                                <Text style={{ color:"black", marginLeft: "auto" }}>{"Weight"}</Text>
+                            </CardItem>                            
                                 {workout.sets.map((set) => {
                                     count += 1;
                                     return (
                                     <CardItem bordered style={{ height: 40 }}>
                                         <Body style={{ flexDirection:"row" }}>
-                                            <Text style={{ fontWeight: "bold" }}>{"Set " + count + "    "}</Text>
-                                            <Text>
-                                                {"Reps: " + set.reps + "    " + "Weight: " + set.weight}
-                                            </Text>
-                                                
+                                            <Text>{count}</Text>
+                                            <Text style={{ marginLeft: "auto" }}>{set.reps}</Text>
+                                            <Text style={{ marginLeft: "auto" }}>{set.weight}</Text>
                                         </Body>
                                     </CardItem>
                                     )})
