@@ -8,9 +8,9 @@ import { uuid } from 'uuidv4';
 
 const App = () => {
   const [items, setItems] = useState([
-    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}, {name: 'Inclined Bench Press', sets: [{reps: 10, weight: 35}, {reps: 10, weight: 35}]}]},
-    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}]},
-    {id: uuid(), workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}]}]}
+    {id: uuid(), time: {date: "May 2, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}, {name: 'Inclined Bench Press', sets: [{reps: 10, weight: 35}, {reps: 10, weight: 35}]}]},
+    {id: uuid(), time: {date: "May 4, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}]},
+    {id: uuid(), time: {date: "May 6, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}]}]}
   ]);
 
   const deleteItem = (id) => {
@@ -21,7 +21,7 @@ const App = () => {
 
   const addItem = (text) => {
     if(!text) {
-      Alert.alert('Please enter a workout!')
+      Alert.alert("Please enter a workout!")
     } else {
       setItems(prevItems => {
         return [{id: uuid(), text}, ...prevItems];
