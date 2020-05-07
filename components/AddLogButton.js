@@ -22,7 +22,7 @@ const AddLogButton = ({ addLog }) => {
           
           <View style = {styles.modal}>
             <TextInput placeholder="Add Workout..." style={styles.input} onChangeText={onChange} />
-                <TouchableOpacity style={styles.button} onPress={() => { addLog(text), toggleModal(!modalVisible)}}>
+                <TouchableOpacity style={styles.button} onPress={() => { addLog(text), toggleModal(!modalVisible), onChange('')}}>
                 <Text><Icon name="pluscircle" size={20} />Add</Text>
             </TouchableOpacity>
           </View>
