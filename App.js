@@ -40,7 +40,7 @@ const App = () => {
         renderItem={({item}) => <ListItem item={item} deleteItem={deleteItem} />}
       />
       <View style={styles.button}>
-        <AddLogButton />
+        <AddLogButton addLog={addItem}/>
       </View>
     </View>
   );
