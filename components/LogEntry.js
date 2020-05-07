@@ -12,7 +12,7 @@ const LogEntry = ({ item, deleteItem }) => {
                 {item.workouts.map((workout) => {
                     count = 0;
                     return (
-                        <Card>
+                        <Card key={workout.id}>
                             <CardItem header bordered style={{ height: 45, borderBottomWidth: 1, borderColor: "black" }}>
                                 <Text style={{ color:"black", fontWeight: "bold", fontSize: 19 }}>{workout.name}</Text>
                             </CardItem>
@@ -24,7 +24,7 @@ const LogEntry = ({ item, deleteItem }) => {
                                 {workout.sets.map((set) => {
                                     count += 1;
                                     return (
-                                    <CardItem bordered style={{ height: 40 }}>
+                                    <CardItem bordered style={{ height: 40 }} key={set.id}>
                                         <Body style={{ flexDirection:"row" }}>
                                             <Text>{count}</Text>
                                             <Text style={{ marginLeft: "auto" }}>{set.reps}</Text>

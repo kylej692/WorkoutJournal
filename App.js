@@ -8,9 +8,9 @@ import { uuid } from 'uuidv4';
 
 const App = () => {
   const [items, setItems] = useState([
-    {id: uuid(), time: {date: "May 2, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}, {name: 'Inclined Bench Press', sets: [{reps: 10, weight: 35}, {reps: 10, weight: 35}]}]},
-    {id: uuid(), time: {date: "May 4, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}, {reps: 6, weight: 35}]}]},
-    {id: uuid(), time: {date: "May 6, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{name: 'Bench Press', sets: [{reps: 10, weight: 20}, {reps: 8, weight: 30}]}]}
+    {id: uuid(), time: {date: "May 2, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), reps: 10, weight: 20}, {id: uuid(), reps: 8, weight: 30}, {id: uuid(), reps: 6, weight: 35}]}, {id: uuid(), name: 'Inclined Bench Press', sets: [{id: uuid(), reps: 10, weight: 35}, {id: uuid(), reps: 10, weight: 35}]}]},
+    {id: uuid(), time: {date: "May 4, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), reps: 10, weight: 20}, {id: uuid(), reps: 8, weight: 30}, {id: uuid(), reps: 6, weight: 35}]}]},
+    {id: uuid(), time: {date: "May 6, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), reps: 10, weight: 20}, {id: uuid(), reps: 8, weight: 30}]}]}
   ]);
 
   const deleteItem = (id) => {
