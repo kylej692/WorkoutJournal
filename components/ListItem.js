@@ -5,9 +5,9 @@ const LogEntry = ({ item, deleteItem }) => {
     var count = 0;
     return (
             <Content padder>
-                <Header style={{ height: 30, alignItems: "center", flexDirection: "row", backgroundColor: "#C1C1C1" }}>
-                    <Text style={{ fontSize: 17, marginRight: "auto" }}>{item.time.date + "    "}</Text>
-                    <Text style={{ fontSize: 13 }}>{item.time.start + "-" + item.time.end}</Text>
+                <Header style={{ height: 30, alignItems: "center", flexDirection: "row", backgroundColor: "#2C95FF" }}>
+                    <Text style={{ fontSize: 17, marginRight: "auto", color: "white" }}>{item.time.date + "    "}</Text>
+                    <Text style={{ fontSize: 13, color: "white" }}>{item.time.start + "-" + item.time.end}</Text>
                 </Header>
                 {item.workouts.map((workout) => {
                     count = 0;
