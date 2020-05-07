@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, FlatList, Alert} from 'react-native';
 import Header from './components/Header';
-import ListItem from './components/ListItem';
+import LogEntry from './components/LogEntry';
 import AddItem from './components/AddItem';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
@@ -35,7 +35,7 @@ const App = () => {
       <AddItem addItem={addItem} />
       <FlatList 
         data={items} 
-        renderItem={({item}) => <ListItem item={item} deleteItem={deleteItem} />}
+        renderItem={({item}) => <LogEntry item={item} deleteItem={deleteItem} />}
       />
     </View>
   );
