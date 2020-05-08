@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Button } from 'native-base';
-import { Modal, Text, TouchableHighlight, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 
 const AddLogButton = ({ addLog }) => {
@@ -22,12 +22,12 @@ const AddLogButton = ({ addLog }) => {
           
           <View style = {styles.modal}>
             <TextInput placeholder="Add Workout..." style={styles.input} onChangeText={onChange} />
-                <TouchableOpacity style={styles.button} onPress={() => { addLog(text), toggleModal(!modalVisible), onChange('') }}>
-                <Text><Icon name="pluscircle" size={20} />Add</Text>
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible), onChange('') }}>
-                <Text><Icon name="closecircle" size={20} />Cancel</Text>
-               </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => { addLog(text), toggleModal(!modalVisible), onChange('') }}>
+               <Text><Icon name="pluscircle" size={20} />Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible), onChange('') }}>
+               <Text><Icon name="closecircle" size={20} />Cancel</Text>
+            </TouchableOpacity>
           </View>
        </Modal>
        
