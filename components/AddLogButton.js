@@ -23,16 +23,16 @@ const AddLogButton = ({ addLog }) => {
           <View style = {styles.modal}>
             <TextInput placeholder="Add Workout..." style={styles.input} onChangeText={onChange} />
             <TouchableOpacity style={styles.button} onPress={() => { addLog(text), toggleModal(!modalVisible), onChange('') }}>
-               <Text><Icon name="pluscircle" size={20} />Add</Text>
+               <Text style={{ fontSize: 20 }}><Icon name="pluscircle" size={25} />Add</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible), onChange('') }}>
-               <Text><Icon name="closecircle" size={20} />Cancel</Text>
+               <Text style={{ fontSize: 20 }}><Icon name="closecircle" size={25} />Cancel</Text>
             </TouchableOpacity>
           </View>
        </Modal>
        
-       <Button rounded primary onPress = {() => {toggleModal(true)}}>
-          <Text>Add Log</Text>
+       <Button style={ styles.add } bordered primary onPress = {() => {toggleModal(true)}}>
+          <Text style={styles.text}>Add</Text>
        </Button>
     </View>
  );
@@ -59,13 +59,20 @@ const styles = StyleSheet.create ({
     bottom: 10, 
     right: 10,
   },
+  add: {
+   backgroundColor: "#2C95FF",
+   width: 70,
+   height: 35,
+   borderColor: "white",
+   justifyContent: "center",
+  },
   cancel: {
    position: 'absolute',
    bottom: 10, 
    left: 10,
   },
   text: {
-     color: '#3f2949',
-     marginTop: 10
+     color: '#fff',
+     fontSize: 20,
   }
 })

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, FlatList, Alert} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert} from 'react-native';
 import Header from './components/Header';
 import LogEntry from './components/LogEntry';
 import AddLogButton from './components/AddLogButton';
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    bottom: 4, 
-    right: 1,
+    top: 12, 
+    right: 5,
   },
 });
 
