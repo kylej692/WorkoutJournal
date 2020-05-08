@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Header, Content, Card, CardItem, Text, Body } from 'native-base';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
@@ -7,11 +7,13 @@ import ModifyLog from '../components/ModifyLog';
 const LogEntry = ({ item, deleteItem }) => {
     var count = 0;
 
-    const [isModalVisible, setModalVisible] = useState(true);
-  
-    const toggleModal = () => {
-      setModalVisible(!isModalVisible);
-    };
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedWorkout, setWorkout] = useState({});
+    
+    const toggleModal = (workout) => {
+        setModalVisible(!isModalVisible);
+        setWorkout(workout)
+    }
 
     return (
             <Content padder>
@@ -23,8 +25,10 @@ const LogEntry = ({ item, deleteItem }) => {
                     count = 0;
                     return (
                         <Card key={workout.id}>
-                            <CardItem header bordered style={{ height: 45, borderBottomWidth: 1, borderColor: "black" }}>
-                                <TouchableOpacity onPress={toggleModal}>
+                            <CardItem header bordered style={{ height: 45, borderBottomWidth: 1, borderColor: "black" }}>  
+                                <TouchableOpacity onPress={() => {
+                                    toggleModal(workout);
+                                }}>
                                     <Text style={{ color:"black", fontWeight: "bold", fontSize: 19 }}>{workout.name}</Text>
                                 </TouchableOpacity>
                             </CardItem>
@@ -45,13 +49,14 @@ const LogEntry = ({ item, deleteItem }) => {
                                 </CardItem>
                                 )})
                             }
-                            <Modal isVisible={ isModalVisible } style={{ backgroundColor: "white", height: 50, flex: 1, alignItems: "center", padding: 100 }}>
-                                <View style={{flex: 1}}>
-                                    <ModifyLog />
-                                    <Button title="Delete" onPress={toggleModal}/>
-                                    <Button title="Cancel" onPress={toggleModal}/>
-                                </View>
-                            </Modal>  
+                            <Modal isVisible={ isModalVisible } style={{ backgroundColor: "white", height: 50, alignItems: "center" }}>
+                                <ModifyLog workout={selectedWorkout} />
+                                <TouchableOpacity style={{ padding: 10 }} onPress={() => {
+                                    deleteItem(selectedWorkout.id)}}>
+                                    <Text style={{ color: "red" }}>Delete</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ padding: 10 }} onPress={toggleModal}><Text>Cancel</Text></TouchableOpacity>
+                            </Modal>
                         </Card>
                         )
                     })

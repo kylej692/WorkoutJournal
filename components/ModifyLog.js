@@ -2,10 +2,10 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import { Content } from 'native-base';
 
-const ModifyLog = () => {
+const ModifyLog = ({ workout }) => {
     return (
-            <Content padder>
-                <Text>{"hi!"}</Text>
+            <Content style={{ width: 370, backgroundColor: "grey" }}>
+                <Text>{workout.name}</Text>
             </Content>
     );
 }
