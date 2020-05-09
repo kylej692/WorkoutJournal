@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Header, Content, Card, CardItem, Text, Body } from 'native-base';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
+import Icon from 'react-native-vector-icons/dist/AntDesign';
 
 const LogEntry = ({ item, deleteItem }) => {
     var count = 0;
@@ -17,45 +18,46 @@ const LogEntry = ({ item, deleteItem }) => {
 
     return (
             <Content padder>
-                <Header style={{ height: 30, alignItems: "center", flexDirection: "row", backgroundColor: "#2C95FF" }}>
-                    <Text style={{ fontSize: 17, marginRight: "auto", color: "white" }}>{item.time.date + "    "}</Text>
-                    <Text style={{ fontSize: 13, color: "white" }}>{item.time.start + "-" + item.time.end}</Text>
+                <Header style={styles.dateHeader}>
+                    <Text style={styles.dateText}>{item.time.date + "    "}</Text>
+                    <Text style={styles.timeText}>{item.time.start + "-" + item.time.end}</Text>
                 </Header>
                 {item.workouts.map((workout) => {
                     count = 0;
                     return (
                         <Card key={workout.id}>
-                            <CardItem header bordered style={{ height: 45, borderBottomWidth: 1, borderColor: "black" }}>  
+                            <CardItem header bordered style={styles.cardHeader}>  
                                 <TouchableOpacity onPress={() => {
                                     toggleModal(workout);
                                 }}>
-                                    <Text style={{ color:"black", fontWeight: "bold", fontSize: 19 }}>{workout.name}</Text>
+                                    <Text style={styles.workoutName}>{workout.name}</Text>
                                 </TouchableOpacity>
                             </CardItem>
-                            <CardItem bordered style={{ height: 40, borderBottomWidth: 1, borderColor: "black" }}>
-                                <Text style={{ color:"black" }}>{"Set"}</Text>
-                                <Text style={{ color:"black", marginLeft: 130 }}>{"Reps"}</Text>
-                                <Text style={{ color:"black", marginLeft: "auto" }}>{"Weight"}</Text>
+                            <CardItem bordered style={styles.cardLabelContainer}>
+                                <Text>{"Set"}</Text>
+                                <Text style={styles.cardText}>{"Reps"}</Text>
+                                <Text style={styles.cardText}>{"Weight"}</Text>
                             </CardItem>                            
                             {workout.sets.map((set) => {
                                 count += 1;
                                 return (
-                                <CardItem bordered style={{ height: 40 }} key={set.id}>
-                                    <Body style={{ flexDirection:"row" }}>
+                                <CardItem bordered style={styles.cardInfoContainer} key={set.id}>
+                                    <Body style={styles.cardBody}>
                                         <Text>{count}</Text>
-                                        <Text style={{ marginLeft: "auto" }}>{set.reps}</Text>
-                                        <Text style={{ marginLeft: "auto" }}>{set.weight}</Text>
+                                        <Text style={styles.cardText}>{set.reps}</Text>
+                                        <Text style={styles.cardText}>{set.weight}</Text>
                                     </Body>
                                 </CardItem>
                                 )})
                             }
-                            <Modal isVisible={ isModalVisible } style={{ backgroundColor: "white", height: 50, alignItems: "center" }}>
+                            <Modal scrollOffset={0} onRequestClose={() => {setModalVisible(!isModalVisible)}} isVisible={ isModalVisible } style={styles.modal}>
                                 <ModifyLog workout={selectedWorkout} />
-                                <TouchableOpacity style={{ padding: 10 }} onPress={() => {
-                                    deleteItem(selectedWorkout.id)}}>
-                                    <Text style={{ color: "red" }}>Delete</Text>
+                                <TouchableOpacity style={styles.deleteBtn} onPress={() => {
+                                    deleteItem(selectedWorkout.id), 
+                                    setModalVisible(!isModalVisible)}}>
+                                    <Icon style={styles.deleteIcon} name="delete" size={20} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{ padding: 10 }} onPress={toggleModal}><Text>Cancel</Text></TouchableOpacity>
+                                <TouchableOpacity style={styles.cancelBtn} onPress={() => {setModalVisible(!isModalVisible)}}><Text>Cancel</Text></TouchableOpacity>
                             </Modal>
                         </Card>
                         )
@@ -64,5 +66,65 @@ const LogEntry = ({ item, deleteItem }) => {
             </Content>
     );
 }
+
+const styles = StyleSheet.create({
+    dateText: { 
+        fontSize: 17, 
+        marginRight: "auto", 
+        color: "white" 
+    },
+    timeText: { 
+        fontSize: 13, 
+        color: "white" 
+    },
+    dateHeader: {
+        height: 30, 
+        alignItems: "center", 
+        flexDirection: "row", 
+        backgroundColor: "#2C95FF"
+    },
+    cardHeader: {
+        height: 45, 
+        borderBottomWidth: 1, 
+        borderColor: "black"
+    },
+    workoutName: {
+        color:"black", 
+        fontWeight: "bold", 
+        fontSize: 19
+    },
+    cardLabel: { 
+        height: 40, 
+        borderBottomWidth: 1, 
+        borderColor: "black" 
+    },
+    cardText: {
+        marginLeft: "auto",
+    },
+    cardBody: { 
+        flexDirection:"row" 
+    },
+    cardInfoContainer: { 
+        height: 40 
+    },
+    modal: { 
+        backgroundColor: "white", 
+        height: 50, 
+        alignItems: "center"
+    },
+    deleteBtn: { 
+        position: 'absolute', 
+        bottom: 10, 
+        right: 10 
+    },
+    deleteIcon: { 
+        color: "red" 
+    },
+    cancelBtn: { 
+        position: 'absolute', 
+        bottom: 10, 
+        left: 10 
+    }
+  });
 
 export default LogEntry;
