@@ -4,10 +4,8 @@ import { Content, Text } from 'native-base';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 
-//{id: uuid(), name: 'Pull-ups', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}], notes: ""}
-
-const ModifyLog = ({ workout, modifyWorkout, deleteItem, setModalVisible }) => {
-
+const ModifyLog = ({ workout, modifyWorkout, deleteItem, setInfoModalVisible }) => {
+    
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const [newWorkout, setNewWorkout] = useState(JSON.parse(JSON.stringify(workout)))
@@ -34,7 +32,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteItem, setModalVisible }) => {
 
     return (
         <View>
-            <Header title="Edit" />
+            <Header title="Edit Log" />
             <Content padder>
                 <View style={styles.nameView}>                  
                     <Text style={styles.name}>Name</Text>
@@ -58,10 +56,10 @@ const ModifyLog = ({ workout, modifyWorkout, deleteItem, setModalVisible }) => {
             </Content>
             <TouchableOpacity style={styles.deleteBtn} onPress={() => {
                                     deleteItem(workout.id), 
-                                    setModalVisible(false)}}>
+                                    setInfoModalVisible(false)}}>
                 <Icon style={styles.deleteIcon} name="delete" size={20} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.doneBtn} onPress={() => {setModalVisible(false), modifyWorkout(newWorkout)}}><Text style={styles.doneText}>Done</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.doneBtn} onPress={() => {setInfoModalVisible(false), modifyWorkout(newWorkout)}}><Text style={styles.doneText}>Done</Text></TouchableOpacity>
         </View>
     );
 }
