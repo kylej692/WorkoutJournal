@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Header, Content, Card, CardItem, Text, Body } from 'native-base';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
-import Icon from 'react-native-vector-icons/dist/AntDesign';
 
-const LogEntry = ({ item, deleteItem }) => {
+const LogEntry = ({ item, deleteItem, modifyWorkout }) => {
     var count = 0;
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedWorkout, setWorkout] = useState({});
-    
+
     const toggleModal = (workout) => {
         setModalVisible(!isModalVisible);
         setWorkout(workout)
     }
 
     return (
-            <Content padder>
+            <View>
                 <Header style={styles.dateHeader}>
                     <Text style={styles.dateText}>{item.time.date + "    "}</Text>
                     <Text style={styles.timeText}>{item.time.start + "-" + item.time.end}</Text>
                 </Header>
                 {item.workouts.map((workout) => {
-                    count = 0;
                     return (
                         <Card key={workout.id}>
                             <CardItem header bordered style={styles.cardHeader}>  
@@ -43,27 +41,21 @@ const LogEntry = ({ item, deleteItem }) => {
                                 return (
                                 <CardItem bordered style={styles.cardInfoContainer} key={set.id}>
                                     <Body style={styles.cardBody}>
-                                        <Text>{count}</Text>
+                                        <Text>{set.num}</Text>
                                         <Text style={styles.cardText}>{set.reps}</Text>
                                         <Text style={styles.cardText}>{set.weight}</Text>
                                     </Body>
                                 </CardItem>
                                 )})
                             }
-                            <Modal scrollOffset={0} onRequestClose={() => {setModalVisible(!isModalVisible)}} isVisible={ isModalVisible } style={styles.modal}>
-                                <ModifyLog workout={selectedWorkout} />
-                                <TouchableOpacity style={styles.deleteBtn} onPress={() => {
-                                    deleteItem(selectedWorkout.id), 
-                                    setModalVisible(!isModalVisible)}}>
-                                    <Icon style={styles.deleteIcon} name="delete" size={20} />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.cancelBtn} onPress={() => {setModalVisible(!isModalVisible)}}><Text>Cancel</Text></TouchableOpacity>
-                            </Modal>
                         </Card>
                         )
                     })
                 }
-            </Content>
+                <Modal onRequestClose={() => {setModalVisible(!isModalVisible)}} isVisible={ isModalVisible } style={styles.modal}>
+                    <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteItem={deleteItem} setModalVisible={setModalVisible}/>
+                </Modal>
+            </View>
     );
 }
 
@@ -80,7 +72,6 @@ const styles = StyleSheet.create({
     dateHeader: {
         height: 30, 
         alignItems: "center", 
-        flexDirection: "row", 
         backgroundColor: "#2C95FF"
     },
     cardHeader: {
@@ -111,19 +102,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white", 
         height: 50, 
         alignItems: "center"
-    },
-    deleteBtn: { 
-        position: 'absolute', 
-        bottom: 10, 
-        right: 10 
-    },
-    deleteIcon: { 
-        color: "red" 
-    },
-    cancelBtn: { 
-        position: 'absolute', 
-        bottom: 10, 
-        left: 10 
     }
   });
 
