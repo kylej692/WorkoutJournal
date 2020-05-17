@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Content, Button } from 'native-base';
 import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
@@ -10,7 +10,7 @@ const AddLogButton = ({ addLog }) => {
    const [modalVisible, setModal] = useState(false);
    const defaultLog = {
       id: '',
-      time: '', 
+      time: {}, 
       workouts: [],
    };
    const defaultTime = {
@@ -29,9 +29,9 @@ const AddLogButton = ({ addLog }) => {
       weight: '',
    };
    const [log, setLog] = useState(defaultLog);
-   const[time, setTime] = useState(defaultTime);
-   const[workout, setWorkout] = useState(defaultWorkout);
-   const[set, setSet] = useState(defaultSet);
+   const [time, setTime] = useState(defaultTime);
+   const [workout, setWorkout] = useState(defaultWorkout);
+   const [set, setSet] = useState(defaultSet);
 
    //Handles attributes for text
    const onChangeID = () => setLog({ id: uuid() });
@@ -40,7 +40,7 @@ const AddLogButton = ({ addLog }) => {
    const emptyWorkout = () => setWorkout({ defaultWorkout });
    const emptyTime = () => setTime({ defaultTime });
    const emptySet = () => setSet({ defaultSet });
-   const onChangeWorkout = (workoutsValue) => setLog(state => ({...state, workouts: [...state.workouts, workoutsValue] }));
+   const onChangeWorkout = (workoutsValue) => setLog(prevState => ({...prevState, workouts: [...prevState.workouts, workoutsValue] }));
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -48,7 +48,7 @@ const AddLogButton = ({ addLog }) => {
    //Handles workouts attribute
    const onChangeWorkoutID = () => setWorkout({...workout, id: uuid()});
    const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
-   const onChangeSet = (setValue) => setWorkout(state => ({...state, sets: [...state.sets, setValue] }));
+   const onChangeSet = (setValue) => setWorkout(prevState => ({...prevState, sets: [...prevState.sets, setValue] }));
    const onChangeSetID = () => setSet({...set, id: uuid()});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
@@ -79,10 +79,10 @@ const AddLogButton = ({ addLog }) => {
                   <TextInput placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
                   <TextInput placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
                   <View style={styles.buttonView}>
-                     <TouchableOpacity style={styles.set} onPress={() => { onChangeSet(set), onChangeSetID }}>
+                     <TouchableOpacity style={styles.set} onPress={() => { onChangeSetID, onChangeSet(set) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
                      </TouchableOpacity>
-                     <TouchableOpacity style={styles.workout} onPress={() => { onChangeWorkout(workout), onChangeWorkoutID }}>
+                     <TouchableOpacity style={styles.workout} onPress={() => { onChangeWorkoutID, onChangeWorkout(workout) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
                      </TouchableOpacity>
                   </View>
