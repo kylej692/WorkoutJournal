@@ -8,14 +8,14 @@ import { uuid } from 'uuidv4';
 
 const App = () => {
   const [items, setItems] = useState([
-    {id: uuid(), time: {date: "May 2, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
+    {id: uuid(), time: {date: "May 02, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}, {id: uuid(), name: 'Inclined Bench Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 35}, {id: uuid(), num: 2, reps: 10, weight: 35}], notes: ""}]},
-    {id: uuid(), time: {date: "May 4, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bicep Curls', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
+    {id: uuid(), time: {date: "May 04, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bicep Curls', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}, {id: uuid(), name: 'Tricep Extensions', sets: [{id: uuid(), num: 1, reps: 12, weight: 25}, {id: uuid(), num: 2, reps: 10, weight: 20}], notes: ""}]},
-    {id: uuid(), time: {date: "May 6, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Overhead Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
+    {id: uuid(), time: {date: "May 06, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Overhead Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}, {id: uuid(), name: 'Military Press', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}]},
-    {id: uuid(), time: {date: "May 8, 2020", start:"1:00pm", end:"2:00pm"}, workouts:[{id: uuid(), name: 'Squats', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
+    {id: uuid(), time: {date: "May 08, 2020", start:"1:00pm", end:"2:00pm"}, workouts:[{id: uuid(), name: 'Squats', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}, {id: uuid(), name: 'Front Squats', sets: [{id: uuid(), num: 1, reps: 10, weight: 20}, {id: uuid(), num: 2, reps: 8, weight: 30}, 
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}]}
   ]);
@@ -56,13 +56,26 @@ const App = () => {
     })
   }
 
+  const modifyDateTime = (itemId, date, start, end) => {
+    setItems(prevItems => {
+      for(var i = 0; i < prevItems.length; i++) {
+        if(prevItems[i].id == itemId) {
+          prevItems[i].time.date = date;
+          prevItems[i].time.start = start;
+          prevItems[i].time.end = end;
+        }
+      }
+      return prevItems;
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
       <Content padder>
-        {items.map((item) => {
+        {[...items].reverse().map((item) => {
           return (
-            <LogEntry item={item} deleteItem={deleteItem} modifyWorkout={modifyWorkout} key={item.id} />
+            <LogEntry item={item} deleteItem={deleteItem} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
           )
         })}
       </Content>

@@ -5,32 +5,28 @@ import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 
-const LogEntry = ({ item, deleteItem, modifyWorkout }) => {
+const LogEntry = ({ item, deleteItem, modifyWorkout, modifyDateTime }) => {
     var count = 0;
 
     const [isInfoModalVisible, setInfoModalVisible] = useState(false);
     const [isDateModalVisible, setDateModalVisible] = useState(false);
     const [selectedWorkout, setWorkout] = useState({});
-    const [selectedDate, setDate] = useState("");
-    const [selectedStart, setStart] = useState("");
-    const [selectedEnd, setEnd] = useState("");
+    const [selectedItem, setItem] = useState({});
 
     const toggleInfoModal = (workout) => {
         setInfoModalVisible(!isInfoModalVisible);
         setWorkout(workout)
     }
 
-    const toggleDateModal = (date, start, end) => {
+    const toggleDateModal = (item) => {
         setDateModalVisible(!isDateModalVisible);
-        setDate(date);
-        setStart(start);
-        setEnd(end);
+        setItem(item);
     }
 
     return (
             <View>
                 <TouchableOpacity style={styles.dateTouchableOpacity} onPress={() => {
-                    toggleDateModal(item.time.date, item.time.start, item.time.end);
+                    toggleDateModal(item);
                 }}>
                     <Header style={styles.dateHeader}>
                         <Text style={styles.dateText}>{item.time.date + "    "}</Text>
@@ -72,7 +68,7 @@ const LogEntry = ({ item, deleteItem, modifyWorkout }) => {
                     <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteItem={deleteItem} setInfoModalVisible={setInfoModalVisible}/>
                 </Modal>
                 <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
-                    <ModifyDate date={selectedDate} start={selectedStart} end={selectedEnd} setDateModalVisible={setDateModalVisible}/>
+                    <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>
                 </Modal>
             </View>
     );
