@@ -10,37 +10,25 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
     const currDay = parseInt(item.time.date.slice(4, 6));
     const currYear = parseInt(item.time.date.slice(8, 12));
 
-    const timeConvertTo24 = (time) => {
-        var newTime = {};
-
-        var hour;
-        var minute;
+    const timeConvertTo12 = (time) => {
+        var hour = parseInt(time.slice(0, 2));
+        var minute = time.slice(3, 5);
         var meridiem;
-
-        if(time.length == 6) {
-            hour = parseInt(time.slice(0, 1));
-            minute = parseInt(time.slice(2, 4));
-            meridiem = time.slice(4, 6);
-        } else {
-            hour = parseInt(time.slice(0, 2));
-            minute = parseInt(time.slice(3, 5));
-            meridiem = time.slice(5, 7);
-        }
         
-        if(meridiem === "pm" && hour < 12) {
-            hour = hour + 12;
-        } else if(meridiem === "am" && hour == 12) {
-            hour = 0;
+        if(hour == 12) {
+            meridiem = "pm";
+        } else if(hour == 0) {
+            hour = 12;
+            meridiem = "am";
+        } else if (hour > 12) {
+            hour = hour - 12;
+            meridiem = "pm";
+        } else {
+            meridiem = "am";
         }
 
-        newTime.minute = minute;
-        newTime.hour = hour;
-
-        return newTime;
+        return hour + ":" + minute + meridiem;
     };
-
-    const currStartHour = timeConvertTo24(item.time.start);
-    const currStartMinute = timeConvertTo24(item.time.start);
     
     const [newDate, setDate] = useState(new Date(currYear, currMonth, currDay));
     const [newDateStr, setDateStr] = useState(item.time.date);
@@ -62,9 +50,9 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
             const timeStr = currentDateTimeStr.slice(16, 21);
             if(mode === "time") {
                 if (isStart) {
-                    setStart(timeStr);
+                    setStart(timeConvertTo12(timeStr));
                 } else {
-                    setEnd(timeStr);
+                    setEnd(timeConvertTo12(timeStr));
                 }
             }
             setDate(currentDate);
