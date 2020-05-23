@@ -20,6 +20,58 @@ const App = () => {
       {id: uuid(), num: 3, reps: 6, weight: 35}], notes: ""}]}
   ]);
 
+  const sortItems = (items) => {
+    const sorted = [...items].sort((a, b) => {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const month1 = months.indexOf(a.time.date.slice(0, 3));
+      const day1 = parseInt(a.time.date.slice(4, 6));
+      const year1 = parseInt(a.time.date.slice(8, 12));
+      const month2 = months.indexOf(b.time.date.slice(0, 3));
+      const day2 = parseInt(b.time.date.slice(4, 6));
+      const year2 =parseInt(b.time.date.slice(8, 12));
+      
+      var date1 = new Date(year1, month1, day1);
+      var date2 = new Date(year2, month2, day2);
+
+      if (date1 < date2) {
+        return 1;
+      } else if (date1 == date2) {
+
+        const time1 = a.time.start;
+        const time2 = b.time.start;
+        if (time1.includes("am") && time2.includes("pm")){
+          return 1;
+        } else if((time1.includes("am") && time2.includes("am")) || (time1.includes("pm") && time2.includes("pm"))) {
+          var hour1 = parseInt(time1.slice(0, 2));
+          var minute1 = parseInt(time1.slice(3, 5));
+          var hour2 = parseInt(time2.slice(0, 2));
+          var minute2 = parseInt(time2.slice(3, 5));
+  
+          if (hour1 < hour2){
+            return 1;
+          } else if (hour1 == hour2) {
+            if (minute1 < minute2) {
+              return 1;
+            } else if (minute1 == minute2) {
+              return 0;
+            } else {
+              return -1;
+            }
+          } else {
+            return -1;
+          }
+  
+        } else {
+          return -1;
+        }
+
+      } else {
+        return -1;
+      }
+    })
+    return sorted;
+  }
+
   const deleteItem = (id) => {
     setItems(prevItems => {
       var emptyItemId = null;
@@ -65,7 +117,7 @@ const App = () => {
           prevItems[i].time.end = end;
         }
       }
-      return prevItems;
+      return sortItems(prevItems);
     })
   }
 
@@ -73,7 +125,7 @@ const App = () => {
     <View style={styles.container}>
       <Header title='Workout Journal'/>
       <Content padder>
-        {[...items].reverse().map((item) => {
+        {sortItems(items).map((item) => {
           return (
             <LogEntry item={item} deleteItem={deleteItem} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
           )
