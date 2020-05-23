@@ -68,12 +68,12 @@ const AddLogButton = ({ addLog }) => {
                   <View style={styles.buttonView}>
                      <TouchableOpacity style={styles.set} onPress={() => { 
                         onChangeSetID,
-                        addSetList(set),
-                        onChangeSet(setList) }}>
+                        addSetList(set) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.workout} onPress={() => { 
                         onChangeWorkoutID, 
+                        onChangeSet(setList),
                         addWorkoutList(workout) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
                      </TouchableOpacity>
@@ -94,7 +94,7 @@ const AddLogButton = ({ addLog }) => {
             </View>
          </Modal>
          
-         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setTime(defaultTime), setSList([])}}>
+         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setTime(defaultTime), setSList([]), setWList([])}}>
             <Text style={styles.text}>Add</Text>
          </Button>
       </View>
