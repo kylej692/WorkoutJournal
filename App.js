@@ -7,6 +7,12 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
 const App = () => {
+  const log = {
+    id: '',
+    time: {}, 
+    workouts: [],
+  };
+
   const [items, setItems] = useState([
     {id: uuid(), time: {date: "May 2, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), reps: 10, weight: 20}, {id: uuid(), reps: 8, weight: 30}, {id: uuid(), reps: 6, weight: 35}]}, {id: uuid(), name: 'Inclined Bench Press', sets: [{id: uuid(), reps: 10, weight: 35}, {id: uuid(), reps: 10, weight: 35}]}]},
     {id: uuid(), time: {date: "May 4, 2020", start: "12:00pm", end: "1:00pm"}, workouts: [{id: uuid(), name: 'Bench Press', sets: [{id: uuid(), reps: 10, weight: 20}, {id: uuid(), reps: 8, weight: 30}, {id: uuid(), reps: 6, weight: 35}]}]},
@@ -19,12 +25,12 @@ const App = () => {
     });
   };
 
-  const addItem = (text) => {
-    if(!text) {
+  const addItem = (time, workouts) => {
+    if(!time || !workouts) {
       Alert.alert("Please enter a workout!")
     } else {
       setItems(prevItems => {
-        return [{id: uuid(), text}, ...prevItems];
+        return [ {id: uuid(), time: time, workouts: workouts}, ...prevItems];
       })
     }
   }
@@ -41,9 +47,9 @@ const App = () => {
       </View>
     </View>
   );
-};
+  };
 
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
   container: {
     flex: 1,
   },

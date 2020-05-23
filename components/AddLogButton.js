@@ -8,11 +8,6 @@ import Header from './Header';
 
 const AddLogButton = ({ addLog }) => {
    const [modalVisible, setModal] = useState(false);
-   const defaultLog = {
-      id: '',
-      time: {}, 
-      workouts: [],
-   };
    const defaultTime = {
       date: '',
       start: '',
@@ -28,19 +23,12 @@ const AddLogButton = ({ addLog }) => {
       reps: '',
       weight: '',
    };
-   const [log, setLog] = useState(defaultLog);
    const [time, setTime] = useState(defaultTime);
    const [workout, setWorkout] = useState(defaultWorkout);
+   const [workoutList, setWList] = useState([]);
+   const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
-
-   //Handles attributes for text
-   const onChangeID = () => setLog({ id: uuid() });
-   const onChangeTime = (timeValue) => setLog({ time: timeValue });
-   const emptyLog = () => setLog({ defaultLog });
-   const emptyWorkout = () => setWorkout({ defaultWorkout });
-   const emptyTime = () => setTime({ defaultTime });
-   const emptySet = () => setSet({ defaultSet });
-   const onChangeWorkout = (workoutsValue) => setLog(prevState => ({...prevState, workouts: [...prevState.workouts, workoutsValue] }));
+   
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -48,7 +36,9 @@ const AddLogButton = ({ addLog }) => {
    //Handles workouts attribute
    const onChangeWorkoutID = () => setWorkout({...workout, id: uuid()});
    const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
-   const onChangeSet = (setValue) => setWorkout(prevState => ({...prevState, sets: [...prevState.sets, setValue] }));
+   const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
+   const addWorkoutList = (workoutVal) => setWList(oldList => [...oldList, workoutVal]);
+   const onChangeSet = (setValue) => setWorkout({...workout, sets: setValue });
    const onChangeSetID = () => setSet({...set, id: uuid()});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
@@ -61,7 +51,7 @@ const AddLogButton = ({ addLog }) => {
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
             visible = {modalVisible}
-            onRequestClose = {() => { toggleModal(!modalVisible), onChangeTime('') } }>
+            onRequestClose = {() => { toggleModal(!modalVisible) } }>
             
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
@@ -70,39 +60,41 @@ const AddLogButton = ({ addLog }) => {
                   <TextInput placeholder="Set Date..." style={styles.input} onChangeText={onChangeDate} />
                   <TextInput placeholder="Set Start Time..." style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="Set End Time..." style={styles.input} onChangeText={onChangeEnd} />
-                  <TouchableOpacity onPress={() => { onChangeTime(time), onChangeID }}>
-                     <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Time</Text>
-                  </TouchableOpacity>
 
                   <Text style={styles.buttonText}>Workout: </Text>
                   <TextInput placeholder="Enter Exercise Name..." style={styles.input} onChangeText={onChangeName} />
                   <TextInput placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
                   <TextInput placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
                   <View style={styles.buttonView}>
-                     <TouchableOpacity style={styles.set} onPress={() => { onChangeSetID, onChangeSet(set) }}>
+                     <TouchableOpacity style={styles.set} onPress={() => { 
+                        onChangeSetID,
+                        addSetList(set),
+                        onChangeSet(setList) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
                      </TouchableOpacity>
-                     <TouchableOpacity style={styles.workout} onPress={() => { onChangeWorkoutID, onChangeWorkout(workout) }}>
+                     <TouchableOpacity style={styles.workout} onPress={() => { 
+                        onChangeWorkoutID, 
+                        addWorkoutList(workout) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
                      </TouchableOpacity>
                   </View>
                </Content>
 
                <TouchableOpacity style={styles.finish} onPress={() => {
-                  if(!log.time || !log.workouts) {
+                  if( time.date == '' && time.start == '' && time.end == '' ) {
                      Alert.alert("Can't add a blank log!")
                   } else {
-                     { addLog(log), emptyTime, emptyLog, emptyWorkout, emptySet, toggleModal(!modalVisible) }
+                     { console.log(setList, workoutList), addLog(time, workoutList), toggleModal(!modalVisible) }
                   }}}>
                   <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish</Text>
                </TouchableOpacity>
-               <TouchableOpacity style={styles.cancel} onPress={() => { emptyTime, emptyLog, emptyWorkout, emptySet, toggleModal(!modalVisible) }}>
+               <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible) }}>
                   <Text style={styles.buttonText}><Icon name="closecircle" size={25} />Cancel</Text>
                </TouchableOpacity>
             </View>
          </Modal>
          
-         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true),emptyTime, emptyLog, emptyWorkout, emptySet}}>
+         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setTime(defaultTime), setSList([])}}>
             <Text style={styles.text}>Add</Text>
          </Button>
       </View>
