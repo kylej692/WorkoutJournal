@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 
-const LogEntry = ({ item, deleteItem, modifyWorkout, modifyDateTime }) => {
+const LogEntry = ({ item, deleteWorkout, addNewSet, deleteSet, modifyWorkout, modifyDateTime }) => {
     var count = 0;
 
     const [isInfoModalVisible, setInfoModalVisible] = useState(false);
@@ -65,7 +65,7 @@ const LogEntry = ({ item, deleteItem, modifyWorkout, modifyDateTime }) => {
                     })
                 }
                 <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
-                    <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteItem={deleteItem} setInfoModalVisible={setInfoModalVisible}/>
+                    <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
                 </Modal>
                 <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
                     <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>

@@ -72,7 +72,7 @@ const App = () => {
     return sorted;
   }
 
-  const deleteItem = (id) => {
+  const deleteWorkout = (id) => {
     setItems(prevItems => {
       var emptyItemId = null;
       prevItems.map((item) => {
@@ -127,7 +127,7 @@ const App = () => {
       <Content padder>
         {sortItems(items).map((item) => {
           return (
-            <LogEntry item={item} deleteItem={deleteItem} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
+            <LogEntry item={item} deleteWorkout={deleteWorkout} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
           )
         })}
       </Content>

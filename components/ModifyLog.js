@@ -2,13 +2,29 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Content, Text } from 'native-base';
 import Header from '../components/Header';
+import 'react-native-get-random-values';
+import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 
-const ModifyLog = ({ workout, modifyWorkout, deleteItem, setInfoModalVisible }) => {
-    
+const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
-    const [newWorkout, setNewWorkout] = useState(JSON.parse(JSON.stringify(workout)))
+    const [newWorkout, setNewWorkout] = useState({...workout})
+
+    const deleteCopySet = (setId) => {
+        var copyWorkout = {...newWorkout};
+        copyWorkout.sets = copyWorkout.sets.filter(set => set.id != setId);
+        for (var i = 0; i < copyWorkout.sets.length; i++) {
+            copyWorkout.sets[i].num = i + 1;
+        }
+        setNewWorkout(copyWorkout);
+    }
+
+    const addNewSet = () => {
+        var copyWorkout = {...newWorkout};
+        copyWorkout.sets = [...copyWorkout.sets, {id: uuid(), num: copyWorkout.sets.length + 1, reps: 0, weight: 0}];
+        setNewWorkout(copyWorkout);
+    }
 
     const onChangeName = (newName) => {
         newWorkout.name = newName;
@@ -36,30 +52,40 @@ const ModifyLog = ({ workout, modifyWorkout, deleteItem, setInfoModalVisible }) 
             <Content padder>
                 <View style={styles.nameView}>                  
                     <Text style={styles.name}>Name</Text>
-                    <TextInput defaultValue={workout.name} style={styles.nameInput} onChangeText={onChangeName} />
+                    <TextInput defaultValue={newWorkout.name} style={styles.nameInput} onChangeText={onChangeName} />
                 </View>
-                {workout.sets.map((set) => {
+                {newWorkout.sets.map((set) => {
                     return (
                         <View style={styles.setView} key={set.id}>
                             <Text style={styles.labelText}>{"Set " + set.num + ":"}</Text>
                             <Text style={styles.infoText}>{"Reps "}</Text>
                             <TextInput keyboardType="numeric" defaultValue={set.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
                             <Text style={styles.infoText}>{"Weight "}</Text>
-                            <TextInput keyboardType="numeric" defaultValue={set.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />        
+                            <TextInput keyboardType="numeric" defaultValue={set.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
+                            <TouchableOpacity style={styles.deleteSetBtn} onPress={() => {
+                                deleteCopySet(set.id)
+                            }}>
+                                <Icon style={styles.deleteSetIcon} name="close" size={15} />    
+                            </TouchableOpacity>  
                         </View>
                     )})
                 }
                 <View style={styles.notesView}>
-                    <Text style={styles.labelText}>Notes</Text>
-                    <TextInput placeholder="Write here..." defaultValue={workout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
+                    <TouchableOpacity style={styles.addSetBtn} onPress={() => {addNewSet()}}>
+                        <Text style={styles.addSetText}>Add Set</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.notesText}>Notes</Text>
+                    <TextInput placeholder="Write here..." defaultValue={newWorkout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
                 </View>
             </Content>
-            <TouchableOpacity style={styles.deleteBtn} onPress={() => {
-                                    deleteItem(workout.id), 
+            <TouchableOpacity style={styles.deleteWorkoutBtn} onPress={() => {
+                                    deleteWorkout(newWorkout.id), 
                                     setInfoModalVisible(false)}}>
-                <Icon style={styles.deleteIcon} name="delete" size={20} />
+                <Icon style={styles.deleteWorkoutIcon} name="delete" size={20} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.doneBtn} onPress={() => {setInfoModalVisible(false), modifyWorkout(newWorkout)}}><Text style={styles.doneText}>Done</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.doneBtn} onPress={() => {setInfoModalVisible(false), modifyWorkout(newWorkout)}}>
+                <Text style={styles.doneText}>Done</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -77,7 +103,7 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     notesView: {
-        flex: 1
+        flex: 1,
     },
     name: {
         fontSize: 20,
@@ -114,7 +140,7 @@ const styles = StyleSheet.create({
     },
     setView: {
         marginBottom: 15,
-        marginLeft: 15,
+        marginLeft: 5,
         flex: 1,
         flexDirection: "row"
     },
@@ -123,22 +149,44 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 10
     },
+    notesText: {
+        alignSelf: "center",
+        fontSize: 20,
+        padding: 10,
+        marginTop: 40
+    },
     infoText: {
         alignSelf: "center",
         fontSize: 15,
         padding: 5
     },
-    deleteBtn: { 
+    deleteSetBtn: {
+        top: 18
+    },
+    deleteWorkoutBtn: { 
         bottom: 10, 
         left: 10 
     },
-    deleteIcon: { 
+    deleteWorkoutIcon: { 
         color: "red" 
+    },
+    addSetBtn: {
+        position: "absolute", 
+        backgroundColor: "#2C95FF",
+        padding: 5,
+        marginLeft: 140,
+        marginBottom: 40,
+        borderRadius: 8
+    },
+    addSetText: {
+        marginLeft: 3,
+        marginRight: 3,
+        color: "white"
     },
     doneBtn: { 
         position: "absolute", 
         bottom: 10, 
-        right: 10 ,
+        right: 10,
         backgroundColor: "#2C95FF",
         height: 35,
         width: 55,
