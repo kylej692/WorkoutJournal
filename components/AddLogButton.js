@@ -28,7 +28,6 @@ const AddLogButton = ({ addLog }) => {
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
-   
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -71,9 +70,13 @@ const AddLogButton = ({ addLog }) => {
                         addSetList(set) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
                      </TouchableOpacity>
+                     <TouchableOpacity style={styles.setList} onPress={() => { 
+                        onChangeSet(setList),
+                        setSList([]) }}>
+                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />New</Text>
+                     </TouchableOpacity>
                      <TouchableOpacity style={styles.workout} onPress={() => { 
                         onChangeWorkoutID, 
-                        onChangeSet(setList),
                         addWorkoutList(workout) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
                      </TouchableOpacity>
@@ -134,7 +137,10 @@ const styles = StyleSheet.create ({
       left: 10,
    },
    workout: {
-      left: 155,
+      left: 70,
+   },
+   setList:{
+      left: 40,
    },
    cancel: {
       position: 'absolute',
