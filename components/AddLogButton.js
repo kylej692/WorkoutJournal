@@ -68,14 +68,14 @@ const AddLogButton = ({ addLog }) => {
                      <TouchableOpacity style={styles.set} onPress={() => { 
                         onChangeSetID,
                         addSetList(set) }}>
-                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
+                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Add Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.setList} onPress={() => { 
-                        onChangeSet(setList),
-                        setSList([]) }}>
-                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />New</Text>
+                        onChangeSet(setList) }}>
+                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
                      </TouchableOpacity>
-                     <TouchableOpacity style={styles.workout} onPress={() => { 
+                     <TouchableOpacity style={styles.workout} onPress={() => {
+                        setSList([]), 
                         onChangeWorkoutID, 
                         addWorkoutList(workout) }}>
                         <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
@@ -87,7 +87,7 @@ const AddLogButton = ({ addLog }) => {
                   if( time.date == '' && time.start == '' && time.end == '' ) {
                      Alert.alert("Can't add a blank log!")
                   } else {
-                     { console.log(setList, workoutList), addLog(time, workoutList), toggleModal(!modalVisible) }
+                     { addLog(time, workoutList), toggleModal(!modalVisible) }
                   }}}>
                   <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish</Text>
                </TouchableOpacity>
