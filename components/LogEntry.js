@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 
-const LogEntry = ({ item, deleteWorkout, addNewSet, deleteSet, modifyWorkout, modifyDateTime }) => {
+const LogEntry = ({ item, deleteWorkout, modifyWorkout, modifyDateTime }) => {
     var count = 0;
 
     const [isInfoModalVisible, setInfoModalVisible] = useState(false);
