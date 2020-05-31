@@ -24,51 +24,53 @@ const App = () => {
     const sorted = [...items].sort((a, b) => {
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month1 = months.indexOf(a.time.date.slice(0, 3));
-      const day1 = parseInt(a.time.date.slice(4, 6));
-      const year1 = parseInt(a.time.date.slice(8, 12));
+      const day1 = a.time.date.slice(4, 6);
+      const year1 = a.time.date.slice(8, 12);
       const month2 = months.indexOf(b.time.date.slice(0, 3));
-      const day2 = parseInt(b.time.date.slice(4, 6));
-      const year2 =parseInt(b.time.date.slice(8, 12));
+      const day2 = b.time.date.slice(4, 6);
+      const year2 = b.time.date.slice(8, 12);
       
-      var date1 = new Date(year1, month1, day1);
-      var date2 = new Date(year2, month2, day2);
+      var date1 = month1 + "/" + day1 + "/" + year1;
+      var date2 = month2 + "/" + day2 + "/" + year2; 
 
-      if (date1 < date2) {
-        return 1;
-      } else if (date1 == date2) {
+      const timeStr1 = a.time.start;
+      const timeStr2 = b.time.start;
 
-        const time1 = a.time.start;
-        const time2 = b.time.start;
-        if (time1.includes("am") && time2.includes("pm")){
-          return 1;
-        } else if((time1.includes("am") && time2.includes("am")) || (time1.includes("pm") && time2.includes("pm"))) {
-          var hour1 = parseInt(time1.slice(0, 2));
-          var minute1 = parseInt(time1.slice(3, 5));
-          var hour2 = parseInt(time2.slice(0, 2));
-          var minute2 = parseInt(time2.slice(3, 5));
-  
-          if (hour1 < hour2){
-            return 1;
-          } else if (hour1 == hour2) {
-            if (minute1 < minute2) {
-              return 1;
-            } else if (minute1 == minute2) {
-              return 0;
-            } else {
-              return -1;
-            }
-          } else {
-            return -1;
-          }
-  
-        } else {
-          return -1;
-        }
-
+      var hour1 = "";
+      var minute1 = "";
+      var meridiem1 = "";
+      if (timeStr1.length == 7) {
+        hour1 = timeStr1.slice(0, 2);
+        minute1 = timeStr1.slice(3, 5);
+        meridiem1 = timeStr1.slice(5, 7);
       } else {
-        return -1;
+        hour1 = timeStr1.slice(0, 1);
+        minute1 = timeStr1.slice(2, 4);
+        meridiem1 = timeStr1.slice(4, 6);
       }
+
+      var hour2 = "";
+      var minute2 = "";
+      var meridiem2 = "";
+      if (timeStr2.length == 7) {
+        hour2 = timeStr2.slice(0, 2);
+        minute2 = timeStr2.slice(3, 5);
+        meridiem2 = timeStr2.slice(5, 7);
+      } else {
+        hour2 = timeStr2.slice(0, 1);
+        minute2 = timeStr2.slice(2, 4);
+        meridiem2 = timeStr2.slice(4, 6);
+      }
+
+      const time1 = hour1 + ":" + minute1 + ":" + "00 " + meridiem1;
+      const time2 = hour2 + ":" + minute2 + ":" + "00 " + meridiem2;
+
+      const aDate = new Date(date1 + " " + time1);
+      const bDate = new Date(date2 + " " + time2);
+      
+      return bDate - aDate;
     })
+
     return sorted;
   }
 
