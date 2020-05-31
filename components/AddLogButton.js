@@ -17,6 +17,7 @@ const AddLogButton = ({ addLog }) => {
       id: '',
       name: '', 
       sets: [],
+      notes: '',
    };
    const defaultSet = {
       id: '',
@@ -41,6 +42,7 @@ const AddLogButton = ({ addLog }) => {
    const onChangeSetID = () => setSet({...set, id: uuid()});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
+   const onChangeNotes = (note) => setWorkout({...workout, notes: note});
 
    const toggleModal = (visible) => {
       setModal(visible);
@@ -64,6 +66,7 @@ const AddLogButton = ({ addLog }) => {
                   <TextInput placeholder="Enter Exercise Name..." style={styles.input} onChangeText={onChangeName} />
                   <TextInput placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
                   <TextInput placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
+                  <TextInput placeholder="Notes..." style={styles.input} onChangeText={onChangeNotes} />
                   <View style={styles.buttonView}>
                      <TouchableOpacity style={styles.set} onPress={() => { 
                         onChangeSetID,
@@ -137,7 +140,7 @@ const styles = StyleSheet.create ({
       left: 10,
    },
    workout: {
-      left: 70,
+      left: 65,
    },
    setList:{
       left: 40,
