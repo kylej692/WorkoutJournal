@@ -14,13 +14,13 @@ const AddLogButton = ({ addLog }) => {
       end: '',
    };
    const defaultWorkout = {
-      id: '',
+      id: uuid(),
       name: '', 
       sets: [],
       notes: '',
    };
    const defaultSet = {
-      id: '',
+      id: uuid(),
       reps: '',
       weight: '',
    };
@@ -34,12 +34,12 @@ const AddLogButton = ({ addLog }) => {
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
    const onChangeEnd = (endValue) => setTime({...time, end: endValue });
    //Handles workouts attribute
-   const onChangeWorkoutID = () => setWorkout({...workout, id: uuid()});
+   const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
    const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
    const addWorkoutList = (workoutVal) => setWList(oldList => [...oldList, workoutVal]);
    const onChangeSet = (setValue) => setWorkout({...workout, sets: setValue });
-   const onChangeSetID = () => setSet({...set, id: uuid()});
+   const onChangeSetID = (id) => setSet({...set, id: id});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
    const onChangeNotes = (note) => setWorkout({...workout, notes: note});
@@ -64,22 +64,23 @@ const AddLogButton = ({ addLog }) => {
 
                   <Text style={styles.header}>Workout: </Text>
                   <TextInput placeholder="Enter Exercise Name..." style={styles.input} onChangeText={onChangeName} />
-                  <TextInput placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
-                  <TextInput placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
+                  <TextInput keyboardType="numeric" placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
+                  <TextInput keyboardType="numeric" placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
                   <TextInput placeholder="Notes..." style={styles.input} onChangeText={onChangeNotes} />
                   <View style={styles.buttonView}>
                      <TouchableOpacity style={styles.set} onPress={() => { 
-                        onChangeSetID,
-                        addSetList(set) }}>
+                        onChangeSetID(uuid()),
+                        addSetList(set),
+                        console.log(set) }}>
                         <Text style={styles.buttonText}>Add Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.setList} onPress={() => { 
-                        onChangeSet(setList) }}>
+                        onChangeSet(setList), console.log(setList) }}>
                         <Text style={styles.buttonText}>Finish Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.workout} onPress={() => {
                         setSList([]), 
-                        onChangeWorkoutID, 
+                        onChangeWorkoutID(uuid()), 
                         addWorkoutList(workout) }}>
                         <Text style={styles.buttonText}>Set Workout</Text>
                      </TouchableOpacity>
