@@ -57,12 +57,12 @@ const AddLogButton = ({ addLog }) => {
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
                <Content>
-                  <Text style={styles.buttonText}>Time: </Text>
+                  <Text style={styles.header}>Time: </Text>
                   <TextInput placeholder="Set Date..." style={styles.input} onChangeText={onChangeDate} />
                   <TextInput placeholder="Set Start Time..." style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="Set End Time..." style={styles.input} onChangeText={onChangeEnd} />
 
-                  <Text style={styles.buttonText}>Workout: </Text>
+                  <Text style={styles.header}>Workout: </Text>
                   <TextInput placeholder="Enter Exercise Name..." style={styles.input} onChangeText={onChangeName} />
                   <TextInput placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
                   <TextInput placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
@@ -71,17 +71,17 @@ const AddLogButton = ({ addLog }) => {
                      <TouchableOpacity style={styles.set} onPress={() => { 
                         onChangeSetID,
                         addSetList(set) }}>
-                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Add Set</Text>
+                        <Text style={styles.buttonText}>Add Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.setList} onPress={() => { 
                         onChangeSet(setList) }}>
-                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish Set</Text>
+                        <Text style={styles.buttonText}>Finish Set</Text>
                      </TouchableOpacity>
                      <TouchableOpacity style={styles.workout} onPress={() => {
                         setSList([]), 
                         onChangeWorkoutID, 
                         addWorkoutList(workout) }}>
-                        <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Set Workout</Text>
+                        <Text style={styles.buttonText}>Set Workout</Text>
                      </TouchableOpacity>
                   </View>
                </Content>
@@ -92,16 +92,16 @@ const AddLogButton = ({ addLog }) => {
                   } else {
                      { addLog(time, workoutList), toggleModal(!modalVisible) }
                   }}}>
-                  <Text style={styles.buttonText}><Icon name="pluscircle" size={25} />Finish</Text>
+                  <Text style={styles.header}>Finish</Text>
                </TouchableOpacity>
                <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible) }}>
-                  <Text style={styles.buttonText}><Icon name="closecircle" size={25} />Cancel</Text>
+                  <Text style={styles.cancelText}>Cancel</Text>
                </TouchableOpacity>
             </View>
          </Modal>
          
          <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setTime(defaultTime), setSList([]), setWList([])}}>
-            <Text style={styles.text}>Add</Text>
+            <Text style={styles.title}>Add</Text>
          </Button>
       </View>
    );
@@ -137,28 +137,48 @@ const styles = StyleSheet.create ({
       flexDirection: "row",
    },
    set: {
+      backgroundColor: "#2C95FF",
+      padding: 5,
+      borderRadius: 8,
       left: 10,
    },
    workout: {
-      left: 65,
+      backgroundColor: "#2C95FF",
+      padding: 5,
+      borderRadius: 8,
+      left: 90,
    },
    setList:{
-      left: 40,
+      backgroundColor: "#2C95FF",
+      padding: 5,
+      borderRadius: 8,
+      left: 55,
    },
    cancel: {
       position: 'absolute',
       bottom: 10, 
       left: 10,
    },
-   text: {
-      color: '#fff',
-      fontSize: 20,
-   },
-   buttonText: {
+   header: {
       marginTop: 10,
       fontSize: 20
    },
+   buttonText: {
+      marginLeft: 3,
+      marginRight: 3,
+      color: "white",
+      fontSize: 20,
+   },
    icon: {
-      margin: 20,
+      padding: 20,
+   },
+   title: {
+      color: '#fff',
+      fontSize: 20,
+   },
+   cancelText: {
+      marginTop: 10,
+      fontSize: 20,
+      color: 'red',
    }
 })
