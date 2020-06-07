@@ -58,8 +58,8 @@ const AddLogButton = ({ addLog }) => {
                <Header title='Add a Log'/>
                <Content>
                   <Text style={styles.header}>Time: </Text>
-                  <TextInput placeholder="Set Date..." style={styles.input} onChangeText={onChangeDate} />
-                  <TextInput placeholder="Set Start Time..." style={styles.input} onChangeText={onChangeStart} />
+                  <TextInput placeholder="Set Date: [Month] [Day], [Year]..." style={styles.input} onChangeText={onChangeDate} />
+                  <TextInput placeholder="Set Start Time: ..." style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="Set End Time..." style={styles.input} onChangeText={onChangeEnd} />
 
                   <Text style={styles.header}>Workout: </Text>
