@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Content, Text } from 'native-base';
 import Header from '../components/Header';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
@@ -79,15 +80,17 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
 
     return (
         <View>
-            <Header title="Edit Date" />
+            <Header title="Edit Date/Time" />
             <Content padder>
                 <View style={styles.dateTimeView}>
+                    <Icon style={styles.calendarTimeIcon} name="calendar" size={20}/>
                     <Text style={styles.dateTimeLabelText}>Date:</Text>
                     <TouchableOpacity onPress={showDatePicker}>
                         <Text style={styles.dateTimeText}>{newDateStr}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.dateTimeView}>
+                    <Icon style={styles.calendarTimeIcon} name="clock-o" size={20}/>
                     <Text style={styles.dateTimeLabelText}>Time:</Text>
                     <TouchableOpacity onPress={() => {showTimePicker(true)}}>
                         <Text style={styles.dateTimeText}>{newStart}</Text>
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     },
     dateTimeLabelText: {
         fontSize: 25,
-        marginLeft: 20
+        marginLeft: 7
     },
     dateTimeText: {
         fontSize: 20,
@@ -160,6 +163,11 @@ const styles = StyleSheet.create({
     doneText: {
         marginLeft: 3,
         color: "white"
+    },
+    calendarTimeIcon: {
+        marginLeft: 10,
+        marginTop: 7,
+        color: "black"
     }
 });
 

@@ -47,16 +47,22 @@ const LogEntry = ({ item, deleteWorkout, modifyWorkout, modifyDateTime }) => {
                                 <Text>{"Set"}</Text>
                                 <Text style={styles.cardText}>{"Reps"}</Text>
                                 <Text style={styles.cardText}>{"Weight"}</Text>
-                            </CardItem>                            
+                            </CardItem>                           
                             {workout.sets.map((set) => {
                                 count += 1;
                                 return (
                                 <CardItem bordered style={styles.cardInfoContainer} key={set.id}>
-                                    <Body style={styles.cardBody}>
-                                        <Text>{set.num}</Text>
-                                        <Text style={styles.cardText}>{set.reps}</Text>
-                                        <Text style={styles.cardText}>{set.weight}</Text>
-                                    </Body>
+                                    <View style={styles.cardItemBody}>
+                                        <View style={styles.itemView}>
+                                            <Text>{set.num}</Text>
+                                        </View>
+                                        <View style={styles.itemView}>
+                                            <Text style={styles.repsNum}>{set.reps}</Text>
+                                        </View>
+                                        <View style={styles.itemView}>
+                                            <Text style={styles.weightNum}>{set.weight}</Text>
+                                        </View>       
+                                    </View>                                  
                                 </CardItem>
                                 )})
                             }
@@ -102,16 +108,28 @@ const styles = StyleSheet.create({
         fontWeight: "bold", 
         fontSize: 19
     },
+    cardItemBody: {
+        flex: 1, 
+        alignSelf: 'stretch', 
+        flexDirection: 'row'
+    },
+    itemView: { 
+        flex: 1, 
+        alignSelf: 'stretch' 
+    },
     cardLabel: { 
         height: 40, 
         borderBottomWidth: 1, 
         borderColor: "black" 
     },
     cardText: {
-        marginLeft: "auto",
+        marginLeft: "auto"
     },
-    cardBody: { 
-        flexDirection:"row" 
+    repsNum: {
+        marginLeft: 30
+    },
+    weightNum: {
+        marginLeft: 70
     },
     cardInfoContainer: { 
         height: 40 
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
     dateModal: {
         position: "relative",
         marginTop: 250,
-        marginBottom: 250,
+        marginBottom: 275,
         backgroundColor: "white", 
         flex: 1,
         alignItems: "center"

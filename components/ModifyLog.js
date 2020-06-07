@@ -74,7 +74,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
                     <TouchableOpacity style={styles.addSetBtn} onPress={() => {addNewSet()}}>
                         <Text style={styles.addSetText}>Add Set</Text>
                     </TouchableOpacity>
-                    <Text style={styles.notesText}>Notes</Text>
+                    <Text style={styles.notesText}><Icon style={styles.notesIcon} name="form" size={15}/>  Notes</Text>
                     <TextInput placeholder="Write here..." defaultValue={newWorkout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
                 </View>
             </Content>
@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
     },
     notesText: {
         alignSelf: "center",
+        flexDirection: "row",
         fontSize: 20,
         padding: 10,
         marginTop: 40
