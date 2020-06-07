@@ -37,8 +37,7 @@ const AddLogButton = ({ addLog }) => {
    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
    const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
-   const addWorkoutList = (workoutVal) => setWList(oldList => [...oldList, workoutVal]);
-   const onChangeSet = (setValue) => setWorkout({...workout, sets: setValue });
+   const addWorkoutList = (setValue, workoutVal) => { workoutVal.sets = setValue, setWList(oldList => [...oldList, workoutVal]), setSList([]) };
    const onChangeSetID = (id) => setSet({...set, id: id});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
@@ -57,12 +56,12 @@ const AddLogButton = ({ addLog }) => {
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
                <Content>
-                  <Text style={styles.header}>Time: </Text>
+                  <Text style={styles.header}> Time: </Text>
                   <TextInput placeholder="Set Date: [Month] [Day], [Year]..." style={styles.input} onChangeText={onChangeDate} />
                   <TextInput placeholder="Set Start Time: ..." style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="Set End Time..." style={styles.input} onChangeText={onChangeEnd} />
 
-                  <Text style={styles.header}>Workout: </Text>
+                  <Text style={styles.header}> Workout: </Text>
                   <TextInput placeholder="Enter Exercise Name..." style={styles.input} onChangeText={onChangeName} />
                   <TextInput keyboardType="numeric" placeholder="Enter Number of Reps..." style={styles.input} onChangeText={onChangeReps} />
                   <TextInput keyboardType="numeric" placeholder="Enter the Weight..." style={styles.input} onChangeText={onChangeWeight} />
@@ -74,22 +73,18 @@ const AddLogButton = ({ addLog }) => {
                         console.log(set) }}>
                         <Text style={styles.buttonText}>Add Set</Text>
                      </TouchableOpacity>
-                     <TouchableOpacity style={styles.setList} onPress={() => { 
-                        onChangeSet(setList), console.log(setList) }}>
-                        <Text style={styles.buttonText}>Finish Set</Text>
-                     </TouchableOpacity>
                      <TouchableOpacity style={styles.workout} onPress={() => {
-                        setSList([]), 
                         onChangeWorkoutID(uuid()), 
-                        addWorkoutList(workout) }}>
+                        addWorkoutList(setList, workout),
+                        console.log(workout) }}>
                         <Text style={styles.buttonText}>Set Workout</Text>
                      </TouchableOpacity>
                   </View>
                </Content>
 
                <TouchableOpacity style={styles.finish} onPress={() => {
-                  if( time.date == '' && time.start == '' && time.end == '' ) {
-                     Alert.alert("Can't add a blank log!")
+                  if((time.date == '' && time.start == '' && time.end == '') || (workout.name == '' && workout.sets == [])) {
+                     Alert.alert("Please fill everything out!")
                   } else {
                      { addLog(time, workoutList), toggleModal(!modalVisible) }
                   }}}>
@@ -101,7 +96,7 @@ const AddLogButton = ({ addLog }) => {
             </View>
          </Modal>
          
-         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setTime(defaultTime), setSList([]), setWList([])}}>
+         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setWorkout(defaultWorkout), setSet(defaultSet), setTime(defaultTime), setSList([]), setWList([])}}>
             <Text style={styles.title}>Add</Text>
          </Button>
       </View>
