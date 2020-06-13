@@ -93,7 +93,7 @@ const AddLogButton = ({ addLog }) => {
                      } else {
                         { addLog(time, workoutList), toggleModal(!modalVisible) }
                      }}}>
-                     <Text style={styles.header}>Finish</Text>
+                     <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible) }}>
                      <Text style={styles.cancelText}>Cancel</Text>
@@ -177,6 +177,11 @@ const styles = StyleSheet.create ({
    cancelText: {
       marginTop: 10,
       fontSize: 20,
-      color: 'red',
+      color: 'white',
+   },
+   finishText: {
+      marginTop: 10,
+      fontSize: 20,
+      color: 'white',
    }
 })
