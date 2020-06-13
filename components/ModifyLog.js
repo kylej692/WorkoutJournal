@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Content, Text } from 'native-base';
 import Header from '../components/Header';
 import 'react-native-get-random-values';
@@ -58,9 +58,9 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
                     return (
                         <View style={styles.setView} key={set.id}>
                             <Text style={styles.labelText}>{"Set " + set.num + ":"}</Text>
-                            <Text style={styles.infoText}>{"Reps "}</Text>
+                            <Text style={styles.infoText}>Reps </Text>
                             <TextInput keyboardType="numeric" defaultValue={set.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
-                            <Text style={styles.infoText}>{"Weight "}</Text>
+                            <Text style={styles.infoText}>Wt (lbs)</Text>
                             <TextInput keyboardType="numeric" defaultValue={set.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
                             <TouchableOpacity style={styles.deleteSetBtn} onPress={() => {
                                 deleteCopySet(set.id)
@@ -83,7 +83,14 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
                                     setInfoModalVisible(false)}}>
                 <Icon style={styles.deleteWorkoutIcon} name="delete" size={20} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.doneBtn} onPress={() => {setInfoModalVisible(false), modifyWorkout(newWorkout)}}>
+            <TouchableOpacity style={styles.doneBtn} onPress={() => {
+                if (newWorkout.sets.length == 0) {
+                    Alert.alert("           At least 1 set is needed!")
+                } else {
+                    setInfoModalVisible(false), 
+                    modifyWorkout(newWorkout)
+                }
+            }}>
                 <Text style={styles.doneText}>Done</Text>
             </TouchableOpacity>
         </View>
@@ -140,7 +147,7 @@ const styles = StyleSheet.create({
     },
     setView: {
         marginBottom: 15,
-        marginLeft: 5,
+        marginLeft: 7,
         flex: 1,
         flexDirection: "row"
     },
@@ -158,8 +165,7 @@ const styles = StyleSheet.create({
     },
     infoText: {
         alignSelf: "center",
-        fontSize: 15,
-        padding: 5
+        fontSize: 15
     },
     deleteSetBtn: {
         top: 18
