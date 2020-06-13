@@ -61,23 +61,29 @@ const AddLogButton = ({ addLog }) => {
                   <TextInput placeholder="Start Time: (e.g. 9:00am)" style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="End Time: (e.g. 10:00am)" style={styles.input} onChangeText={onChangeEnd} />
 
-                  <Text style={styles.header}> Workout: </Text>
-                  <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} />
-                  <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} />
-                  <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} />
-                  <View style={styles.buttonView}>
-                     <TouchableOpacity style={styles.set} onPress={() => { 
-                        onChangeSetID(uuid()),
-                        addSetList(set) }}>
-                        <Text style={styles.buttonText}>Add Set</Text>
-                     </TouchableOpacity>
-                     <TouchableOpacity style={styles.workout} onPress={() => {
-                        onChangeWorkoutID(uuid()), 
-                        addWorkoutList(setList, workout) }}>
-                        <Text style={styles.buttonText}>Set Workout</Text>
-                     </TouchableOpacity>
+                  <View style={{borderColor:'black',borderBottomWidth:1,borderTopWidth:1}}>
+                     <Text style={styles.header}> Workout: </Text>
+                     <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} />
+                     <View style={{borderColor:'blue',borderBottomWidth:1,borderTopWidth:1}}>
+                        <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} />
+                        <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} />
+                        <View style={styles.buttonView}>
+                           <TouchableOpacity style={styles.set} onPress={() => { 
+                              onChangeSetID(uuid()),
+                              addSetList(set) }}>
+                              <Text style={styles.buttonText}>Add Set</Text>
+                           </TouchableOpacity>
+                        </View>
+                     </View> 
+                     <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
+                     <View style={styles.buttonView}>
+                        <TouchableOpacity style={styles.workout} onPress={() => {
+                           onChangeWorkoutID(uuid()), 
+                           addWorkoutList(setList, workout) }}>
+                           <Text style={styles.buttonText}>Set Workout</Text>
+                        </TouchableOpacity>
+                     </View>
                   </View>
-                  <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
                </Content>
                   
                <Header/>
@@ -135,14 +141,16 @@ const styles = StyleSheet.create ({
    set: {
       backgroundColor: "#2C95FF",
       padding: 5,
-      borderRadius: 8,
-      left: 10,
+      borderRadius: 10,
+      bottom: 5,
+      left: 310,
    },
    workout: {
       backgroundColor: "#2C95FF",
       padding: 5,
       borderRadius: 8,
-      left: 190,
+      bottom: 5,
+      left: 270,
    },
    cancel: {
       position: 'absolute',
