@@ -43,10 +43,10 @@ const LogEntry = ({ item, deleteWorkout, modifyWorkout, modifyDateTime }) => {
                                     <Text style={styles.workoutName}>{workout.name}</Text>
                                 </TouchableOpacity>
                             </CardItem>
-                            <CardItem bordered style={styles.cardLabelContainer}>
-                                <Text>{"Set"}</Text>
-                                <Text style={styles.cardText}>{"Reps"}</Text>
-                                <Text style={styles.cardText}>{"Weight"}</Text>
+                            <CardItem bordered>
+                                <Text>Set</Text>
+                                <Text style={styles.cardText}>Reps</Text>
+                                <Text style={styles.cardText}>Wt (lbs)</Text>
                             </CardItem>                           
                             {workout.sets.map((set) => {
                                 count += 1;
@@ -61,7 +61,7 @@ const LogEntry = ({ item, deleteWorkout, modifyWorkout, modifyDateTime }) => {
                                         </View>
                                         <View style={styles.itemView}>
                                             <Text style={styles.weightNum}>{set.weight}</Text>
-                                        </View>       
+                                        </View>   
                                     </View>                                  
                                 </CardItem>
                                 )})
@@ -110,12 +110,12 @@ const styles = StyleSheet.create({
     },
     cardItemBody: {
         flex: 1, 
-        alignSelf: 'stretch', 
-        flexDirection: 'row'
+        alignSelf: "stretch", 
+        flexDirection: "row"
     },
     itemView: { 
         flex: 1, 
-        alignSelf: 'stretch' 
+        alignSelf: "stretch"
     },
     cardLabel: { 
         height: 40, 
@@ -130,6 +130,9 @@ const styles = StyleSheet.create({
     },
     weightNum: {
         marginLeft: 70
+    },
+    weightNumType: {
+        fontSize: 15
     },
     cardInfoContainer: { 
         height: 40 
