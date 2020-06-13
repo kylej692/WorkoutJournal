@@ -71,15 +71,13 @@ const AddLogButton = ({ addLog }) => {
                         addSetList(set) }}>
                         <Text style={styles.buttonText}>Add Set</Text>
                      </TouchableOpacity>
-                  </View>
-                  <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
-                  <View style={styles.buttonView}>
                      <TouchableOpacity style={styles.workout} onPress={() => {
                         onChangeWorkoutID(uuid()), 
                         addWorkoutList(setList, workout) }}>
                         <Text style={styles.buttonText}>Set Workout</Text>
                      </TouchableOpacity>
                   </View>
+                  <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
                </Content>
                   
                <Header/>
@@ -138,13 +136,13 @@ const styles = StyleSheet.create ({
       backgroundColor: "#2C95FF",
       padding: 5,
       borderRadius: 8,
-      left: 290,
+      left: 10,
    },
    workout: {
       backgroundColor: "#2C95FF",
       padding: 5,
       borderRadius: 8,
-      left: 270,
+      left: 190,
    },
    cancel: {
       position: 'absolute',
