@@ -78,8 +78,11 @@ const AddLogButton = ({ addLog }) => {
                      <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
                      <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.workout} onPress={() => {
-                           onChangeWorkoutID(uuid()), 
-                           addWorkoutList(setList, workout) }}>
+                           if (setList.length == 0) {
+                              Alert.alert("Please add one or more sets for your workout!")
+                           } else {
+                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout) }
+                           }}}>
                            <Text style={styles.buttonText}>Set Workout</Text>
                         </TouchableOpacity>
                      </View>
@@ -88,21 +91,28 @@ const AddLogButton = ({ addLog }) => {
                   
                <Header/>
                   <TouchableOpacity style={styles.finish} onPress={() => {
-                     if((time.date == '' && time.start == '' && time.end == '') || (workout.name == '' && workout.sets == [])) {
+                     if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0 || workout.notes == '') {
                         Alert.alert("Please fill everything out!")
                      } else {
                         { addLog(time, workoutList), toggleModal(!modalVisible) }
                      }}}>
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.cancel} onPress={() => { toggleModal(!modalVisible) }}>
+                  <TouchableOpacity style={styles.cancel} onPress={() => { 
+                     toggleModal(!modalVisible) }}>
                      <Text style={styles.cancelText}>Cancel</Text>
                   </TouchableOpacity>
 
             </View>
          </Modal>
          
-         <Button style={ styles.addButton } bordered primary onPress = {() => {toggleModal(true), setWorkout(defaultWorkout), setSet(defaultSet), setTime(defaultTime), setSList([]), setWList([])}}>
+         <Button style={ styles.addButton } bordered primary onPress = {() => {
+            toggleModal(true), 
+            setWorkout(defaultWorkout), 
+            setSet(defaultSet), 
+            setTime(defaultTime), 
+            setSList([]), 
+            setWList([]) }}>
             <Text style={styles.title}>Add</Text>
          </Button>
       </View>
