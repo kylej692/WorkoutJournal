@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
@@ -49,39 +50,49 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
     return (
         <View>
             <Header title="Edit Log" />
-            <Content padder>
-                <View style={styles.nameView}>                  
-                    <Text style={styles.name}>Name</Text>
-                    <TextInput defaultValue={newWorkout.name} style={styles.nameInput} onChangeText={onChangeName} />
-                </View>
-                {newWorkout.sets.map((set) => {
-                    return (
-                        <View style={styles.setView} key={set.id}>
-                            <Text style={styles.labelText}>{"Set " + set.num + ":"}</Text>
-                            <Text style={styles.infoText}>Reps </Text>
-                            <TextInput keyboardType="numeric" defaultValue={set.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
-                            <Text style={styles.infoText}>Wt (lbs)</Text>
-                            <TextInput keyboardType="numeric" defaultValue={set.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(set.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
-                            <TouchableOpacity style={styles.deleteSetBtn} onPress={() => {
-                                deleteCopySet(set.id)
-                            }}>
-                                <Icon style={styles.deleteSetIcon} name="close" size={15} />    
-                            </TouchableOpacity>  
+                <SwipeListView 
+                    data={newWorkout.sets}
+                    ListHeaderComponent={              
+                        <View style={styles.nameView}>                  
+                            <Text style={styles.name}>Name</Text>
+                            <TextInput defaultValue={newWorkout.name} style={styles.nameInput} onChangeText={onChangeName} />
                         </View>
-                    )})
-                }
-                <View style={styles.notesView}>
-                    <TouchableOpacity style={styles.addSetBtn} onPress={() => {addNewSet()}}>
-                        <Text style={styles.addSetText}>Add Set</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.notesText}><Icon style={styles.notesIcon} name="form" size={15}/>  Notes</Text>
-                    <TextInput placeholder="Write here..." defaultValue={newWorkout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
-                </View>
-            </Content>
+                    }
+                    renderItem={(data, rowMap) => (
+                        <View style={styles.setView} key={data.item.id}>
+                            <Text style={styles.labelText}>{"Set " + data.item.num + ":"}</Text>
+                            <Text style={styles.infoText}>Reps </Text>
+                            <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
+                            <Text style={styles.infoText}>Wt (lbs)</Text>
+                            <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
+                        </View>
+                    )}
+                    renderHiddenItem={ (data, rowMap) => (
+                        <TouchableOpacity style={styles.deleteSetBtn} onPress={() => {
+                            deleteCopySet(data.item.id)
+                        }}>
+                            <View style={styles.rowFront}>
+                                <Icon style={styles.deleteIcon} name="closecircle" size={15} />    
+                            </View>
+                        </TouchableOpacity>  
+                    )}
+                    ListFooterComponent={
+                        <View style={styles.notesView}>
+                            <TouchableOpacity style={styles.addSetBtn} onPress={addNewSet}>
+                                <Text style={styles.addSetText}>Add Set</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.notesText}><Icon style={styles.notesIcon} name="form" size={15}/>  Notes</Text>
+                            <TextInput placeholder="Write here..." defaultValue={newWorkout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
+                        </View>
+                    }
+                    disableRightSwipe={true}
+                    rightOpenValue={-75}
+                    removeClippedSubviews={false}
+                />
             <TouchableOpacity style={styles.deleteWorkoutBtn} onPress={() => {
                                     deleteWorkout(newWorkout.id), 
                                     setInfoModalVisible(false)}}>
-                <Icon style={styles.deleteWorkoutIcon} name="delete" size={20} />
+                <Icon style={styles.deleteIcon} name="delete" size={20} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.doneBtn} onPress={() => {
                 if (newWorkout.sets.length == 0) {
@@ -98,8 +109,14 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
 }
 
 const styles = StyleSheet.create({
+    rowFront: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 25,
+        marginLeft: 270
+    },
     nameView: {
-        marginBottom: 15,
+        marginBottom: 10,
         flexWrap: "wrap",
         width: 370,
         flexDirection: "row",
@@ -116,7 +133,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 5,
         paddingRight: 10,
-        marginTop: 40,
+        marginTop: 45,
         marginLeft: 20
     },
     nameInput: {
@@ -125,6 +142,7 @@ const styles = StyleSheet.create({
         padding: 8,
         fontSize: 16,
         marginTop: 43,
+        paddingBottom: 1,
         borderRadius: 8,
         borderBottomColor: "black",
         borderBottomWidth: 1
@@ -135,6 +153,7 @@ const styles = StyleSheet.create({
         width: 50,
         borderRadius: 8,
         margin: 10,
+        paddingBottom: 1,
         borderBottomColor: "black",
         borderBottomWidth: 1
     },
@@ -147,14 +166,16 @@ const styles = StyleSheet.create({
     },
     setView: {
         marginBottom: 15,
-        marginLeft: 7,
+        marginLeft: 15,
+        backgroundColor: "white",
         flex: 1,
         flexDirection: "row"
     },
     labelText: {
         alignSelf: "center",
         fontSize: 20,
-        padding: 10
+        padding: 10,
+        marginTop: 10
     },
     notesText: {
         alignSelf: "center",
@@ -165,7 +186,8 @@ const styles = StyleSheet.create({
     },
     infoText: {
         alignSelf: "center",
-        fontSize: 15
+        fontSize: 15,
+        marginTop: 10
     },
     deleteSetBtn: {
         top: 18
@@ -174,8 +196,9 @@ const styles = StyleSheet.create({
         bottom: 10, 
         left: 10 
     },
-    deleteWorkoutIcon: { 
-        color: "red" 
+    deleteIcon: { 
+        color: "red",
+        fontSize: 20
     },
     addSetBtn: {
         position: "absolute", 
