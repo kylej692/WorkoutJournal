@@ -21,6 +21,7 @@ const AddLogButton = ({ addLog }) => {
    };
    const defaultSet = {
       id: uuid(),
+      num: 1,
       reps: '',
       weight: '',
    };
@@ -29,6 +30,7 @@ const AddLogButton = ({ addLog }) => {
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
+   //const [setCount, setSetCount] = useState(0);
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -38,7 +40,7 @@ const AddLogButton = ({ addLog }) => {
    const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
    const addWorkoutList = (setValue, workoutVal) => { workoutVal.sets = setValue, setWList(oldList => [...oldList, workoutVal]), setSList([]) };
-   const onChangeSetID = (id) => setSet({...set, id: id});
+   const onChangeSetID = (id, count) => setSet({...set, id: id, num: count});
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
    const onChangeNotes = (note) => setWorkout({...workout, notes: note});
@@ -46,6 +48,14 @@ const AddLogButton = ({ addLog }) => {
    const toggleModal = (visible) => {
       setModal(visible);
    };
+
+   const setSetCount = (workoutList) => {
+      for(var j = 0; j < workoutList.length; j++) {
+         for (var i = 0; i < workoutList[j].sets.length; i++) {
+            workoutList[j].sets[i].num = i + 1;
+         }
+      }
+   }
 
    return (
       <View style = {styles.container}>
@@ -69,7 +79,7 @@ const AddLogButton = ({ addLog }) => {
                         <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} />
                         <View style={styles.buttonView}>
                            <TouchableOpacity style={styles.set} onPress={() => { 
-                              onChangeSetID(uuid()),
+                              onChangeSetID(uuid()),   
                               addSetList(set) }}>
                               <Text style={styles.buttonText}>Add Set</Text>
                            </TouchableOpacity>
@@ -94,7 +104,7 @@ const AddLogButton = ({ addLog }) => {
                      if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0 || workout.notes == '') {
                         Alert.alert("Please fill everything out!")
                      } else {
-                        { addLog(time, workoutList), toggleModal(!modalVisible) }
+                        { setSetCount(workoutList), addLog(time, workoutList), toggleModal(!modalVisible) }
                      }}}>
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
