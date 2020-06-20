@@ -13,7 +13,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
     const [newWorkout, setNewWorkout] = useState({...workout})
 
     const deleteCopySet = (setId) => {
-        var copyWorkout = {...newWorkout};
+        var copyWorkout = JSON.parse(JSON.stringify(newWorkout));
         copyWorkout.sets = copyWorkout.sets.filter(set => set.id != setId);
         for (var i = 0; i < copyWorkout.sets.length; i++) {
             copyWorkout.sets[i].num = i + 1;
