@@ -6,8 +6,48 @@ import LogEntry from './components/LogEntry';
 import AddLogButton from './components/AddLogButton';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const App = () => {
+
+  const storeData = async (key, value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getData = async (key) => {
+    try {
+      var jsonValue = await AsyncStorage.getItem(key);
+      return JSON.parse(jsonValue);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const getAllKeys = async () => {
+    let keys = []
+    try {
+      keys = await AsyncStorage.getAllKeys();
+      return keys;
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const removeValue = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch(e) {
+      console.log(e);
+    }
+  
+    console.log('Done.');
+  }
+
   const log = {
     id: '',
     time: {}, 
@@ -15,6 +55,20 @@ const App = () => {
   };
 
   const [items, setItems] = useState([]);
+
+  //AsyncStorage.clear()
+
+  if(items.length == 0) {
+    getAllKeys().then(keys => {
+      keys.map((key) => {
+        getData(key).then(val => { 
+          setItems(prevItems => {
+            return [ val, ...prevItems ];
+          }) 
+        });
+      })
+    })
+  }
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -75,8 +129,10 @@ const App = () => {
       var emptyItemId = null;
       prevItems.map((item) => {
         item.workouts = item.workouts.filter(workout => workout.id != id);
+        storeData(item.id, item);
         if(item.workouts.length == 0) {
           emptyItemId = item.id;
+          removeValue(item.id);
         };
       });
       return prevItems.filter(item => item.id != emptyItemId);
@@ -88,7 +144,9 @@ const App = () => {
       Alert.alert("Please enter a workout!")
     } else {
       setItems(prevItems => {
-        return [ {id: uuid(), time: time, workouts: workouts}, ...prevItems];
+        var newItem = {id: uuid(), time: time, workouts: workouts};
+        storeData(newItem.id, newItem);
+        return [ newItem, ...prevItems ];
       })
     }
   }
@@ -99,6 +157,7 @@ const App = () => {
         for(var j = 0; j < prevItems[i].workouts.length; j++) {
           if(prevItems[i].workouts[j].id == modifiedWorkout.id) {
             prevItems[i].workouts[j] = modifiedWorkout
+            storeData(prevItems[i].id, prevItems[i]);
           }
         }
       }
@@ -113,6 +172,7 @@ const App = () => {
           prevItems[i].time.date = date;
           prevItems[i].time.start = start;
           prevItems[i].time.end = end;
+          storeData(prevItems[i].id, prevItems[i]);
         }
       }
       return sortItems(prevItems);
