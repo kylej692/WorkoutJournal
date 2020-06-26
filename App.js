@@ -56,8 +56,6 @@ const App = () => {
 
   const [items, setItems] = useState([]);
 
-  //AsyncStorage.clear()
-
   if(items.length == 0) {
     getAllKeys().then(keys => {
       keys.map((key) => {
