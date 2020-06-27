@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Content, Button } from 'native-base';
 import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/dist/AntDesign';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Header from './Header';
@@ -37,10 +36,10 @@ const AddLogButton = ({ addLog }) => {
    const onChangeEnd = (endValue) => setTime({...time, end: endValue });
    //Handles workouts attribute
    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
-   const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue});
+   const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue });
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
    const addWorkoutList = (setValue, workoutVal) => { workoutVal.sets = setValue, setWList(oldList => [...oldList, workoutVal]), setSList([]) };
-   const onChangeSetID = (id, count) => setSet({...set, id: id, num: count});
+   const onChangeSetID = (id) => setSet({...set, id: id });
    const onChangeReps = (repValue) => setSet({...set, reps: repValue });
    const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
    const onChangeNotes = (note) => setWorkout({...workout, notes: note});
