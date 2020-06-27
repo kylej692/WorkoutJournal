@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Content, Button } from 'native-base';
-import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Header from './Header';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddLogButton = ({ addLog }) => {
    const [modalVisible, setModal] = useState(false);
@@ -56,6 +57,30 @@ const AddLogButton = ({ addLog }) => {
       }
    }
 
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
    return (
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
@@ -66,6 +91,18 @@ const AddLogButton = ({ addLog }) => {
                <Header title='Add a Log'/>
                <Content>
                   <Text style={styles.header}> Time: </Text>
+                  <Button onPress={showDatepicker} title="Show date picker!" />
+                  <Button onPress={showTimepicker} title="Show time picker!" />
+                  {show && (
+                     <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                     />
+                  )}
                   <TextInput placeholder="Set Date: [Month] [Day], [Year]" style={styles.input} onChangeText={onChangeDate} />
                   <TextInput placeholder="Start Time: (e.g. 9:00am)" style={styles.input} onChangeText={onChangeStart} />
                   <TextInput placeholder="End Time: (e.g. 10:00am)" style={styles.input} onChangeText={onChangeEnd} />
