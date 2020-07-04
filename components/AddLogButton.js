@@ -137,7 +137,7 @@ const AddLogButton = ({ addLog }) => {
                   
                <Header/>
                   <TouchableOpacity style={styles.finish} onPress={() => {
-                     if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0 || workout.notes == '') {
+                     if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0) {
                         Alert.alert("Please fill everything out!")
                      } else {
                         { setSetCount(workoutList), addLog(time, workoutList), toggleModal(!modalVisible) }
