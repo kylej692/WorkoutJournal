@@ -57,29 +57,65 @@ const AddLogButton = ({ addLog }) => {
       }
    }
 
+   const timeConvertTo12 = (time) => {
+      var hour = parseInt(time.slice(0, 2));
+      var minute = time.slice(3, 5);
+      var meridiem;
+      
+      if(hour == 12) {
+          meridiem = "pm";
+      } else if(hour == 0) {
+          hour = 12;
+          meridiem = "am";
+      } else if (hour > 12) {
+          hour = hour - 12;
+          meridiem = "pm";
+      } else {
+          meridiem = "am";
+      }
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+      return hour + ":" + minute + meridiem;
+   };
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
+   const [date, setDate] = useState(new Date(1598051730000));
+   const [mode, setMode] = useState('date');
+   const [show, setShow] = useState(false);
+   const [newStart, setStart] = useState('');
+   const [newEnd, setEnd] = useState('');
+   const [isStart, setIsStart] = useState(true)
 
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-  };
+   const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+      const currentDateTimeStr = currentDate.toString(0, 21);
+      const monthDayStr = currentDateTimeStr.slice(4, 10);
+      const yearStr = currentDateTimeStr.slice(11, 15);
+      const dateStr = monthDayStr + ", " + yearStr;
+      const timeStr = currentDateTimeStr.slice(16, 21);
+      setShow(Platform.OS === 'ios');
+      setDate(currentDate);
+      onChangeDate(dateStr);
+      if (mode == 'time') {
+         if (isStart) {
+            onChangeStart(timeConvertTo12(timeStr));
+         } else {
+            onChangeEnd(timeConvertTo12(timeStr));
+         }
+      }
+   };
 
-  const showDatepicker = () => {
-    showMode('date');
-  };
+   const showMode = currentMode => {
+      setShow(true);
+      setMode(currentMode);
+   };
 
-  const showTimepicker = () => {
-    showMode('time');
-  };
+   const showDatepicker = () => {
+      showMode('date');
+   };
+
+   const showTimepicker = (isStart) => {
+      showMode('time');
+      setIsStart(isStart);
+   };
 
    return (
       <View style = {styles.container}>
@@ -91,14 +127,21 @@ const AddLogButton = ({ addLog }) => {
                <Header title='Add a Log'/>
                <Content>
                   <Text style={styles.header}> Time: </Text>
-                  <Button onPress={showDatepicker} title="Show date picker!" />
-                  <Button onPress={showTimepicker} title="Show time picker!" />
+                  <TouchableOpacity onPress={showDatepicker}>
+                        <Text> Set Date</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {showTimepicker(true)}}>
+                        <Text> Set Start Time</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {showTimepicker(true)}}>
+                        <Text> Set End Time</Text>
+                  </TouchableOpacity>
                   {show && (
                      <DateTimePicker
                         testID="dateTimePicker"
                         value={date}
                         mode={mode}
-                        is24Hour={true}
+                        is24Hour={false}
                         display="default"
                         onChange={onChange}
                      />
