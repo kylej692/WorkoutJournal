@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Alert } from 'react-native';
+import {View, StyleSheet, Alert, Platform } from 'react-native';
 import { Content } from 'native-base';
 import Header from './components/Header';
 import LogEntry from './components/LogEntry';
@@ -7,6 +7,7 @@ import AddLogButton from './components/AddLogButton';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import AsyncStorage from '@react-native-community/async-storage';
+import FilterLogsButton from './components/FilterLogsButton';
 
 const App = () => {
 
@@ -17,7 +18,7 @@ const App = () => {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const getData = async (key) => {
     try {
@@ -26,7 +27,7 @@ const App = () => {
     } catch(e) {
       console.log(e);
     }
-  }
+  };
 
   const getAllKeys = async () => {
     let keys = []
@@ -35,18 +36,18 @@ const App = () => {
       return keys;
     } catch(e) {
       console.log(e);
-    }
-  }
+    };
+  };
 
   const removeValue = async (key) => {
     try {
       await AsyncStorage.removeItem(key);
     } catch(e) {
       console.log(e);
-    }
+    };
   
     console.log('Done.');
-  }
+  };
 
   const log = {
     id: '',
@@ -62,10 +63,44 @@ const App = () => {
         getData(key).then(val => { 
           setItems(prevItems => {
             return [ val, ...prevItems ];
-          }) 
+          });
         });
-      })
-    })
+      });
+    });
+  };
+
+  const getMonths = () => {
+    var months =[];
+    for(var i = 0; i < items.length; i++) {
+      var month = items[i].time.date.slice(0, 3);
+      if(!months.includes(month)) {
+        months.push(month);
+      }
+    };
+
+    var monthsList =[{label: "None"}]
+    for(var j = 0; j < months.length; j++) {
+      monthsList.push({label: months[j]});
+    };
+
+    return monthsList;
+  };
+
+  const getYears = () => {
+    var years =[];
+    for(var i = 0; i < items.length; i++) {
+      var year = items[i].time.date.slice(8, 12);
+      if(!years.includes(year)) {
+        years.push(year);
+      }
+    };
+
+    var yearsList =[{label: "None"}]
+    for(var j = 0; j < years.length; j++) {
+      yearsList.push({label: years[j]});
+    };
+
+    return yearsList;
   }
 
   const sortItems = (items) => {
@@ -117,9 +152,40 @@ const App = () => {
       const bDate = new Date(date2 + " " + time2);
       
       return bDate - aDate;
-    })
+    });
 
     return sorted;
+  };
+
+  const filter = (month, year) => {
+    if(month === "None" && year === "None") {
+      console.log('got into both none')
+      setItems([]);
+      getAllKeys().then(keys => {
+        keys.map((key) => {
+          getData(key).then(val => { 
+            setItems(prevItems => {
+              return [ val, ...prevItems ];
+            });
+          });
+        });
+      });
+    } else if (year === "None") {
+      console.log('got into year none')
+      setItems(prevItems => {
+        return prevItems.filter(item => item.time.date.slice(0, 3) === month);
+      })
+    } else if (month === "None") {
+      console.log('got into month none')
+      setItems(prevItems => {
+        return prevItems.filter(item => item.time.date.slice(8, 12) === year);
+      })
+    } else {
+      console.log('got into all have values')
+      setItems(prevItems => {
+        return prevItems.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
+      })
+    }
   }
 
   const deleteWorkout = (id) => {
@@ -131,10 +197,10 @@ const App = () => {
         if(item.workouts.length == 0) {
           emptyItemId = item.id;
           removeValue(item.id);
-        };
-      });
+        }
+      })
       return prevItems.filter(item => item.id != emptyItemId);
-    });
+    })
   };
 
   const addItem = (time, workouts) => {
@@ -147,7 +213,7 @@ const App = () => {
         return [ newItem, ...prevItems ];
       })
     }
-  }
+  };
 
   const modifyWorkout = (modifiedWorkout) => {
     setItems(prevItems => {
@@ -161,7 +227,7 @@ const App = () => {
       }
       return prevItems;
     })
-  }
+  };
 
   const modifyDateTime = (itemId, date, start, end) => {
     setItems(prevItems => {
@@ -175,12 +241,15 @@ const App = () => {
       }
       return sortItems(prevItems);
     })
-  }
+  };
+
+  var months = getMonths();
+  var years = getYears();
 
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
-      <Content padder>
+      <Content padder style={styles.content}>
         {sortItems(items).map((item) => {
           return (
             <LogEntry item={item} deleteWorkout={deleteWorkout} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
@@ -190,13 +259,17 @@ const App = () => {
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
+      <FilterLogsButton items={items} months={months} years={years} filter={filter} />
     </View>
-  );
-  };
+  )
+};
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    marginTop: 35
   },
   button: {
     position: 'absolute',
