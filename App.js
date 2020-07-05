@@ -56,52 +56,38 @@ const App = () => {
   };
 
   const [items, setItems] = useState([]);
+  const [monthsList, setMonthsList] = useState([]);
+  const [yearsList, setYearsList] = useState([]);
 
   if(items.length == 0) {
     getAllKeys().then(keys => {
       keys.map((key) => {
         getData(key).then(val => { 
+
           setItems(prevItems => {
             return [ val, ...prevItems ];
           });
+
+          var month = val.time.date.slice(0, 3);
+          setMonthsList(prevMonths => {
+            if(!prevMonths.includes(month)) {
+              return [...prevMonths, month];
+            } 
+            return [...prevMonths];
+          });
+
+          var year = val.time.date.slice(8, 12);
+          setYearsList(prevYears => {
+            if(!prevYears.includes(year)) {
+              return [...prevYears, year];
+            }
+            return [...prevYears];
+          });
+
         });
       });
     });
   };
-
-  const getMonths = () => {
-    var months =[];
-    for(var i = 0; i < items.length; i++) {
-      var month = items[i].time.date.slice(0, 3);
-      if(!months.includes(month)) {
-        months.push(month);
-      }
-    };
-
-    var monthsList =[{label: "None"}]
-    for(var j = 0; j < months.length; j++) {
-      monthsList.push({label: months[j]});
-    };
-
-    return monthsList;
-  };
-
-  const getYears = () => {
-    var years =[];
-    for(var i = 0; i < items.length; i++) {
-      var year = items[i].time.date.slice(8, 12);
-      if(!years.includes(year)) {
-        years.push(year);
-      }
-    };
-
-    var yearsList =[{label: "None"}]
-    for(var j = 0; j < years.length; j++) {
-      yearsList.push({label: years[j]});
-    };
-
-    return yearsList;
-  }
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -159,32 +145,31 @@ const App = () => {
 
   const filter = (month, year) => {
     if(month === "None" && year === "None") {
+
       console.log('got into both none')
       setItems([]);
-      getAllKeys().then(keys => {
-        keys.map((key) => {
-          getData(key).then(val => { 
-            setItems(prevItems => {
-              return [ val, ...prevItems ];
-            });
-          });
-        });
-      });
+
     } else if (year === "None") {
+
       console.log('got into year none')
       setItems(prevItems => {
         return prevItems.filter(item => item.time.date.slice(0, 3) === month);
       })
+
     } else if (month === "None") {
+
       console.log('got into month none')
       setItems(prevItems => {
         return prevItems.filter(item => item.time.date.slice(8, 12) === year);
       })
+
     } else {
+
       console.log('got into all have values')
       setItems(prevItems => {
         return prevItems.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
       })
+
     }
   }
 
@@ -243,8 +228,15 @@ const App = () => {
     })
   };
 
-  var months = getMonths();
-  var years = getYears();
+  var months = [{label: "None"}];
+  monthsList.map((month) => {
+    months.push({label: month})
+  });
+
+  var years = [{label: "None"}];
+  yearsList.map((year) => {
+    years.push({label: year})
+  });
 
   return (
     <View style={styles.container}>
