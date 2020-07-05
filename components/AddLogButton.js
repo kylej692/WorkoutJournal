@@ -101,6 +101,7 @@ const AddLogButton = ({ addLog }) => {
             onChangeEnd(timeConvertTo12(timeStr));
          }
       }
+      console.log(time);
    };
 
    const showMode = currentMode => {
@@ -126,31 +127,28 @@ const AddLogButton = ({ addLog }) => {
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
                <Content>
-                  <Text style={styles.header}> Time: </Text>
-                  <TouchableOpacity onPress={showDatepicker}>
-                        <Text> Set Date</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {showTimepicker(true)}}>
-                        <Text> Set Start Time</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {showTimepicker(true)}}>
-                        <Text> Set End Time</Text>
-                  </TouchableOpacity>
-                  {show && (
-                     <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={false}
-                        display="default"
-                        onChange={onChange}
-                     />
-                  )}
-                  <TextInput placeholder="Set Date: [Month] [Day], [Year]" style={styles.input} onChangeText={onChangeDate} />
-                  <TextInput placeholder="Start Time: (e.g. 9:00am)" style={styles.input} onChangeText={onChangeStart} />
-                  <TextInput placeholder="End Time: (e.g. 10:00am)" style={styles.input} onChangeText={onChangeEnd} />
-
-                  <View style={{borderColor:'black',borderBottomWidth:1,borderTopWidth:1}}>
+                  <View>
+                     <View style={styles.buttonView}>
+                        <TouchableOpacity style={styles.time} onPress={showDatepicker}>
+                              <Text style={styles.buttonText}> Set Date</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(true)}}>
+                              <Text style={styles.buttonText}> Set Start Time</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(false)}}>
+                              <Text style={styles.buttonText}> Set End Time</Text>
+                        </TouchableOpacity>
+                        {show && (
+                           <DateTimePicker
+                              testID="dateTimePicker"
+                              value={date}
+                              mode={mode}
+                              is24Hour={false}
+                              display="default"
+                              onChange={onChange}
+                           />
+                        )}
+                     </View>
                      <Text style={styles.header}> Workout: </Text>
                      <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} />
                      <View style={{borderColor:'blue',borderBottomWidth:1,borderTopWidth:1}}>
@@ -242,14 +240,22 @@ const styles = StyleSheet.create ({
       padding: 5,
       borderRadius: 10,
       bottom: 5,
-      left: 310,
+      left: 315,
+   },
+   time: {
+      backgroundColor: "#2C95FF",
+      marginHorizontal: 5,
+      padding: 5,
+      borderRadius: 10,
+      bottom: -10,
+      left: 4,
    },
    workout: {
       backgroundColor: "#2C95FF",
       padding: 5,
       borderRadius: 8,
       bottom: 5,
-      left: 270,
+      left: 275,
    },
    cancel: {
       position: 'absolute',
@@ -257,14 +263,14 @@ const styles = StyleSheet.create ({
       left: 10,
    },
    header: {
-      marginTop: 10,
+      marginTop: 20,
       fontSize: 20
    },
    buttonText: {
       marginLeft: 3,
-      marginRight: 3,
+      marginRight: 5,
       color: "white",
-      fontSize: 20,
+      fontSize: 19,
    },
    icon: {
       padding: 20,
