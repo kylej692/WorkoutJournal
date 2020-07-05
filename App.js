@@ -56,34 +56,16 @@ const App = () => {
   };
 
   const [items, setItems] = useState([]);
-  const [monthsList, setMonthsList] = useState([]);
-  const [yearsList, setYearsList] = useState([]);
+  //const [monthsList, setMonthsList] = useState([]);
+  //const [yearsList, setYearsList] = useState([]);
 
   if(items.length == 0) {
     getAllKeys().then(keys => {
       keys.map((key) => {
         getData(key).then(val => { 
-
           setItems(prevItems => {
             return [ val, ...prevItems ];
           });
-
-          var month = val.time.date.slice(0, 3);
-          setMonthsList(prevMonths => {
-            if(!prevMonths.includes(month)) {
-              return [...prevMonths, month];
-            } 
-            return [...prevMonths];
-          });
-
-          var year = val.time.date.slice(8, 12);
-          setYearsList(prevYears => {
-            if(!prevYears.includes(year)) {
-              return [...prevYears, year];
-            }
-            return [...prevYears];
-          });
-
         });
       });
     });
@@ -227,6 +209,22 @@ const App = () => {
       return sortItems(prevItems);
     })
   };
+
+  var monthsList = [];
+  var yearsList = [];
+  items.map((item) => {
+    
+    var month = item.time.date.slice(0, 3);
+    if(!monthsList.includes(month)) {
+      monthsList.push(month);
+    };
+
+    var year = item.time.date.slice(8, 12);
+    if(!yearsList.includes(year)) {
+      yearsList.push(year);
+    };
+
+  });
 
   var months = [{label: "None"}];
   monthsList.map((month) => {
