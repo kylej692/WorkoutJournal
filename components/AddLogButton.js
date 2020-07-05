@@ -156,8 +156,11 @@ const AddLogButton = ({ addLog }) => {
                         <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} />
                         <View style={styles.buttonView}>
                            <TouchableOpacity style={styles.set} onPress={() => { 
-                              onChangeSetID(uuid()),   
-                              addSetList(set) }}>
+                              if (set.reps == '' || set.weight == '') {
+                                 Alert.alert("Can't add a blank set")
+                              } else {
+                                 { onChangeSetID(uuid()), addSetList(set) }
+                              }}}>
                               <Text style={styles.buttonText}>Add Set</Text>
                            </TouchableOpacity>
                         </View>
