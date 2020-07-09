@@ -4,9 +4,7 @@ import { Picker } from '@react-native-community/picker';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
-const FilterLogsButton = ({ months, years, filter }) => {
-    const [selectedMonthValue, setSelectedMonthValue] = useState("None");
-    const [selectedYearValue, setSelectedYearValue] = useState("None");
+const FilterLogsButton = ({ months, years, filter, setSelectedMonthValue, setSelectedYearValue, selectedMonthValue, selectedYearValue }) => {
 
     return (
         <View style={styles.dropDownMonthsView}>

@@ -56,14 +56,20 @@ const App = () => {
   };
 
   const [items, setItems] = useState([]);
-  //const [monthsList, setMonthsList] = useState([]);
-  //const [yearsList, setYearsList] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedMonthValue, setSelectedMonthValue] = useState("None");
+  const [selectedYearValue, setSelectedYearValue] = useState("None");
 
+  //AsyncStorage.clear();
+  //get all workout logs from local storage
   if(items.length == 0) {
     getAllKeys().then(keys => {
       keys.map((key) => {
         getData(key).then(val => { 
           setItems(prevItems => {
+            return [ val, ...prevItems ];
+          });
+          setFilteredItems(prevItems => {
             return [ val, ...prevItems ];
           });
         });
@@ -128,34 +134,78 @@ const App = () => {
   const filter = (month, year) => {
     if(month === "None" && year === "None") {
 
-      console.log('got into both none')
-      setItems([]);
+      setFilteredItems(items);
 
     } else if (year === "None") {
 
-      console.log('got into year none')
-      setItems(prevItems => {
-        return prevItems.filter(item => item.time.date.slice(0, 3) === month);
+      setFilteredItems(() => {
+        return items.filter(item => item.time.date.slice(0, 3) === month);
       })
 
     } else if (month === "None") {
 
-      console.log('got into month none')
-      setItems(prevItems => {
-        return prevItems.filter(item => item.time.date.slice(8, 12) === year);
+      setFilteredItems(() => {
+        return items.filter(item => item.time.date.slice(8, 12) === year);
       })
 
     } else {
 
-      console.log('got into all have values')
-      setItems(prevItems => {
-        return prevItems.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
+      setFilteredItems(() => {
+        return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
       })
 
     }
-  }
+  };
+
+  //get all the months and years of the workout logs for filter component
+  var monthsList = [];
+  var yearsList = [];
+
+  items.map((item) => {
+    
+    var month = item.time.date.slice(0, 3);
+    if(!monthsList.includes(month)) {
+      monthsList.push(month);
+    };
+
+    var year = item.time.date.slice(8, 12);
+    if(!yearsList.includes(year)) {
+      yearsList.push(year);
+    };
+
+  });
+
+  var months = [{label: "None"}];
+  monthsList.map((month) => {
+    months.push({label: month})
+  });
+
+  var years = [{label: "None"}];
+  yearsList.map((year) => {
+    years.push({label: year})
+  });
+
+  const addItem = (time, workouts) => {
+    if(!time || !workouts) {
+      Alert.alert("Please enter a workout!")
+    } else {
+      setItems(prevItems => {
+        var newItem = {id: uuid(), time: time, workouts: workouts};
+        storeData(newItem.id, newItem);
+        return [ newItem, ...prevItems ];
+      });
+      if((selectedMonthValue === "None" && selectedYearValue === "None") || time.date.slice(0, 3) === selectedMonthValue || time.date.slice(8, 12) === selectedYearValue) {
+        setFilteredItems(prevItems => {
+          var newItem = {id: uuid(), time: time, workouts: workouts};
+          storeData(newItem.id, newItem);
+          return [ newItem, ...prevItems ];
+        });
+      }
+    }
+  };
 
   const deleteWorkout = (id) => {
+
     setItems(prevItems => {
       var emptyItemId = null;
       prevItems.map((item) => {
@@ -167,19 +217,19 @@ const App = () => {
         }
       })
       return prevItems.filter(item => item.id != emptyItemId);
-    })
-  };
+    });
 
-  const addItem = (time, workouts) => {
-    if(!time || !workouts) {
-      Alert.alert("Please enter a workout!")
-    } else {
-      setItems(prevItems => {
-        var newItem = {id: uuid(), time: time, workouts: workouts};
-        storeData(newItem.id, newItem);
-        return [ newItem, ...prevItems ];
+    setFilteredItems(prevItems => {
+      var emptyItemId = null;
+      prevItems.map((item) => {
+        item.workouts = item.workouts.filter(workout => workout.id != id);
+        if(item.workouts.length == 0) {
+          emptyItemId = item.id;
+        }
       })
-    }
+      return prevItems.filter(item => item.id != emptyItemId);
+    });
+
   };
 
   const modifyWorkout = (modifiedWorkout) => {
@@ -210,37 +260,11 @@ const App = () => {
     })
   };
 
-  var monthsList = [];
-  var yearsList = [];
-  items.map((item) => {
-    
-    var month = item.time.date.slice(0, 3);
-    if(!monthsList.includes(month)) {
-      monthsList.push(month);
-    };
-
-    var year = item.time.date.slice(8, 12);
-    if(!yearsList.includes(year)) {
-      yearsList.push(year);
-    };
-
-  });
-
-  var months = [{label: "None"}];
-  monthsList.map((month) => {
-    months.push({label: month})
-  });
-
-  var years = [{label: "None"}];
-  yearsList.map((year) => {
-    years.push({label: year})
-  });
-
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
       <Content padder style={styles.content}>
-        {sortItems(items).map((item) => {
+        {sortItems(filteredItems).map((item) => {
           return (
             <LogEntry item={item} deleteWorkout={deleteWorkout} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
           )
@@ -249,7 +273,7 @@ const App = () => {
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
-      <FilterLogsButton items={items} months={months} years={years} filter={filter} />
+      <FilterLogsButton months={months} years={years} filter={filter} setSelectedMonthValue={setSelectedMonthValue} setSelectedYearValue={setSelectedYearValue} selectedMonthValue={selectedMonthValue} selectedYearValue={selectedYearValue} />
     </View>
   )
 };
