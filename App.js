@@ -60,7 +60,6 @@ const App = () => {
   const [selectedMonthValue, setSelectedMonthValue] = useState("None");
   const [selectedYearValue, setSelectedYearValue] = useState("None");
 
-  //AsyncStorage.clear();
   //get all workout logs from local storage
   if(items.length == 0) {
     getAllKeys().then(keys => {
@@ -197,7 +196,6 @@ const App = () => {
       if((selectedMonthValue === "None" && selectedYearValue === "None") || time.date.slice(0, 3) === selectedMonthValue || time.date.slice(8, 12) === selectedYearValue) {
         setFilteredItems(prevItems => {
           var newItem = {id: uuid(), time: time, workouts: workouts};
-          storeData(newItem.id, newItem);
           return [ newItem, ...prevItems ];
         });
       }
