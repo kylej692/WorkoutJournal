@@ -7,7 +7,7 @@ import AddLogButton from './components/AddLogButton';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import AsyncStorage from '@react-native-community/async-storage';
-import FilterLogsButton from './components/FilterLogsButton';
+import FilterLogs from './components/FilterLogs';
 
 const App = () => {
 
@@ -271,7 +271,8 @@ const App = () => {
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
-      <FilterLogsButton months={months} years={years} filter={filter} setSelectedMonthValue={setSelectedMonthValue} setSelectedYearValue={setSelectedYearValue} selectedMonthValue={selectedMonthValue} selectedYearValue={selectedYearValue} />
+      <FilterLogs months={months} years={years} filter={filter} setSelectedMonthValue={setSelectedMonthValue} setSelectedYearValue={setSelectedYearValue} 
+      selectedMonthValue={selectedMonthValue} selectedYearValue={selectedYearValue} />
     </View>
   )
 };
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12, 
     right: 5,
-  },
+  }
 });
 
 export default App;
