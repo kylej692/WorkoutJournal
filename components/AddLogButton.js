@@ -30,7 +30,6 @@ const AddLogButton = ({ addLog }) => {
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
-   //const [setCount, setSetCount] = useState(0);
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -80,8 +79,6 @@ const AddLogButton = ({ addLog }) => {
    const [date, setDate] = useState(new Date(1598051730000));
    const [mode, setMode] = useState('date');
    const [show, setShow] = useState(false);
-   const [newStart, setStart] = useState('');
-   const [newEnd, setEnd] = useState('');
    const [isStart, setIsStart] = useState(true)
 
    const onChange = (event, selectedDate) => {
