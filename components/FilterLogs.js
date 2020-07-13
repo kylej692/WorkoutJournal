@@ -6,10 +6,12 @@ import { uuid } from 'uuidv4';
 import Modal from 'react-native-modal';
 import RangeSlider from 'rn-range-slider';
 
-const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedYearValue, selectedMonthValue, selectedYearValue }) => {
+const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedYearValue, selectedMonthValue, selectedYearValue, rangeLow, rangeHigh, setRangeLow, setRangeHigh }) => {
 
     const [isRangeModalVisible, setRangeModalVisible] = useState(false);
-
+    const [copyRangeLow, setCopyRangeLow] = useState(rangeLow);
+    const [copyRangeHigh, setCopyRangeHigh] = useState(rangeHigh);
+    
     const toggleRangeModal = () => {
         setRangeModalVisible(!isRangeModalVisible);
     }
@@ -32,7 +34,7 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
             </Picker>
             <Text style={styles.daysText}>Days</Text>
             <TouchableOpacity onPress={toggleRangeModal}>
-                <Text style={styles.daysRange}>0 - 31</Text>
+            <Text style={styles.daysRange}>{rangeLow + " - " + rangeHigh}</Text>
             </TouchableOpacity>
             <Text style={styles.yearText}>Year</Text>
             <Picker
@@ -50,15 +52,39 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
             </Picker>
             <Modal onRequestClose={() => {setRangeModalVisible(!isRangeModalVisible)}} isVisible={ isRangeModalVisible } style={styles.rangeModal}>
                 <View>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>Filter Days</Text>
+                    </View>
+                    <View style={styles.rangeTextView}>
+                        <Text style={styles.rangeLowText}>{copyRangeLow}</Text>
+                        <Text style={styles.rangeHighText}>{copyRangeHigh}</Text>
+                    </View>
                     <RangeSlider
-                    style={{width: 180, height: 80}}
+                    style={{width: 230, height: 80, marginLeft: 65, bottom: 5 }}
                     gravity={'center'}
                     min={1}
                     max={31}
+                    initialLowValue={copyRangeLow}
+                    initialHighValue={copyRangeHigh}
                     step={1}
+                    labelStyle="none"
                     selectionColor="#2C95FF"
-                    blankColor="#f618"
+                    blankColor="#90DDFF"
+                    onValueChanged = {(low, high, fromUser) => {
+                        if(fromUser) {
+                            console.log('got here')
+                            setCopyRangeLow(low)
+                            setCopyRangeHigh(high)
+                        };
+                    }}
                     />
+                    <TouchableOpacity style={styles.doneBtn} onPress={() => {
+                        setRangeLow(copyRangeLow),
+                        setRangeHigh(copyRangeHigh),
+                        setRangeModalVisible(false)
+                    }}>
+                        <Text style={styles.doneText}>Done</Text>
+                     </TouchableOpacity>
                 </View>
             </Modal>
         </View>
@@ -100,10 +126,54 @@ const styles = StyleSheet.create({
     rangeModal: {
         position: "relative",
         marginTop: 250,
-        marginBottom: 350,
+        marginBottom: 315,
         backgroundColor: "white", 
         flex: 1,
         alignItems: "center"
+    },
+    header: {
+        height: 40,
+        padding: 15,
+        width: 370,
+        alignItems: "center",
+        backgroundColor: '#2C95FF',
+        bottom: 33
+    },
+    headerText: {
+        color: '#fff',
+        fontSize: 20,
+        bottom: 10,
+        textAlign: 'center'
+    },
+    rangeTextView: {
+        flexDirection: "row"
+    },
+    rangeLowText: {
+        position: "absolute",
+        fontSize: 20,
+        left: 64
+    },
+    rangeHighText: {
+        position: "absolute",
+        fontSize: 20,
+        left: 274
+    },
+    doneBtn: { 
+        position: "absolute", 
+        right: 160,
+        top: 110,
+        backgroundColor: "#2C95FF",
+        height: 35,
+        width: 55,
+        padding: 5,
+        borderRadius: 8,
+        flexWrap: "wrap",
+        flexDirection: "row" 
+    },
+    doneText: {
+        marginLeft: 3,
+        fontSize: 17,
+        color: "white"
     }
 });
 

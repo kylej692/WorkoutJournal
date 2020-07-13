@@ -59,6 +59,8 @@ const App = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedMonthValue, setSelectedMonthValue] = useState("None");
   const [selectedYearValue, setSelectedYearValue] = useState("None");
+  const [rangeLow, setRangeLow] = useState(1);
+  const [rangeHigh, setRangeHigh] = useState(31);
 
   //get all workout logs from local storage
   if(items.length == 0) {
@@ -271,8 +273,18 @@ const App = () => {
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
-      <FilterLogs months={months} years={years} filter={filter} setSelectedMonthValue={setSelectedMonthValue} setSelectedYearValue={setSelectedYearValue} 
-      selectedMonthValue={selectedMonthValue} selectedYearValue={selectedYearValue} />
+      <FilterLogs 
+        months={months} years={years} 
+        filter={filter} 
+        setSelectedMonthValue={setSelectedMonthValue} 
+        setSelectedYearValue={setSelectedYearValue} 
+        selectedMonthValue={selectedMonthValue} 
+        selectedYearValue={selectedYearValue} 
+        rangeLow={rangeLow} 
+        rangeHigh={rangeHigh} 
+        setRangeLow={setRangeLow}
+        setRangeHigh={setRangeHigh}
+      />
     </View>
   )
 };
