@@ -30,19 +30,36 @@ const AddLogButton = ({ addLog }) => {
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
+   //For text inputs
+   const [wName, setWName] = useState('');
+   const clearName = () => {
+      setWName('');
+   };
+   const [note, setNote] = useState('');
+   const clearNote = () => {
+      setNote('');
+   };
+   const [rep, setRep] = useState();
+   const clearRep = () => {
+      setRep('');
+   };
+   const [weight, setWeight] = useState();
+   const clearWeight = () => {
+      setWeight('');
+   };
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
    const onChangeEnd = (endValue) => setTime({...time, end: endValue });
    //Handles workouts attribute
    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
-   const onChangeName = (nameValue) => setWorkout({...workout, name: nameValue });
+   const onChangeName = (nameValue) => { setWorkout({...workout, name: nameValue }), setWName(nameValue) };
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
    const addWorkoutList = (setValue, workoutVal) => { workoutVal.sets = setValue, setWList(oldList => [...oldList, workoutVal]), setSList([]) };
    const onChangeSetID = (id) => setSet({...set, id: id });
-   const onChangeReps = (repValue) => setSet({...set, reps: repValue });
-   const onChangeWeight = (weightValue) => setSet({...set, weight: weightValue });
-   const onChangeNotes = (note) => setWorkout({...workout, notes: note});
+   const onChangeReps = (repValue) => { setSet({...set, reps: repValue }), setRep(repValue) };
+   const onChangeWeight = (weightValue) => { setSet({...set, weight: weightValue }), setWeight(weightValue) };
+   const onChangeNotes = (note) => { setWorkout({...workout, notes: note}), setNote(note) };
 
    const toggleModal = (visible) => {
       setModal(visible);
@@ -147,28 +164,28 @@ const AddLogButton = ({ addLog }) => {
                         )}
                      </View>
                      <Text style={styles.header}> Workout: </Text>
-                     <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} />
+                     <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
                      <View style={{borderColor:'blue',borderBottomWidth:1,borderTopWidth:1}}>
-                        <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} />
-                        <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} />
+                        <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} value={rep}/>
+                        <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
                         <View style={styles.buttonView}>
                            <TouchableOpacity style={styles.set} onPress={() => { 
                               if (set.reps == '' || set.weight == '') {
                                  Alert.alert("Can't add a blank set")
                               } else {
-                                 { onChangeSetID(uuid()), addSetList(set) }
+                                 { onChangeSetID(uuid()), addSetList(set), clearRep(), clearWeight() }
                               }}}>
                               <Text style={styles.buttonText}>Add Set</Text>
                            </TouchableOpacity>
                         </View>
                      </View> 
-                     <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} />
+                     <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} value={note} />
                      <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.workout} onPress={() => {
                            if (setList.length == 0) {
                               Alert.alert("Please add one or more sets for your workout!")
                            } else {
-                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout) }
+                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), clearName(), clearNote() }
                            }}}>
                            <Text style={styles.buttonText}>Set Workout</Text>
                         </TouchableOpacity>
