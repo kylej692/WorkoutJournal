@@ -4,7 +4,7 @@ import { Picker } from '@react-native-community/picker';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Modal from 'react-native-modal';
-import RangeSlider from 'rn-range-slider';
+import FilterDays from '../components/FilterDays';
 
 const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedYearValue, selectedMonthValue, selectedYearValue, rangeLow, rangeHigh, setRangeLow, setRangeHigh }) => {
 
@@ -14,7 +14,7 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
     
     const toggleRangeModal = () => {
         setRangeModalVisible(!isRangeModalVisible);
-    }
+    };
 
     return (
         <View style={styles.dropDownMonthsView}>
@@ -23,7 +23,7 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
                 selectedValue={selectedMonthValue}
                 mode="dropdown"
                 style={{ height: 30, width: 102, bottom:6, left: 8 }}
-                onValueChange={(itemValue) => {setSelectedMonthValue(itemValue), filter(itemValue, selectedYearValue)}}
+                onValueChange={(itemValue) => {setSelectedMonthValue(itemValue), filter(itemValue, selectedYearValue, rangeLow, rangeHigh)}}
             >
                 {months.map((month) => { 
                     return (
@@ -34,14 +34,14 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
             </Picker>
             <Text style={styles.daysText}>Days</Text>
             <TouchableOpacity onPress={toggleRangeModal}>
-            <Text style={styles.daysRange}>{rangeLow + " - " + rangeHigh}</Text>
+                <Text style={styles.daysRange}>{rangeLow + " - " + rangeHigh}</Text>
             </TouchableOpacity>
             <Text style={styles.yearText}>Year</Text>
             <Picker
                 selectedValue={selectedYearValue}
                 mode="dropdown"
                 style={{ height: 30, width: 102, bottom: 6, left: 38 }}
-                onValueChange={(itemValue) => {setSelectedYearValue(itemValue), filter(selectedMonthValue, itemValue)}}
+                onValueChange={(itemValue) => {setSelectedYearValue(itemValue), filter(selectedMonthValue, itemValue, rangeLow, rangeHigh)}}
             >
                 {years.map((year) => {
                     return (
@@ -50,42 +50,26 @@ const FilterLogs = ({ months, years, filter, setSelectedMonthValue, setSelectedY
                 })}
 
             </Picker>
-            <Modal onRequestClose={() => {setRangeModalVisible(!isRangeModalVisible)}} isVisible={ isRangeModalVisible } style={styles.rangeModal}>
-                <View>
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>Filter Days</Text>
-                    </View>
-                    <View style={styles.rangeTextView}>
-                        <Text style={styles.rangeLowText}>{copyRangeLow}</Text>
-                        <Text style={styles.rangeHighText}>{copyRangeHigh}</Text>
-                    </View>
-                    <RangeSlider
-                    style={{width: 230, height: 80, marginLeft: 65, bottom: 5 }}
-                    gravity={'center'}
-                    min={1}
-                    max={31}
-                    initialLowValue={copyRangeLow}
-                    initialHighValue={copyRangeHigh}
-                    step={1}
-                    labelStyle="none"
-                    selectionColor="#2C95FF"
-                    blankColor="#90DDFF"
-                    onValueChanged = {(low, high, fromUser) => {
-                        if(fromUser) {
-                            console.log('got here')
-                            setCopyRangeLow(low)
-                            setCopyRangeHigh(high)
-                        };
-                    }}
-                    />
-                    <TouchableOpacity style={styles.doneBtn} onPress={() => {
-                        setRangeLow(copyRangeLow),
-                        setRangeHigh(copyRangeHigh),
-                        setRangeModalVisible(false)
-                    }}>
-                        <Text style={styles.doneText}>Done</Text>
-                     </TouchableOpacity>
-                </View>
+            <Modal 
+                onRequestClose={() => {
+                    setRangeModalVisible(!isRangeModalVisible),
+                    setCopyRangeLow(rangeLow),
+                    setCopyRangeHigh(rangeHigh)
+                }} 
+                isVisible={ isRangeModalVisible } style={styles.rangeModal}
+            >
+                <FilterDays 
+                    filter={filter}
+                    selectedMonthValue={selectedMonthValue}
+                    selectedYearValue={selectedYearValue}
+                    copyRangeLow={copyRangeLow} 
+                    copyRangeHigh={copyRangeHigh} 
+                    setCopyRangeLow={setCopyRangeLow} 
+                    setRangeLow={setRangeLow}
+                    setRangeHigh={setRangeHigh}
+                    setCopyRangeHigh={setCopyRangeHigh} 
+                    setRangeModalVisible={setRangeModalVisible} 
+                />
             </Modal>
         </View>
     )
@@ -130,50 +114,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white", 
         flex: 1,
         alignItems: "center"
-    },
-    header: {
-        height: 40,
-        padding: 15,
-        width: 370,
-        alignItems: "center",
-        backgroundColor: '#2C95FF',
-        bottom: 33
-    },
-    headerText: {
-        color: '#fff',
-        fontSize: 20,
-        bottom: 10,
-        textAlign: 'center'
-    },
-    rangeTextView: {
-        flexDirection: "row"
-    },
-    rangeLowText: {
-        position: "absolute",
-        fontSize: 20,
-        left: 64
-    },
-    rangeHighText: {
-        position: "absolute",
-        fontSize: 20,
-        left: 274
-    },
-    doneBtn: { 
-        position: "absolute", 
-        right: 160,
-        top: 110,
-        backgroundColor: "#2C95FF",
-        height: 35,
-        width: 55,
-        padding: 5,
-        borderRadius: 8,
-        flexWrap: "wrap",
-        flexDirection: "row" 
-    },
-    doneText: {
-        marginLeft: 3,
-        fontSize: 17,
-        color: "white"
     }
 });
 

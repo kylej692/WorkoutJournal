@@ -10,7 +10,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 import FilterLogs from './components/FilterLogs';
 
 const App = () => {
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedMonthValue, setSelectedMonthValue] = useState("None");
+  const [selectedYearValue, setSelectedYearValue] = useState("None");
+  const [rangeLow, setRangeLow] = useState(1);
+  const [rangeHigh, setRangeHigh] = useState(31);
 
+  //AsyncStorage functions
   const storeData = async (key, value) => {
     try {
       const jsonValue = JSON.stringify(value);
@@ -49,20 +56,7 @@ const App = () => {
     console.log('Done.');
   };
 
-  const log = {
-    id: '',
-    time: {}, 
-    workouts: [],
-  };
-
-  const [items, setItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [selectedMonthValue, setSelectedMonthValue] = useState("None");
-  const [selectedYearValue, setSelectedYearValue] = useState("None");
-  const [rangeLow, setRangeLow] = useState(1);
-  const [rangeHigh, setRangeHigh] = useState(31);
-
-  //get all workout logs from local storage
+  //Get all workout logs from local storage
   if(items.length == 0) {
     getAllKeys().then(keys => {
       keys.map((key) => {
@@ -132,33 +126,66 @@ const App = () => {
     return sorted;
   };
 
-  const filter = (month, year) => {
+  const filter = (month, year, rangeLow, rangeHigh) => {
     if(month === "None" && year === "None") {
 
-      setFilteredItems(items);
+      if(rangeLow != 1 || rangeHigh != 31) {
+
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+        })
+
+      } else {
+        setFilteredItems(items);
+      }
 
     } else if (year === "None") {
 
-      setFilteredItems(() => {
-        return items.filter(item => item.time.date.slice(0, 3) === month);
-      })
+      if(rangeLow != 1 || rangeHigh != 31) {
+
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+        })
+
+      } else {
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(0, 3) === month);
+        })
+      }
 
     } else if (month === "None") {
 
-      setFilteredItems(() => {
-        return items.filter(item => item.time.date.slice(8, 12) === year);
-      })
+      if(rangeLow != 1 || rangeHigh != 31) {
+
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+        })
+
+      } else {
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(8, 12) === year);
+        })
+      }
 
     } else {
 
-      setFilteredItems(() => {
-        return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
-      })
+      if(rangeLow != 1 || rangeHigh != 31) {
+
+        setFilteredItems(() => {
+          return items.filter(item => 
+            item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+        })
+
+      } else {
+        setFilteredItems(() => {
+          return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
+        })
+      }
 
     }
   };
 
-  //get all the months and years of the workout logs for filter component
+  //Get all the months and years of the workout logs for filter component
   var monthsList = [];
   var yearsList = [];
 
@@ -205,7 +232,6 @@ const App = () => {
   };
 
   const deleteWorkout = (id) => {
-
     setItems(prevItems => {
       var emptyItemId = null;
       prevItems.map((item) => {
@@ -274,8 +300,11 @@ const App = () => {
         <AddLogButton addLog={addItem}/>
       </View>
       <FilterLogs 
-        months={months} years={years} 
+        months={months} 
+        years={years} 
         filter={filter} 
+        selectedMonthValue={selectedMonthValue}
+        selectedYearValue={selectedYearValue}
         setSelectedMonthValue={setSelectedMonthValue} 
         setSelectedYearValue={setSelectedYearValue} 
         selectedMonthValue={selectedMonthValue} 
