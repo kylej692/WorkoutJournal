@@ -30,36 +30,61 @@ const AddLogButton = ({ addLog }) => {
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
    const [set, setSet] = useState(defaultSet);
-   //For text inputs
    const [wName, setWName] = useState('');
-   const clearName = () => {
-      setWName('');
-   };
    const [note, setNote] = useState('');
-   const clearNote = () => {
-      setNote('');
-   };
    const [rep, setRep] = useState();
-   const clearRep = () => {
-      setRep('');
-   };
    const [weight, setWeight] = useState();
-   const clearWeight = () => {
-      setWeight('');
-   };
+   const [date, setDate] = useState(new Date(1598051730000));
+   const [mode, setMode] = useState('date');
+   const [show, setShow] = useState(false);
+   const [isStart, setIsStart] = useState(true);
+
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
    const onChangeEnd = (endValue) => setTime({...time, end: endValue });
+
    //Handles workouts attribute
    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
-   const onChangeName = (nameValue) => { setWorkout({...workout, name: nameValue }), setWName(nameValue) };
+   const onChangeName = (nameValue) => { 
+      setWorkout({...workout, name: nameValue });
+      setWName(nameValue);
+   };
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
-   const addWorkoutList = (setValue, workoutVal) => { workoutVal.sets = setValue, setWList(oldList => [...oldList, workoutVal]), setSList([]) };
+   const addWorkoutList = (setValue, workoutVal) => { 
+      workoutVal.sets = setValue;
+      setWList(oldList => [...oldList, workoutVal]);
+      setSList([]); 
+   };
    const onChangeSetID = (id) => setSet({...set, id: id });
-   const onChangeReps = (repValue) => { setSet({...set, reps: repValue }), setRep(repValue) };
-   const onChangeWeight = (weightValue) => { setSet({...set, weight: weightValue }), setWeight(weightValue) };
-   const onChangeNotes = (note) => { setWorkout({...workout, notes: note}), setNote(note) };
+   const onChangeReps = (repValue) => { 
+      setSet({...set, reps: repValue });
+      setRep(repValue);
+   };
+   const onChangeWeight = (weightValue) => { 
+      setSet({...set, weight: weightValue });
+      setWeight(weightValue);
+   };
+   const onChangeNotes = (note) => { 
+      setWorkout({...workout, notes: note});
+      setNote(note);
+   };
+   
+   //For text inputs
+   const clearName = () => {
+      console.log('hi');
+      setWName('');
+   };
+   const clearNote = () => {
+      setNote('');
+   };
+   const clearRep = () => {
+      console.log("hi");
+      setRep('');
+   };
+   const clearWeight = () => {
+      setWeight('');
+   };
 
    const toggleModal = (visible) => {
       setModal(visible);
@@ -71,8 +96,8 @@ const AddLogButton = ({ addLog }) => {
             workoutList[j].sets[i].num = i + 1;
          }
       }
-   }
-
+   };
+   //For date and time picker
    const timeConvertTo12 = (time) => {
       var hour = parseInt(time.slice(0, 2));
       var minute = time.slice(3, 5);
@@ -93,12 +118,7 @@ const AddLogButton = ({ addLog }) => {
       return hour + ":" + minute + meridiem;
    };
 
-   const [date, setDate] = useState(new Date(1598051730000));
-   const [mode, setMode] = useState('date');
-   const [show, setShow] = useState(false);
-   const [isStart, setIsStart] = useState(true)
-
-   const onChange = (event, selectedDate) => {
+   const onChangeTime = (event, selectedDate) => {
       const currentDate = selectedDate || date;
       const currentDateTimeStr = currentDate.toString(0, 21);
       const monthDayStr = currentDateTimeStr.slice(4, 10);
@@ -115,7 +135,6 @@ const AddLogButton = ({ addLog }) => {
             onChangeEnd(timeConvertTo12(timeStr));
          }
       }
-      console.log(time);
    };
 
    const showMode = currentMode => {
@@ -159,13 +178,13 @@ const AddLogButton = ({ addLog }) => {
                               mode={mode}
                               is24Hour={false}
                               display="default"
-                              onChange={onChange}
+                              onChange={onChangeTime}
                            />
                         )}
                      </View>
                      <Text style={styles.header}> Workout: </Text>
                      <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
-                     <View style={{borderColor:'blue',borderBottomWidth:1,borderTopWidth:1}}>
+                     <View style={styles.workoutView}>
                         <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} value={rep}/>
                         <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
                         <View style={styles.buttonView}>
@@ -203,7 +222,8 @@ const AddLogButton = ({ addLog }) => {
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.cancel} onPress={() => { 
-                     toggleModal(!modalVisible) }}>
+                     toggleModal(!modalVisible), clearRep(), clearWeight(), clearName(), clearNote()
+                     }}>
                      <Text style={styles.cancelText}>Cancel</Text>
                   </TouchableOpacity>
 
@@ -211,12 +231,17 @@ const AddLogButton = ({ addLog }) => {
          </Modal>
          
          <Button style={ styles.addButton } bordered primary onPress = {() => {
-            toggleModal(true), 
-            setWorkout(defaultWorkout), 
-            setSet(defaultSet), 
-            setTime(defaultTime), 
-            setSList([]), 
-            setWList([]) }}>
+            toggleModal(true);
+            setWorkout(defaultWorkout);
+            setSet(defaultSet);
+            setTime(defaultTime);
+            setSList([]);
+            setWList([]); 
+            clearRep();
+            clearWeight();
+            clearName();
+            clearNote();
+            }}>
             <Text style={styles.title}>Add</Text>
          </Button>
       </View>
@@ -305,5 +330,10 @@ const styles = StyleSheet.create ({
       marginTop: 10,
       fontSize: 20,
       color: 'white',
+   },
+   workoutView: {
+      borderColor:'blue',
+      borderBottomWidth:1,
+      borderTopWidth:1
    }
 })
