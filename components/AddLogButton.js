@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Content, Button } from 'native-base';
-import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
+import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ToastAndroid } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Header from './Header';
@@ -151,6 +151,10 @@ const AddLogButton = ({ addLog }) => {
       setIsStart(isStart);
    };
 
+   const notifyMessage = (msg) => {
+      ToastAndroid.show(msg, ToastAndroid.SHORT)
+   };
+
    return (
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
@@ -192,7 +196,7 @@ const AddLogButton = ({ addLog }) => {
                               if (set.reps == '' || set.weight == '') {
                                  Alert.alert("Can't add a blank set")
                               } else {
-                                 { onChangeSetID(uuid()), addSetList(set), clearRep(), clearWeight() }
+                                 { onChangeSetID(uuid()), addSetList(set), notifyMessage("Added set"), clearRep(), clearWeight() }
                               }}}>
                               <Text style={styles.buttonText}>Add Set</Text>
                            </TouchableOpacity>
@@ -204,7 +208,7 @@ const AddLogButton = ({ addLog }) => {
                            if (setList.length == 0) {
                               Alert.alert("Please add one or more sets for your workout!")
                            } else {
-                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), clearName(), clearNote() }
+                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), clearName(), clearNote() }
                            }}}>
                            <Text style={styles.buttonText}>Set Workout</Text>
                         </TouchableOpacity>
