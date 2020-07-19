@@ -72,14 +72,12 @@ const AddLogButton = ({ addLog }) => {
    
    //For text inputs
    const clearName = () => {
-      console.log('hi');
       setWName('');
    };
    const clearNote = () => {
       setNote('');
    };
    const clearRep = () => {
-      console.log("hi");
       setRep('');
    };
    const clearWeight = () => {
