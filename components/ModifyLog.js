@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { Content, Text } from 'native-base';
+import { Text } from 'native-base';
 import Header from '../components/Header';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';

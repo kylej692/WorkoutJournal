@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Alert, Platform } from 'react-native';
+import {View, StyleSheet, Alert } from 'react-native';
 import { Content } from 'native-base';
 import Header from './components/Header';
 import LogEntry from './components/LogEntry';

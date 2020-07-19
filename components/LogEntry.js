@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Header, Card, CardItem, Text, Body } from 'native-base';
+import { Header, Card, CardItem, Text } from 'native-base';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';

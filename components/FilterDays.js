@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import 'react-native-get-random-values';
 import RangeSlider from 'rn-range-slider';
