@@ -217,14 +217,15 @@ const App = () => {
     if(!time || !workouts) {
       Alert.alert("Please enter a workout!")
     } else {
+      var id = uuid()
       setItems(prevItems => {
-        var newItem = {id: uuid(), time: time, workouts: workouts};
+        var newItem = {id: id, time: time, workouts: workouts};
         storeData(newItem.id, newItem);
         return [ newItem, ...prevItems ];
       });
       if((selectedMonthValue === "None" && selectedYearValue === "None") || time.date.slice(0, 3) === selectedMonthValue || time.date.slice(8, 12) === selectedYearValue) {
         setFilteredItems(prevItems => {
-          var newItem = {id: uuid(), time: time, workouts: workouts};
+          var newItem = {id: id, time: time, workouts: workouts};
           return [ newItem, ...prevItems ];
         });
       }
