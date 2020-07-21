@@ -25,6 +25,7 @@ const AddLogButton = ({ addLog }) => {
       reps: '',
       weight: '',
    };
+
    const [time, setTime] = useState(defaultTime);
    const [workout, setWorkout] = useState(defaultWorkout);
    const [workoutList, setWList] = useState([]);
@@ -34,7 +35,7 @@ const AddLogButton = ({ addLog }) => {
    const [note, setNote] = useState('');
    const [rep, setRep] = useState();
    const [weight, setWeight] = useState();
-   const [date, setDate] = useState(new Date(1598051730000));
+   const [date, setDate] = useState(new Date());
    const [mode, setMode] = useState('date');
    const [show, setShow] = useState(false);
    const [isStart, setIsStart] = useState(true);
