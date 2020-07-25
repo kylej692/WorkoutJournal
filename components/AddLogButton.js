@@ -98,7 +98,7 @@ const AddLogButton = ({ addLog }) => {
    const toggleModal = (visible) => {
       setModal(visible);
    };
-   
+
    //For date and time picker
    const timeConvertTo12 = (time) => {
       var hour = parseInt(time.slice(0, 2));
@@ -173,6 +173,7 @@ const AddLogButton = ({ addLog }) => {
                <Header title='Add a Log'/>
                <SwipeListView 
                   data={setList}
+                  keyboardShouldPersistTaps={'handled'}
                   ListHeaderComponent={
                      <View style={styles.workoutView}>
                         <View style={styles.buttonView}>
