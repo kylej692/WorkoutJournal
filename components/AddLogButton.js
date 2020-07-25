@@ -5,6 +5,8 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Header from './Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Icon from 'react-native-vector-icons/dist/AntDesign';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const AddLogButton = ({ addLog }) => {
    const [modalVisible, setModal] = useState(false);
@@ -39,6 +41,7 @@ const AddLogButton = ({ addLog }) => {
    const [mode, setMode] = useState('date');
    const [show, setShow] = useState(false);
    const [isStart, setIsStart] = useState(true);
+   const [showDisplay, setShowDisplay] = useState(false);
 
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
@@ -47,25 +50,32 @@ const AddLogButton = ({ addLog }) => {
 
    //Handles workouts attribute
    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
+
    const onChangeName = (nameValue) => { 
       setWorkout({...workout, name: nameValue });
       setWName(nameValue);
    };
+
    const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
+
    const addWorkoutList = (setValue, workoutVal) => { 
       workoutVal.sets = setValue;
       setWList(oldList => [...oldList, workoutVal]);
       setSList([]); 
    };
+
    const onChangeSetID = (id) => setSet({...set, id: id });
+
    const onChangeReps = (repValue) => { 
-      setSet({...set, reps: repValue });
+      setSet({...set, num: setList.length + 1, reps: repValue });
       setRep(repValue);
    };
+
    const onChangeWeight = (weightValue) => { 
       setSet({...set, weight: weightValue });
       setWeight(weightValue);
    };
+
    const onChangeNotes = (note) => { 
       setWorkout({...workout, notes: note});
       setNote(note);
@@ -88,14 +98,7 @@ const AddLogButton = ({ addLog }) => {
    const toggleModal = (visible) => {
       setModal(visible);
    };
-
-   const setSetCount = (workoutList) => {
-      for(var j = 0; j < workoutList.length; j++) {
-         for (var i = 0; i < workoutList[j].sets.length; i++) {
-            workoutList[j].sets[i].num = i + 1;
-         }
-      }
-   };
+   
    //For date and time picker
    const timeConvertTo12 = (time) => {
       var hour = parseInt(time.slice(0, 2));
@@ -154,6 +157,12 @@ const AddLogButton = ({ addLog }) => {
       ToastAndroid.show(msg, ToastAndroid.SHORT)
    };
 
+   const deleteSet = (setId) => {
+      setSList(prevSets => {
+         return prevSets.filter(set => set.id != setId);
+      });
+  }
+
    return (
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
@@ -162,65 +171,101 @@ const AddLogButton = ({ addLog }) => {
             
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
-               <Content>
-                  <View>
-                     <View style={styles.buttonView}>
-                        <TouchableOpacity style={styles.time} onPress={showDatepicker}>
-                              <Text style={styles.buttonText}> Set Date</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(true)}}>
-                              <Text style={styles.buttonText}> Set Start Time</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(false)}}>
-                              <Text style={styles.buttonText}> Set End Time</Text>
-                        </TouchableOpacity>
-                        {show && (
-                           <DateTimePicker
-                              testID="dateTimePicker"
-                              value={date}
-                              mode={mode}
-                              is24Hour={false}
-                              display="default"
-                              onChange={onChangeTime}
-                           />
-                        )}
-                     </View>
-                     <Text style={styles.header}> Workout: </Text>
-                     <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
+               <SwipeListView 
+                  data={setList}
+                  ListHeaderComponent={
                      <View style={styles.workoutView}>
-                        <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} value={rep}/>
-                        <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
                         <View style={styles.buttonView}>
-                           <TouchableOpacity style={styles.set} onPress={() => { 
-                              if (set.reps == '' || set.weight == '') {
-                                 Alert.alert("Can't add a blank set")
+                           <TouchableOpacity style={styles.time} onPress={showDatepicker}>
+                                 <Text style={styles.buttonText}> Set Date</Text>
+                           </TouchableOpacity>
+                           <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(true)}}>
+                                 <Text style={styles.buttonText}> Set Start Time</Text>
+                           </TouchableOpacity>
+                           <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(false)}}>
+                                 <Text style={styles.buttonText}> Set End Time</Text>
+                           </TouchableOpacity>
+                           {show && (
+                              <DateTimePicker
+                                 testID="dateTimePicker"
+                                 value={date}
+                                 mode={mode}
+                                 is24Hour={false}
+                                 display="default"
+                                 onChange={onChangeTime}
+                              />
+                           )}
+                        </View>
+                        <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
+                     </View>
+                  }
+                  renderItem={(data, rowMap) => (
+                        <View style={styles.setView} key={data.item.id}>
+                           <Text style={styles.labelText}>{"Set " + data.item.num + ":"}</Text>
+                           <Text style={styles.infoText}>Reps </Text>
+                           <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} />
+                           <Text style={styles.infoText}>Wt (lbs)</Text>
+                           <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} />  
+                        </View>
+                  )}
+                  renderHiddenItem={ (data, rowMap) => (
+                        <TouchableOpacity style={styles.deleteSetBtn} onPress={() => {
+                           deleteSet(data.item.id)
+                        }}>
+                           <View style={styles.rowFront}>
+                              <Icon style={styles.deleteIcon} name="closecircle" size={15} />    
+                           </View>
+                        </TouchableOpacity>  
+                  )}
+                  ListFooterComponent={
+                     <View>
+                        <View style={styles.workoutView}>
+                           <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} value={rep}/>
+                           <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
+                           <View style={styles.buttonView}>
+                              <TouchableOpacity style={styles.set} onPress={() => { 
+                                 if (set.reps == '' || set.weight == '') {
+                                    Alert.alert("Can't add a blank set")
+                                 } else {
+                                    { onChangeSetID(uuid()), addSetList(set), notifyMessage("Added set"), clearRep(), clearWeight() }
+                                 }}}>
+                                 <Text style={styles.buttonText}>Add Set</Text>
+                              </TouchableOpacity>
+                           </View>   
+                        </View>
+                        <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} value={note} />
+                        <View style={styles.buttonView}>
+                           <TouchableOpacity style={styles.workout} onPress={() => {
+                              if (setList.length == 0) {
+                                 Alert.alert("Please add one or more sets for your workout!")
                               } else {
-                                 { onChangeSetID(uuid()), addSetList(set), notifyMessage("Added set"), clearRep(), clearWeight() }
+                                 { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), clearName(), clearNote() }
                               }}}>
-                              <Text style={styles.buttonText}>Add Set</Text>
+                              <Text style={styles.buttonText}>Set Workout</Text>
                            </TouchableOpacity>
                         </View>
-                     </View> 
-                     <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} value={note} />
-                     <View style={styles.buttonView}>
-                        <TouchableOpacity style={styles.workout} onPress={() => {
-                           if (setList.length == 0) {
-                              Alert.alert("Please add one or more sets for your workout!")
-                           } else {
-                              { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), clearName(), clearNote() }
-                           }}}>
-                           <Text style={styles.buttonText}>Set Workout</Text>
-                        </TouchableOpacity>
+                        <View style={styles.workoutDisplayView}>
+                           <Text style={styles.workoutDisplayHeaderText}>Added Workouts</Text>
+                           {workoutList.map((workout) => {
+                              return (
+                                 <View key={workout.id}>
+                                    <Text style={styles.workoutDisplayText}>{workout.name}</Text>
+                                 </View>
+                              )
+                           })}
+                        </View>
                      </View>
-                  </View>
-               </Content>
-                  
+                  }
+                  disableRightSwipe={true}
+                  rightOpenValue={-75}
+                  removeClippedSubviews={false}
+               />
                <Header/>
                   <TouchableOpacity style={styles.finish} onPress={() => {
                      if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0) {
                         Alert.alert("Please fill everything out!")
                      } else {
-                        { setSetCount(workoutList), addLog(time, workoutList), toggleModal(!modalVisible) }
+                        { addLog(time, workoutList), toggleModal(!modalVisible) }
                      }}}>
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
@@ -266,7 +311,7 @@ const styles = StyleSheet.create ({
       flex: 1,
    },
    finish: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 15, 
       right: 10,
    },
@@ -303,13 +348,14 @@ const styles = StyleSheet.create ({
       left: 275,
    },
    cancel: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 15, 
       left: 10,
    },
    header: {
       marginTop: 20,
-      fontSize: 20
+      fontSize: 20,
+      color: "black"
    },
    buttonText: {
       marginLeft: 3,
@@ -327,16 +373,70 @@ const styles = StyleSheet.create ({
    cancelText: {
       marginTop: 10,
       fontSize: 20,
-      color: 'white',
+      color: "white",
    },
    finishText: {
       marginTop: 10,
       fontSize: 20,
-      color: 'white',
+      color: "white",
    },
    workoutView: {
-      borderColor:'blue',
-      borderBottomWidth:1,
-      borderTopWidth:1
+      borderColor: "#2C95FF",
+      borderBottomWidth: 1,
+   },
+
+   //styles for swipeable list
+   setView: {
+      marginBottom: 15,
+      marginLeft: 15,
+      backgroundColor: "white",
+      flex: 1,
+      flexDirection: "row"
+  },
+   labelText: {
+      alignSelf: "center",
+      fontSize: 20,
+      padding: 10,
+      marginTop: 10
+  },
+   infoText: {
+      alignSelf: "center",
+      fontSize: 15,
+      marginTop: 10
+   },
+   infoInput: {
+      textAlignVertical: "bottom",
+      height: 35,
+      width: 50,
+      borderRadius: 8,
+      margin: 10,
+      paddingBottom: 1,
+      borderBottomColor: "black",
+      borderBottomWidth: 1
+   },
+   deleteSetBtn: {
+      top: 18,
+      left: 365
+   },
+   deleteIcon: { 
+      color: "red",
+      fontSize: 20
+   },
+
+   //styles for workout display
+   workoutDisplayView: {
+      borderColor: "#2C95FF",
+      borderTopWidth: 1
+   },
+   workoutDisplayText: {
+      padding: 8,
+      fontSize: 16,
+      color: "black"
+   },
+   workoutDisplayHeaderText: {
+      textAlign: 'center',
+      padding: 8,
+      fontSize: 16,
+      color: "black"
    }
 })
