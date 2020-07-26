@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 const AddLogButton = ({ addLog }) => {
-   const [modalVisible, setModal] = useState(false);
    const defaultTime = {
       date: '',
       start: '',
@@ -28,6 +27,7 @@ const AddLogButton = ({ addLog }) => {
       weight: '',
    };
 
+   const [modalVisible, setModal] = useState(false);
    const [time, setTime] = useState(defaultTime);
    const [workout, setWorkout] = useState(defaultWorkout);
    const [workoutList, setWList] = useState([]);
@@ -35,13 +35,15 @@ const AddLogButton = ({ addLog }) => {
    const [set, setSet] = useState(defaultSet);
    const [wName, setWName] = useState('');
    const [note, setNote] = useState('');
-   const [rep, setRep] = useState();
-   const [weight, setWeight] = useState();
+   const [rep, setRep] = useState('');
+   const [weight, setWeight] = useState('');
    const [date, setDate] = useState(new Date());
    const [mode, setMode] = useState('date');
    const [show, setShow] = useState(false);
    const [isStart, setIsStart] = useState(true);
-   const [showDisplay, setShowDisplay] = useState(false);
+   const [selectedSetNumber, setSetNumber] = useState(1);
+   const [displayDate, setDisplayDate] = useState(false);
+   const [displayTime, setDisplayTime] = useState(false);
 
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
@@ -121,21 +123,27 @@ const AddLogButton = ({ addLog }) => {
    };
 
    const onChangeTime = (event, selectedDate) => {
-      const currentDate = selectedDate || date;
-      const currentDateTimeStr = currentDate.toString(0, 21);
-      const monthDayStr = currentDateTimeStr.slice(4, 10);
-      const yearStr = currentDateTimeStr.slice(11, 15);
-      const dateStr = monthDayStr + ", " + yearStr;
-      const timeStr = currentDateTimeStr.slice(16, 21);
-      setShow(Platform.OS === 'ios');
-      setDate(currentDate);
-      onChangeDate(dateStr);
-      if (mode == 'time') {
-         if (isStart) {
-            onChangeStart(timeConvertTo12(timeStr));
-         } else {
-            onChangeEnd(timeConvertTo12(timeStr));
+      if(event.type === "set") {
+         const currentDate = selectedDate || date;
+         const currentDateTimeStr = currentDate.toString(0, 21);
+         const monthDayStr = currentDateTimeStr.slice(4, 10);
+         const yearStr = currentDateTimeStr.slice(11, 15);
+         const dateStr = monthDayStr + ", " + yearStr;
+         const timeStr = currentDateTimeStr.slice(16, 21);
+         setShow(Platform.OS === 'ios');
+         setDate(currentDate);
+         onChangeDate(dateStr);
+         setDisplayDate(true);
+         if (mode == 'time') {
+            if (isStart) {
+               onChangeStart(timeConvertTo12(timeStr));
+            } else {
+               onChangeEnd(timeConvertTo12(timeStr));
+            }
+            setDisplayTime(true);
          }
+      } else {
+         setShow(Platform.OS === 'ios');
       }
    };
 
@@ -161,7 +169,14 @@ const AddLogButton = ({ addLog }) => {
       setSList(prevSets => {
          return prevSets.filter(set => set.id != setId);
       });
-  }
+  };
+   const modifyReps = (newReps) => {
+      setList[selectedSetNumber - 1].reps = newReps;
+   };
+
+   const modifyWeight = (newWeight) => {
+      setList[selectedSetNumber - 1].weight = newWeight;
+   };
 
    return (
       <View style = {styles.container}>
@@ -197,16 +212,18 @@ const AddLogButton = ({ addLog }) => {
                               />
                            )}
                         </View>
-                        <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
+                        <View style={{borderColor: "#2C95FF", borderTopWidth: 3, marginTop: 20}}>
+                           <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
+                        </View>
                      </View>
                   }
                   renderItem={(data, rowMap) => (
                         <View style={styles.setView} key={data.item.id}>
                            <Text style={styles.labelText}>{"Set " + data.item.num + ":"}</Text>
                            <Text style={styles.infoText}>Reps </Text>
-                           <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} />
+                           <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => modifyReps(newReps)} />
                            <Text style={styles.infoText}>Wt (lbs)</Text>
-                           <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} />  
+                           <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => modifyWeight(newWeight)} />  
                         </View>
                   )}
                   renderHiddenItem={ (data, rowMap) => (
@@ -225,7 +242,7 @@ const AddLogButton = ({ addLog }) => {
                            <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
                            <View style={styles.buttonView}>
                               <TouchableOpacity style={styles.set} onPress={() => { 
-                                 if (set.reps == '' || set.weight == '') {
+                                 if (rep == '' || weight == '') {
                                     Alert.alert("Can't add a blank set")
                                  } else {
                                     { onChangeSetID(uuid()), addSetList(set), notifyMessage("Added set"), clearRep(), clearWeight() }
@@ -246,7 +263,19 @@ const AddLogButton = ({ addLog }) => {
                            </TouchableOpacity>
                         </View>
                         <View style={styles.workoutDisplayView}>
-                           <Text style={styles.workoutDisplayHeaderText}>Added Workouts</Text>
+                           <View style={styles.addedLogHeader}> 
+                              <Text style={styles.addedLogHeaderText}>Added Log</Text>
+                           </View>
+                           {(displayDate || displayTime) && 
+                              <View style={styles.dateHeaderView}> 
+                                 {displayDate && 
+                                 <Text style={styles.dateHeaderText}>{time.date}</Text>
+                                 }
+                                 {displayTime && 
+                                 <Text style={styles.timeHeaderText}>{time.start + " - " + time.end}</Text>
+                                 }
+                              </View>
+                           }
                            {workoutList.map((workout) => {
                               return (
                                  <View key={workout.id}>
@@ -266,12 +295,12 @@ const AddLogButton = ({ addLog }) => {
                      if(time.date == '' || time.start == '' || time.end == '' || workout.name == '' || workoutList.length == 0) {
                         Alert.alert("Please fill everything out!")
                      } else {
-                        { addLog(time, workoutList), toggleModal(!modalVisible) }
+                        { addLog(time, workoutList), toggleModal(!modalVisible), setDisplayDate(false), setDisplayTime(false), setDate(new Date()) }
                      }}}>
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.cancel} onPress={() => { 
-                     toggleModal(!modalVisible), clearRep(), clearWeight(), clearName(), clearNote()
+                     toggleModal(!modalVisible), setDisplayDate(false), setDisplayTime(false), clearRep(), clearWeight(), clearName(), clearNote(), setDate(new Date())
                      }}>
                      <Text style={styles.cancelText}>Cancel</Text>
                   </TouchableOpacity>
@@ -324,7 +353,7 @@ const styles = StyleSheet.create ({
       justifyContent: "center",
    },
    buttonView: {
-      flexDirection: "row",
+      flexDirection: "row"
    },
    set: {
       backgroundColor: "#2C95FF",
@@ -383,16 +412,17 @@ const styles = StyleSheet.create ({
    },
    workoutView: {
       borderColor: "#2C95FF",
-      borderBottomWidth: 1,
+      borderBottomWidth: 1
    },
 
    //styles for swipeable list
    setView: {
-      marginBottom: 15,
-      marginLeft: 15,
-      backgroundColor: "white",
       flex: 1,
-      flexDirection: "row"
+      flexDirection: "row",
+      paddingLeft: 20,
+      backgroundColor: "#C5E2FF",
+      borderColor: "#2C95FF",
+      borderBottomWidth: 1,
   },
    labelText: {
       alignSelf: "center",
@@ -403,7 +433,8 @@ const styles = StyleSheet.create ({
    infoText: {
       alignSelf: "center",
       fontSize: 15,
-      marginTop: 10
+      marginTop: 10,
+      paddingLeft: 15
    },
    infoInput: {
       textAlignVertical: "bottom",
@@ -425,19 +456,40 @@ const styles = StyleSheet.create ({
    },
 
    //styles for workout display
+   addedLogHeader: {
+      backgroundColor: "#2C95FF"
+   },
+   dateHeaderView: {
+      flexDirection: "row",
+      backgroundColor: "#C5E2FF",
+      marginTop: 5,
+      alignSelf: "stretch"
+   },
+   addedLogHeaderText: {
+      textAlign: 'center',
+      padding: 8,
+      fontSize: 20,
+      color: "white"
+   },
    workoutDisplayView: {
-      borderColor: "#2C95FF",
-      borderTopWidth: 1
+      backgroundColor: "#C5E2FF",
+      marginTop: 5,
    },
    workoutDisplayText: {
       padding: 8,
       fontSize: 16,
       color: "black"
    },
-   workoutDisplayHeaderText: {
-      textAlign: 'center',
+   dateHeaderText: {
       padding: 8,
-      fontSize: 16,
-      color: "black"
+      marginLeft: 10,
+      fontSize: 16
+   },
+   timeHeaderText: {
+      position: "absolute",
+      padding: 8,
+      marginLeft: 260,
+      marginRight: 10,
+      fontSize: 16
    }
 })
