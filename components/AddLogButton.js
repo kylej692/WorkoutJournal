@@ -58,7 +58,7 @@ const AddLogButton = ({ addLog }) => {
       setWName(nameValue);
    };
 
-   const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
+   const addSetList = (setVal) => setSList(oldList => {console.log(oldList); return [...oldList, setVal]});
 
    const addWorkoutList = (setValue, workoutVal) => { 
       workoutVal.sets = setValue;
@@ -167,7 +167,11 @@ const AddLogButton = ({ addLog }) => {
 
    const deleteSet = (setId) => {
       setSList(prevSets => {
-         return prevSets.filter(set => set.id != setId);
+         var newSets = prevSets.filter(set => set.id != setId);
+         for (var i = 0; i < newSets.length; i++) {
+            newSets[i].num = i + 1;
+         }
+         return newSets;
       });
   };
    const modifyReps = (newReps) => {
@@ -212,7 +216,7 @@ const AddLogButton = ({ addLog }) => {
                               />
                            )}
                         </View>
-                        <View style={{borderColor: "#2C95FF", borderTopWidth: 3, marginTop: 20}}>
+                        <View style={{borderColor: "#2C95FF", borderTopWidth: 1, marginTop: 20}}>
                            <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
                         </View>
                      </View>
@@ -238,18 +242,21 @@ const AddLogButton = ({ addLog }) => {
                   ListFooterComponent={
                      <View>
                         <View style={styles.workoutView}>
-                           <TextInput keyboardType="numeric" placeholder="Enter Number of Reps" style={styles.input} onChangeText={onChangeReps} value={rep}/>
-                           <TextInput keyboardType="numeric" placeholder="Enter the Weight (lbs)" style={styles.input} onChangeText={onChangeWeight} value={weight}/>
-                           <View style={styles.buttonView}>
-                              <TouchableOpacity style={styles.set} onPress={() => { 
+                           <View style={styles.repsWeightView}>
+                              <Text style={styles.newSetText}>{"Set " + (setList.length + 1) + ": "}</Text>
+                              <Text style={styles.infoText}>Reps </Text>
+                              <TextInput keyboardType="numeric" style={styles.infoInput} onChangeText={onChangeReps} value={rep}/>
+                              <Text style={styles.infoText}>Wt (lbs) </Text>
+                              <TextInput keyboardType="numeric" style={styles.infoInput} onChangeText={onChangeWeight} value={weight}/>
+                           </View>
+                           <TouchableOpacity style={styles.set} onPress={() => { 
                                  if (rep == '' || weight == '') {
                                     Alert.alert("Can't add a blank set")
                                  } else {
                                     { onChangeSetID(uuid()), addSetList(set), notifyMessage("Added set"), clearRep(), clearWeight() }
                                  }}}>
                                  <Text style={styles.buttonText}>Add Set</Text>
-                              </TouchableOpacity>
-                           </View>   
+                           </TouchableOpacity>
                         </View>
                         <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} value={note} />
                         <View style={styles.buttonView}>
@@ -264,7 +271,7 @@ const AddLogButton = ({ addLog }) => {
                         </View>
                         <View style={styles.workoutDisplayView}>
                            <View style={styles.addedLogHeader}> 
-                              <Text style={styles.addedLogHeaderText}>Added Log</Text>
+                              <Text style={styles.addedLogHeaderText}>Log Preview</Text>
                            </View>
                            {(displayDate || displayTime) && 
                               <View style={styles.dateHeaderView}> 
@@ -278,7 +285,7 @@ const AddLogButton = ({ addLog }) => {
                            }
                            {workoutList.map((workout) => {
                               return (
-                                 <View key={workout.id}>
+                                 <View style={{backgroundColor: "#D7EBFF"}} key={workout.id}>
                                     <Text style={styles.workoutDisplayText}>{workout.name}</Text>
                                  </View>
                               )
@@ -335,7 +342,7 @@ const styles = StyleSheet.create ({
    input: {
       height: 60,
       padding: 8,
-      fontSize: 16,
+      fontSize: 16
    },
    modal: {
       flex: 1,
@@ -356,11 +363,14 @@ const styles = StyleSheet.create ({
       flexDirection: "row"
    },
    set: {
+      alignSelf: "center",
       backgroundColor: "#2C95FF",
+      height: 35,
+      width: 88,
       padding: 5,
       borderRadius: 10,
-      bottom: 5,
-      left: 315,
+      marginBottom: 10,
+      marginTop: 5
    },
    time: {
       backgroundColor: "#2C95FF",
@@ -388,7 +398,7 @@ const styles = StyleSheet.create ({
       color: "black"
    },
    buttonText: {
-      marginLeft: 3,
+      marginLeft: 4,
       marginRight: 5,
       color: "white",
       fontSize: 19,
@@ -414,7 +424,16 @@ const styles = StyleSheet.create ({
       borderColor: "#2C95FF",
       borderBottomWidth: 1
    },
-
+   repsWeightView: {
+      flex: 1,
+      flexDirection: "row"
+   },
+   newSetText: {
+      fontSize: 20,
+      padding: 10,
+      marginLeft: 20,
+      marginTop: 10
+   },
    //styles for swipeable list
    setView: {
       flex: 1,
@@ -457,13 +476,11 @@ const styles = StyleSheet.create ({
 
    //styles for workout display
    addedLogHeader: {
-      backgroundColor: "#2C95FF"
+      backgroundColor: "#7A9CC0"
    },
    dateHeaderView: {
       flexDirection: "row",
-      backgroundColor: "#C5E2FF",
-      marginTop: 5,
-      alignSelf: "stretch"
+      backgroundColor: "#A4D1FF"
    },
    addedLogHeaderText: {
       textAlign: 'center',
