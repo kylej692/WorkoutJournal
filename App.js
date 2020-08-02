@@ -20,7 +20,7 @@ const App = () => {
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home';
             } else if (route.name === 'Progress') {
-              iconName = focused ? 'exclamationcircleo' : 'exclamationcircleo';
+              iconName = focused ? 'linechart' : 'linechart';
             } else if (route.name === 'Timer') {
               iconName = focused ? 'clockcircleo' : 'clockcircleo';
             }
