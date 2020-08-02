@@ -30,8 +30,10 @@ const App = () => {
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#2C95FF',
-          inactiveTintColor: 'gray',
+          activeTintColor: 'black',
+          inactiveTintColor: 'white',
+          showLabel: false,
+          style: {backgroundColor: '#2C95FF', height: 45}
         }}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
