@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Content, Button } from 'native-base';
+import { Keyboard } from 'react-native';
+import { Button } from 'native-base';
 import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ToastAndroid } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
@@ -58,7 +59,7 @@ const AddLogButton = ({ addLog }) => {
       setWName(nameValue);
    };
 
-   const addSetList = (setVal) => setSList(oldList => {console.log(oldList); return [...oldList, setVal]});
+   const addSetList = (setVal) => setSList(oldList => [...oldList, setVal]);
 
    const addWorkoutList = (setValue, workoutVal) => { 
       workoutVal.sets = setValue;
@@ -182,6 +183,7 @@ const AddLogButton = ({ addLog }) => {
       setList[selectedSetNumber - 1].weight = newWeight;
    };
 
+   const alternatingColors = ["#D7EBFF", "#C1D4E6"];
    return (
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
@@ -264,7 +266,7 @@ const AddLogButton = ({ addLog }) => {
                               if (setList.length == 0) {
                                  Alert.alert("Please add one or more sets for your workout!")
                               } else {
-                                 { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), clearName(), clearNote() }
+                                 { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), setWorkout(defaultWorkout), clearRep(), clearWeight(), clearName(), clearNote(), Keyboard.dismiss() }
                               }}}>
                               <Text style={styles.buttonText}>Set Workout</Text>
                            </TouchableOpacity>
@@ -283,10 +285,25 @@ const AddLogButton = ({ addLog }) => {
                                  }
                               </View>
                            }
-                           {workoutList.map((workout) => {
+                           {workoutList.map((workout, index) => {
                               return (
-                                 <View style={{backgroundColor: "#D7EBFF"}} key={workout.id}>
-                                    <Text style={styles.workoutDisplayText}>{workout.name}</Text>
+                                 <View style={{ backgroundColor: alternatingColors[index % alternatingColors.length] }} key={workout.id}>
+                                    <TouchableOpacity>
+                                       <Text style={styles.workoutDisplayText}>{workout.name}</Text>
+                                    </TouchableOpacity>
+                                    {workout.sets.map((set) => {
+                                       return (
+                                          <View style={{ flexDirection: "row", borderTopWidth: 1, borderColor: "#5782AB" }} key={set.id}>
+                                             <Text style={styles.logPreviewHeaderText}>{"Set " + set.num + ": "}</Text>
+                                             <Text style={styles.logPreviewText}>{"reps: " + set.reps}</Text>
+                                             <Text style={styles.logPreviewText}> {"weight (lbs): " + set.weight}</Text>
+                                          </View>
+                                       )
+                                    })}
+                                    <View style={{ borderTopColor: "#5782AB", borderTopWidth: 1, borderBottomWidth: 2 }}>
+                                       <Text style={styles.logPreviewHeaderText}>Notes:</Text>
+                                       <Text style={styles.logPreviewText}>{workout.notes}</Text>
+                                    </View>
                                  </View>
                               )
                            })}
@@ -494,7 +511,8 @@ const styles = StyleSheet.create ({
    },
    workoutDisplayText: {
       padding: 8,
-      fontSize: 16,
+      marginLeft: 10,
+      fontSize: 18,
       color: "black"
    },
    dateHeaderText: {
@@ -507,6 +525,16 @@ const styles = StyleSheet.create ({
       padding: 8,
       marginLeft: 260,
       marginRight: 10,
+      fontSize: 16
+   },
+   logPreviewHeaderText: {
+      padding: 8, 
+      marginLeft: 10, 
+      fontSize: 18
+   },
+   logPreviewText: {
+      padding: 8, 
+      marginLeft: 10, 
       fontSize: 16
    }
 })
