@@ -182,9 +182,7 @@ const AddLogButton = ({ addLog }) => {
       for(var i = 0; i < workoutList.length; i++) {
          if (workoutList[i].id == workoutId) {
             workoutList[i].name = wName;
-            console.log(setList);
             workoutList[i].sets = setList;
-            console.log(note);
             workoutList[i].notes = note;
          }
       }
