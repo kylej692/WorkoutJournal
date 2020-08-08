@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
-const TimerScreen = () => {
+const TimeScreen = () => {
 
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -28,10 +28,18 @@ const TimerScreen = () => {
   }, [isActive, seconds]);
 
   return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Timer!</Text>
+      <View>
+        <Text>{seconds}</Text>
+        <View>
+          <TouchableOpacity onPress={toggle}>
+            <Text>{isActive ? 'Pause' : 'Start'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={reset}>
+            <Text>Reset</Text> 
+          </TouchableOpacity>
+        </View>
       </View>
     );
 };
 
-export default TimerScreen;
+export default TimeScreen;

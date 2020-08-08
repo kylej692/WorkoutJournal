@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './components/HomeScreen';
 import ProgressScreen from './components/ProgressScreen';
-import TimerScreen from './components/TimerScreen';
+import TimeScreen from './components/TimeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +21,7 @@ const App = () => {
               iconName = focused ? 'home' : 'home';
             } else if (route.name === 'Progress') {
               iconName = focused ? 'linechart' : 'linechart';
-            } else if (route.name === 'Timer') {
+            } else if (route.name === 'Time') {
               iconName = focused ? 'clockcircleo' : 'clockcircleo';
             }
 
@@ -38,7 +38,7 @@ const App = () => {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Progress" component={ProgressScreen} />
-        <Tab.Screen name="Timer" component={TimerScreen} />
+        <Tab.Screen name="Time" component={TimeScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
