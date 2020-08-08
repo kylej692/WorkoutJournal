@@ -202,8 +202,8 @@ const AddLogButton = ({ addLog }) => {
       <View style = {styles.container}>
          <Modal animationType = {"slide"} transparent = {false}
             visible = {modalVisible}
-            onRequestClose = {() => { toggleModal(!modalVisible) } }>
-            
+            onRequestClose = {() => { toggleModal(!modalVisible) } 
+         }>  
             <View style = {styles.modal}>
                <Header title='Add a Log'/>
                <SwipeListView 
@@ -232,7 +232,7 @@ const AddLogButton = ({ addLog }) => {
                               />
                            )}
                         </View>
-                        <View style={{borderColor: "#2C95FF", borderTopWidth: 1, marginTop: 20}}>
+                        <View style={{ marginTop: 10 }}>
                            <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
                         </View>
                      </View>
@@ -274,21 +274,21 @@ const AddLogButton = ({ addLog }) => {
                                  <Text style={styles.buttonText}>Add Set</Text>
                            </TouchableOpacity>
                         </View>
-                        <TextInput placeholder="Notes" style={styles.input} onChangeText={onChangeNotes} value={note} />
-                        <View style={styles.buttonView}>
-                           {displaySetWorkout && 
-                              <TouchableOpacity style={styles.setWorkout} 
-                                 onPress={() => {
-                                    if (setList.length == 0) {
-                                       Alert.alert("Please add one or more sets for your workout!")
-                                    } else {
-                                       { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), setWorkout(defaultWorkout), clearRep(), clearWeight(), clearName(), clearNote(), Keyboard.dismiss() }
-                                    }
+                        <TextInput placeholder="Notes" multiline={true} style={styles.input} onChangeText={onChangeNotes} value={note} />
+                        {displaySetWorkout && 
+                           <TouchableOpacity style={styles.setWorkout} 
+                              onPress={() => {
+                                 if (setList.length == 0) {
+                                    Alert.alert("Please add one or more sets for your workout!")
+                                 } else {
+                                    { onChangeWorkoutID(uuid()), addWorkoutList(setList, workout), notifyMessage("Added workout"), setWorkout(defaultWorkout), clearRep(), clearWeight(), clearName(), clearNote(), Keyboard.dismiss() }
                                  }
-                              }>
-                                 <Text style={styles.buttonText}>Set Workout</Text>
-                              </TouchableOpacity>
-                           }
+                              }
+                           }>
+                              <Text style={styles.buttonText}>Set Workout</Text>
+                           </TouchableOpacity>
+                        }
+                        <View style={styles.buttonView}>
                            {!displaySetWorkout && 
                               <View style={styles.buttonView}>
                                  <TouchableOpacity style={styles.clearWorkout} 
@@ -320,9 +320,6 @@ const AddLogButton = ({ addLog }) => {
                            }
                         </View>
                         <View style={styles.workoutDisplayView}>
-                           <View style={styles.addedLogHeader}> 
-                              <Text style={styles.addedLogHeaderText}>Log Preview</Text>
-                           </View>
                            {(displayDate || displayTime) && 
                               <View style={styles.dateHeaderView}> 
                                  {displayDate && 
@@ -375,12 +372,12 @@ const AddLogButton = ({ addLog }) => {
                      if(time.date == '' || time.start == '' || time.end == '' || workoutList.length == 0) {
                         Alert.alert("Please fill everything out!")
                      } else {
-                        { addLog(time, workoutList), toggleModal(!modalVisible), setDisplayDate(false), setDisplayTime(false), setDate(new Date()) }
+                        { addLog(time, workoutList), toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), setDate(new Date()) }
                      }}}>
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.cancel} onPress={() => { 
-                     toggleModal(!modalVisible), setDisplayDate(false), setDisplayTime(false), clearRep(), clearWeight(), clearName(), clearNote(), setDate(new Date())
+                     toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), clearRep(), clearWeight(), clearName(), clearNote(), setDate(new Date())
                      }}>
                      <Text style={styles.cancelText}>Cancel</Text>
                   </TouchableOpacity>
@@ -405,8 +402,6 @@ const AddLogButton = ({ addLog }) => {
       </View>
    );
 };
-
-export default AddLogButton;
 
 const styles = StyleSheet.create ({
    container: {
@@ -434,45 +429,50 @@ const styles = StyleSheet.create ({
       justifyContent: "center",
    },
    buttonView: {
-      flexDirection: "row"
+      alignSelf: "center",
+      flexDirection: "row",
+      marginTop: 5
    },
    set: {
-      alignSelf: "center",
       backgroundColor: "#2C95FF",
       height: 35,
       width: 88,
       padding: 5,
       borderRadius: 10,
       marginBottom: 10,
-      marginTop: 5
+      marginTop: 5,
+      left: 310
    },
    time: {
       backgroundColor: "#2C95FF",
       marginHorizontal: 5,
       padding: 5,
       borderRadius: 10,
-      bottom: -10
+      top: 10
    },
    setWorkout: {
       backgroundColor: "#2C95FF",
+      height: 35,
+      width: 125,
       padding: 5,
-      borderRadius: 8,
-      bottom: 5,
-      left: 275,
+      borderRadius: 10,
+      marginBottom: 10,
+      marginTop: 5,
+      left: 275
    },
    updateWorkout: {
       backgroundColor: "#2C95FF",
       padding: 5,
       borderRadius: 8,
       bottom: 5,
-      left: 185,
+      left: 85,
    },
    clearWorkout: {
-      backgroundColor: "red",
+      backgroundColor: "#9A9A9A",
       padding: 5,
       borderRadius: 8,
       bottom: 5,
-      left: 10,
+      right: 85
    },
    cancel: {
       position: "absolute",
@@ -521,6 +521,7 @@ const styles = StyleSheet.create ({
       marginLeft: 20,
       marginTop: 10
    },
+
    //styles for swipeable list
    setView: {
       flex: 1,
@@ -562,22 +563,13 @@ const styles = StyleSheet.create ({
    },
 
    //styles for workout display
-   addedLogHeader: {
-      backgroundColor: "#7A9CC0"
-   },
    dateHeaderView: {
       flexDirection: "row",
       backgroundColor: "#A4D1FF"
    },
-   addedLogHeaderText: {
-      textAlign: 'center',
-      padding: 8,
-      fontSize: 20,
-      color: "white"
-   },
    workoutDisplayView: {
       backgroundColor: "#C5E2FF",
-      marginTop: 5,
+      marginTop: 10,
    },
    workoutDisplayText: {
       padding: 8,
@@ -607,4 +599,6 @@ const styles = StyleSheet.create ({
       marginLeft: 10, 
       fontSize: 16
    }
-})
+});
+
+export default AddLogButton;
