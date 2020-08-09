@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Alert } from 'react-native';
-import { Content } from 'native-base';
+import { View, StyleSheet, Alert, FlatList } from 'react-native';
 import Header from './Header';
 import LogEntry from './LogEntry';
 import AddLogButton from './AddLogButton';
@@ -8,6 +7,9 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import AsyncStorage from '@react-native-community/async-storage';
 import FilterLogs from './FilterLogs';
+import Modal from 'react-native-modal';
+import ModifyLog from '../components/ModifyLog';
+import ModifyDate from '../components/ModifyDate';
 
 const HomeScreen = () => {
   const [items, setItems] = useState([]);
@@ -17,6 +19,20 @@ const HomeScreen = () => {
   const [rangeLow, setRangeLow] = useState(1);
   const [rangeHigh, setRangeHigh] = useState(31);
 
+  const [isInfoModalVisible, setInfoModalVisible] = useState(false);
+  const [isDateModalVisible, setDateModalVisible] = useState(false);
+  const [selectedWorkout, setWorkout] = useState({});
+  const [selectedItem, setItem] = useState({});
+
+  const toggleInfoModal = (workout) => {
+    setInfoModalVisible(!isInfoModalVisible);
+    setWorkout(workout)
+  }
+
+  const toggleDateModal = (item) => {
+    setDateModalVisible(!isDateModalVisible);
+    setItem(item);
+}
   //AsyncStorage functions
   const storeData = async (key, value) => {
     try {
@@ -302,13 +318,16 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
-      <Content padder style={styles.content}>
-        {sortItems(filteredItems).map((item) => {
-          return (
-            <LogEntry item={item} deleteWorkout={deleteWorkout} modifyWorkout={modifyWorkout} modifyDateTime={modifyDateTime} key={item.id} />
-          )
-        })}
-      </Content>
+      <FlatList style={styles.content}
+        data={sortItems(filteredItems)}
+        renderItem={(data) => (
+          <LogEntry 
+            item={data.item} i
+            toggleInfoModal={toggleInfoModal}
+            toggleDateModal={toggleDateModal}
+            key={data.item.id} />
+        )}
+      />
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
@@ -327,6 +346,12 @@ const HomeScreen = () => {
         setRangeLow={setRangeLow}
         setRangeHigh={setRangeHigh}
       />
+      <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
+          <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
+      </Modal>
+      <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
+          <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>
+      </Modal>
     </View>
   )
 };
@@ -335,13 +360,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  content: {
-    marginTop: 35
+  content: {  
+    marginTop: 40,
+    paddingLeft: 5,
+    paddingRight: 5
   },
   button: {
     position: 'absolute',
     top: 12, 
     right: 5,
+  },
+  infoModal: { 
+    position: "relative",
+    marginTop: 50,
+    marginBottom: 50,
+    backgroundColor: "white", 
+    flex: 1,
+    alignItems: "center"
+  },
+  dateModal: {
+      position: "relative",
+      marginTop: 250,
+      marginBottom: 275,
+      backgroundColor: "white", 
+      flex: 1,
+      alignItems: "center"
   }
 });
 
