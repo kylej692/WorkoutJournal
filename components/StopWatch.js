@@ -4,6 +4,8 @@ import { Text, View, TouchableOpacity } from 'react-native';
 const StopWatch = () => {
 
   const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
   function toggle() {
@@ -12,24 +14,35 @@ const StopWatch = () => {
 
   function reset() {
     setSeconds(0);
+    setMinutes(0);
+    setHours(0);
     setIsActive(false);
   }
 
   useEffect(() => {
-    let interval = null;
+    let Interval = null;
     if (isActive) {
-      interval = setInterval(() => {
+      if (seconds === 60) {
+        setSeconds(0);
+        setMinutes(minutes => minutes + 1);
+      } if (minutes === 60) {
+        setMinutes(0);
+        setHours(hours => hours + 1);
+      }
+      Interval = setInterval(() => {
         setSeconds(seconds => seconds + 1);
       }, 1000);
-    } else if (!isActive && seconds !== 0) {
-      clearInterval(interval);
+    } else if (!isActive && (seconds !== 0 || minutes !== 0 || hours !== 0)) {
+      clearInterval(Interval);
     }
-    return () => clearInterval(interval);
+    return () => { 
+      clearInterval(Interval);
+    }
   }, [isActive, seconds]);
 
   return (
       <View>
-        <Text>{seconds}</Text>
+        <Text>{hours}:{minutes}:{seconds}</Text>
         <View>
           <TouchableOpacity onPress={toggle}>
             <Text>{isActive ? 'Stop' : 'Start'}</Text>
