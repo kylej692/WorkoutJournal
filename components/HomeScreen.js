@@ -271,6 +271,18 @@ const HomeScreen = () => {
       }
       return prevItems;
     })
+
+    setFilteredItems(prevItems => {
+      for(var i = 0; i < prevItems.length; i++) {
+        for(var j = 0; j < prevItems[i].workouts.length; j++) {
+          if(prevItems[i].workouts[j].id == modifiedWorkout.id) {
+            prevItems[i].workouts[j] = modifiedWorkout
+            storeData(prevItems[i].id, prevItems[i]);
+          }
+        }
+      }
+      return prevItems;
+    })
   };
 
   const modifyDateTime = (itemId, date, start, end) => {

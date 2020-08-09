@@ -52,6 +52,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
             <Header title="Edit Log" />
                 <SwipeListView 
                     data={newWorkout.sets}
+                    keyboardShouldPersistTaps={'handled'}
                     ListHeaderComponent={              
                         <View style={styles.nameView}>                  
                             <Text style={styles.name}>Name</Text>
