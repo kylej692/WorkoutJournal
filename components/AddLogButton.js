@@ -348,8 +348,8 @@ const AddLogButton = ({ addLog }) => {
                                        return (
                                           <View style={{ flexDirection: "row", borderTopWidth: 1, borderColor: "#5782AB" }} key={set.id}>
                                              <Text style={styles.logPreviewHeaderText}>{"Set " + set.num + ": "}</Text>
-                                             <Text style={styles.logPreviewText}>{"reps: " + set.reps}</Text>
-                                             <Text style={styles.logPreviewText}> {"weight (lbs): " + set.weight}</Text>
+                                             <Text style={styles.logPreviewText}>{"Reps: " + set.reps}</Text>
+                                             <Text style={styles.logPreviewText}> {"Weight (lbs): " + set.weight}</Text>
                                           </View>
                                        )
                                     })}
@@ -565,6 +565,7 @@ const styles = StyleSheet.create ({
    //styles for workout display
    dateHeaderView: {
       flexDirection: "row",
+      alignItems: "stretch",
       backgroundColor: "#A4D1FF"
    },
    workoutDisplayView: {
@@ -585,9 +586,8 @@ const styles = StyleSheet.create ({
    timeHeaderText: {
       position: "absolute",
       padding: 8,
-      marginLeft: 260,
-      marginRight: 10,
-      fontSize: 16
+      fontSize: 16,
+      right: 10
    },
    logPreviewHeaderText: {
       padding: 8, 
