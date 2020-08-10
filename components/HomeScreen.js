@@ -91,10 +91,10 @@ const HomeScreen = () => {
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const month1 = months.indexOf(a.time.date.slice(0, 3));
+      const month1 = months.indexOf(a.time.date.slice(0, 3)) + 1;
       const day1 = a.time.date.slice(4, 6);
       const year1 = a.time.date.slice(8, 12);
-      const month2 = months.indexOf(b.time.date.slice(0, 3));
+      const month2 = months.indexOf(b.time.date.slice(0, 3)) + 1;
       const day2 = b.time.date.slice(4, 6);
       const year2 = b.time.date.slice(8, 12);
       
@@ -135,7 +135,7 @@ const HomeScreen = () => {
 
       const aDate = new Date(date1 + " " + time1);
       const bDate = new Date(date2 + " " + time2);
-      
+
       return bDate - aDate;
     });
 
@@ -327,6 +327,8 @@ const HomeScreen = () => {
             toggleDateModal={toggleDateModal}
             key={data.item.id} />
         )}
+        initialNumToRender={4}
+        maxToRenderPerBatch={5}
       />
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
