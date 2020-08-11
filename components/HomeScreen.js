@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Alert, FlatList } from 'react-native';
 import Header from './Header';
 import LogEntry from './LogEntry';
@@ -12,10 +12,16 @@ import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 
 const HomeScreen = () => {
+  const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var currDate = new Date();
+  var currMonth = monthsInYear[currDate.getMonth()];
+  var currYear = currDate.getFullYear().toString();
+  var currDay = currDate.getDate();
+
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [selectedMonthValue, setSelectedMonthValue] = useState("None");
-  const [selectedYearValue, setSelectedYearValue] = useState("None");
+  const [selectedMonthValue, setSelectedMonthValue] = useState(currMonth);
+  const [selectedYearValue, setSelectedYearValue] = useState(currYear);
   const [rangeLow, setRangeLow] = useState(1);
   const [rangeHigh, setRangeHigh] = useState(31);
 
@@ -80,9 +86,11 @@ const HomeScreen = () => {
           setItems(prevItems => {
             return [ val, ...prevItems ];
           });
-          setFilteredItems(prevItems => {
-            return [ val, ...prevItems ];
-          });
+          if(val.time.date.slice(0, 3) === selectedMonthValue && val.time.date.slice(8, 12) === selectedYearValue && val.time.date.slice(4, 6) >= rangeLow && val.time.date.slice(4, 6) <= rangeHigh) {
+            setFilteredItems(prevItems => {
+              return [ val, ...prevItems ];
+            });
+          };
         });
       });
     });
@@ -90,11 +98,10 @@ const HomeScreen = () => {
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const month1 = months.indexOf(a.time.date.slice(0, 3)) + 1;
+      const month1 = monthsInYear.indexOf(a.time.date.slice(0, 3)) + 1;
       const day1 = a.time.date.slice(4, 6);
       const year1 = a.time.date.slice(8, 12);
-      const month2 = months.indexOf(b.time.date.slice(0, 3)) + 1;
+      const month2 = monthsInYear.indexOf(b.time.date.slice(0, 3)) + 1;
       const day2 = b.time.date.slice(4, 6);
       const year2 = b.time.date.slice(8, 12);
       
@@ -143,75 +150,17 @@ const HomeScreen = () => {
   };
 
   const filter = (month, year, rangeLow, rangeHigh) => {
-    if(month === "None" && year === "None") {
-
-      if(rangeLow != 1 || rangeHigh != 31) {
-
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
-        })
-
-      } else {
-        setFilteredItems(items);
-      }
-
-    } else if (year === "None") {
-
-      if(rangeLow != 1 || rangeHigh != 31) {
-
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
-        })
-
-      } else {
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(0, 3) === month);
-        })
-      }
-
-    } else if (month === "None") {
-
-      if(rangeLow != 1 || rangeHigh != 31) {
-
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
-        })
-
-      } else {
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(8, 12) === year);
-        })
-      }
-
-    } else {
-
-      if(rangeLow != 1 || rangeHigh != 31) {
-
-        setFilteredItems(() => {
-          return items.filter(item => 
-            item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
-        })
-
-      } else {
-        setFilteredItems(() => {
-          return items.filter(item => item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year);
-        })
-      }
-
-    }
+    setFilteredItems(() => {
+      return items.filter(item => 
+        item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+    })
   };
 
   //Get all the months and years of the workout logs for filter component
-  var monthsList = [];
   var yearsList = [];
 
   items.map((item) => {
     
-    var month = item.time.date.slice(0, 3);
-    if(!monthsList.includes(month)) {
-      monthsList.push(month);
-    };
-
     var year = item.time.date.slice(8, 12);
     if(!yearsList.includes(year)) {
       yearsList.push(year);
@@ -219,12 +168,9 @@ const HomeScreen = () => {
 
   });
 
-  var months = [{label: "None"}];
-  monthsList.map((month) => {
-    months.push({label: month})
-  });
+  var months = [{label: "Jan"}, {label: "Feb"}, {label: "Mar"}, {label: "Apr"}, {label: "May"}, {label: "Jun"}, {label: "Jul"}, {label: "Aug"}, {label: "Sep"}, {label: "Oct"}, {label: "Nov"}, {label: "Dec"}];
 
-  var years = [{label: "None"}];
+  var years = [];
   yearsList.map((year) => {
     years.push({label: year})
   });
@@ -239,7 +185,7 @@ const HomeScreen = () => {
         storeData(newItem.id, newItem);
         return [ newItem, ...prevItems ];
       });
-      if((selectedMonthValue === "None" && selectedYearValue === "None") || time.date.slice(0, 3) === selectedMonthValue || time.date.slice(8, 12) === selectedYearValue) {
+      if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue) {
         setFilteredItems(prevItems => {
           var newItem = {id: id, time: time, workouts: workouts};
           return [ newItem, ...prevItems ];
@@ -309,6 +255,12 @@ const HomeScreen = () => {
           prevItems[i].time.start = start;
           prevItems[i].time.end = end;
           storeData(prevItems[i].id, prevItems[i]);
+
+          if(prevItems[i].time.date.slice(0, 3) != selectedMonthValue || prevItems[i].time.date.slice(8, 12) != selectedYearValue || prevItems[i].time.date.slice(4, 6) < rangeLow || prevItems[i].time.date.slice(4, 6) > rangeHigh) {
+            setFilteredItems(() => {
+              return filteredItems.filter(item => item.id != prevItems[i].id);
+            })
+          };
         }
       }
       return sortItems(prevItems);
