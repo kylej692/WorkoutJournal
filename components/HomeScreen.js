@@ -315,20 +315,23 @@ const HomeScreen = () => {
     })
   };
 
+  var sortedItems = sortItems(filteredItems);
+
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
       <FlatList style={styles.content}
-        data={sortItems(filteredItems)}
+        data={sortedItems}
         renderItem={(data) => (
           <LogEntry 
-            item={data.item} i
+            item={data.item} 
             toggleInfoModal={toggleInfoModal}
             toggleDateModal={toggleDateModal}
-            key={data.item.id} />
+            key={data.item.id} 
+          />
         )}
-        initialNumToRender={4}
-        maxToRenderPerBatch={5}
+        initialNumToRender={6}
+        maxToRenderPerBatch={4}
       />
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Header, Card, CardItem, Text } from 'native-base';
 
 class LogEntry extends PureComponent {
@@ -20,43 +20,46 @@ class LogEntry extends PureComponent {
                         <Text style={styles.timeText}>{this.props.item.time.start + "-" + this.props.item.time.end}</Text>
                     </Header>
                 </TouchableOpacity>
-                {this.props.item.workouts.map((workout) => {
-                    return (
-                        <Card key={workout.id} style={styles.card}>
+                <FlatList 
+                    data={this.props.item.workouts}
+                    renderItem={(workoutData) => (
+                        <Card key={workoutData.item.id} style={styles.card}>
                             <CardItem header bordered style={styles.cardHeader}>  
                                 <TouchableOpacity onPress={() => {
-                                    this.props.toggleInfoModal(workout);
+                                    this.props.toggleInfoModal(workoutData.item);
                                 }}>
-                                    <Text style={styles.workoutName}>{workout.name}</Text>
+                                    <Text style={styles.workoutName}>{workoutData.item.name}</Text>
                                 </TouchableOpacity>
                             </CardItem>
                             <CardItem bordered>
                                 <Text>Set</Text>
                                 <Text style={styles.cardText}>Reps</Text>
                                 <Text style={styles.cardText}>Wt (lbs)</Text>
-                            </CardItem>                           
-                            {workout.sets.map((set) => {
-                                this.count += 1;
-                                return (
-                                <CardItem bordered style={styles.cardInfoContainer} key={set.id}>
-                                    <View style={styles.cardItemBody}>
-                                        <View style={styles.itemView}>
-                                            <Text>{set.num}</Text>
-                                        </View>
-                                        <View style={styles.itemView}>
-                                            <Text style={styles.repsNum}>{set.reps}</Text>
-                                        </View>
-                                        <View style={styles.itemView}>
-                                            <Text style={styles.weightNum}>{set.weight}</Text>
-                                        </View>   
-                                    </View>                                  
-                                </CardItem>
-                                )})
-                            }
+                            </CardItem>  
+                            <FlatList 
+                                data={workoutData.item.sets}
+                                renderItem={(setData) => {
+                                    this.count += 1;
+                                    return (
+                                        <CardItem bordered style={styles.cardInfoContainer} key={setData.item.id}>
+                                            <View style={styles.cardItemBody}>
+                                                <View style={styles.itemView}>
+                                                    <Text>{setData.item.num}</Text>
+                                                </View>
+                                                <View style={styles.itemView}>
+                                                    <Text style={styles.repsNum}>{setData.item.reps}</Text>
+                                                </View>
+                                                <View style={styles.itemView}>
+                                                    <Text style={styles.weightNum}>{setData.item.weight}</Text>
+                                                </View>   
+                                            </View>                                  
+                                        </CardItem>
+                                    )
+                                }}
+                            />                         
                         </Card>
-                        )
-                    })
-                }
+                    )}
+                />
             </View>
         );
     }
