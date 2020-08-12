@@ -168,6 +168,10 @@ const HomeScreen = () => {
 
   });
 
+  yearsList.sort((a, b) => {
+    return parseInt(b) - parseInt(a);
+  })
+
   var months = [{label: "Jan"}, {label: "Feb"}, {label: "Mar"}, {label: "Apr"}, {label: "May"}, {label: "Jun"}, {label: "Jul"}, {label: "Aug"}, {label: "Sep"}, {label: "Oct"}, {label: "Nov"}, {label: "Dec"}];
 
   var years = [];
