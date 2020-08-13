@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert, FlatList } from 'react-native';
+import { View, StyleSheet, Alert, FlatList, Text } from 'react-native';
 import Header from './Header';
 import LogEntry from './LogEntry';
 import AddLogButton from './AddLogButton';
@@ -261,6 +261,11 @@ const HomeScreen = () => {
             key={data.item.id} 
           />
         )}
+        ListEmptyComponent={() => 
+          <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
+            <Text style={{ fontSize: 20 }}>Log is Empty</Text>
+          </View>
+        }
         initialNumToRender={6}
         maxToRenderPerBatch={4}
       />
