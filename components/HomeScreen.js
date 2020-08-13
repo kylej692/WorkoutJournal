@@ -16,7 +16,7 @@ const HomeScreen = () => {
   var currDate = new Date();
   var currMonth = monthsInYear[currDate.getMonth()];
   var currYear = currDate.getFullYear().toString();
-  var currDay = currDate.getDate();
+  var currDay = currDate.getDate().toString();
 
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -58,10 +58,22 @@ const HomeScreen = () => {
   };
 
   const getAllKeys = async () => {
-    let keys = []
     try {
-      keys = await AsyncStorage.getAllKeys();
-      return keys;
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
+      
+      return result.map(req => JSON.parse(req[1])).forEach(item => {
+        setItems(prevItems => {
+          return [ item, ...prevItems ];
+        });
+
+        if(item.time.date.slice(0, 3) === selectedMonthValue && item.time.date.slice(8, 12) === selectedYearValue && item.time.date.slice(4, 6) == selectedDayValue) {
+          setFilteredItems(prevItems => {
+            return [ item, ...prevItems ];
+          });
+        };
+      });
+      
     } catch(e) {
       console.log(e);
     };
@@ -79,20 +91,7 @@ const HomeScreen = () => {
 
   //Get all workout logs from local storage
   if(items.length == 0) {
-    getAllKeys().then(keys => {
-      keys.map((key) => {
-        getData(key).then(val => { 
-          setItems(prevItems => {
-            return [ val, ...prevItems ];
-          });
-          if(val.time.date.slice(0, 3) === selectedMonthValue && val.time.date.slice(8, 12) === selectedYearValue && val.time.date.slice(4, 6) == currDay) {
-            setFilteredItems(prevItems => {
-              return [ val, ...prevItems ];
-            });
-          };
-        });
-      });
-    });
+    getAllKeys()
   };
 
   const sortItems = (items) => {
@@ -165,7 +164,7 @@ const HomeScreen = () => {
         storeData(newItem.id, newItem);
         return [ newItem, ...prevItems ];
       });
-      if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue) {
+      if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue && time.date.slice(4, 6) === selectedDayValue) {
         setFilteredItems(prevItems => {
           var newItem = {id: id, time: time, workouts: workouts};
           return [ newItem, ...prevItems ];
