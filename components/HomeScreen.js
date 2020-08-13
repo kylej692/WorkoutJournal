@@ -22,8 +22,7 @@ const HomeScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedMonthValue, setSelectedMonthValue] = useState(currMonth);
   const [selectedYearValue, setSelectedYearValue] = useState(currYear);
-  const [rangeLow, setRangeLow] = useState(1);
-  const [rangeHigh, setRangeHigh] = useState(31);
+  const [selectedDayValue, setSelectedDayValue] = useState(currDay);
 
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
   const [isDateModalVisible, setDateModalVisible] = useState(false);
@@ -86,7 +85,7 @@ const HomeScreen = () => {
           setItems(prevItems => {
             return [ val, ...prevItems ];
           });
-          if(val.time.date.slice(0, 3) === selectedMonthValue && val.time.date.slice(8, 12) === selectedYearValue && val.time.date.slice(4, 6) >= rangeLow && val.time.date.slice(4, 6) <= rangeHigh) {
+          if(val.time.date.slice(0, 3) === selectedMonthValue && val.time.date.slice(8, 12) === selectedYearValue && val.time.date.slice(4, 6) == currDay) {
             setFilteredItems(prevItems => {
               return [ val, ...prevItems ];
             });
@@ -149,35 +148,12 @@ const HomeScreen = () => {
     return sorted;
   };
 
-  const filter = (month, year, rangeLow, rangeHigh) => {
+  const filter = (month, year, day) => {
     setFilteredItems(() => {
       return items.filter(item => 
-        item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) >= rangeLow && item.time.date.slice(4, 6) <= rangeHigh);
+        item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) == day);
     })
   };
-
-  //Get all the months and years of the workout logs for filter component
-  var yearsList = [];
-
-  items.map((item) => {
-    
-    var year = item.time.date.slice(8, 12);
-    if(!yearsList.includes(year)) {
-      yearsList.push(year);
-    };
-
-  });
-
-  yearsList.sort((a, b) => {
-    return parseInt(b) - parseInt(a);
-  })
-
-  var months = [{label: "Jan"}, {label: "Feb"}, {label: "Mar"}, {label: "Apr"}, {label: "May"}, {label: "Jun"}, {label: "Jul"}, {label: "Aug"}, {label: "Sep"}, {label: "Oct"}, {label: "Nov"}, {label: "Dec"}];
-
-  var years = [];
-  yearsList.map((year) => {
-    years.push({label: year})
-  });
 
   const addItem = (time, workouts) => {
     if(!time || !workouts) {
@@ -260,7 +236,7 @@ const HomeScreen = () => {
           prevItems[i].time.end = end;
           storeData(prevItems[i].id, prevItems[i]);
 
-          if(prevItems[i].time.date.slice(0, 3) != selectedMonthValue || prevItems[i].time.date.slice(8, 12) != selectedYearValue || prevItems[i].time.date.slice(4, 6) < rangeLow || prevItems[i].time.date.slice(4, 6) > rangeHigh) {
+          if(prevItems[i].time.date.slice(0, 3) != selectedMonthValue || prevItems[i].time.date.slice(8, 12) != selectedYearValue || prevItems[i].time.date.slice(4, 6) != selectedDayValue) {
             setFilteredItems(() => {
               return filteredItems.filter(item => item.id != prevItems[i].id);
             })
@@ -293,19 +269,13 @@ const HomeScreen = () => {
         <AddLogButton addLog={addItem}/>
       </View>
       <FilterLogs 
-        months={months} 
-        years={years} 
         filter={filter} 
         selectedMonthValue={selectedMonthValue}
         selectedYearValue={selectedYearValue}
+        selectedDayValue={selectedDayValue}
         setSelectedMonthValue={setSelectedMonthValue} 
         setSelectedYearValue={setSelectedYearValue} 
-        selectedMonthValue={selectedMonthValue} 
-        selectedYearValue={selectedYearValue} 
-        rangeLow={rangeLow} 
-        rangeHigh={rangeHigh} 
-        setRangeLow={setRangeLow}
-        setRangeHigh={setRangeHigh}
+        setSelectedDayValue={setSelectedDayValue}
       />
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
           <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
@@ -322,7 +292,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {  
-    marginTop: 40,
     paddingLeft: 5,
     paddingRight: 5
   },
