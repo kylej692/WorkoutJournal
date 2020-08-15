@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
 
 const Timer = () => {
 
@@ -10,14 +11,14 @@ const Timer = () => {
 
   function toggle() {
     setIsActive(!isActive);
-  }
+  };
 
   function reset() {
     setSeconds(0);
     setMinutes(0);
     setHours(0);
     setIsActive(false);
-  }
+  };
 
   useEffect(() => {
     let Interval = null;
@@ -46,9 +47,9 @@ const Timer = () => {
   return (
       <View>
         <Text>{hours}h:{minutes}m:{seconds}s</Text>
-        <TextInput keyboardType="numeric" placeholder="Hour(s)" onChangeText={setHours} value={hours}/>
-        <TextInput keyboardType="numeric" placeholder="Min(s)" onChangeText={setMinutes} value={minutes}/>
-        <TextInput keyboardType="numeric" placeholder="Sec(s)" onChangeText={setSeconds} value={seconds}/>
+        <NumericInput minValue={0} value={hours} onChange={setHours} />
+        <NumericInput minValue={0} value={minutes} onChange={setMinutes} />
+        <NumericInput minValue={0} value={seconds} onChange={setSeconds} />
         <View>
           <TouchableOpacity onPress={toggle}>
             <Text>{isActive ? 'Stop' : 'Start'}</Text>
