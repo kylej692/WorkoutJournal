@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
 
 const Timer = () => {
 
@@ -25,12 +26,15 @@ const Timer = () => {
       clearInterval(Interval);
       setIsActive(false);
     } else if (isActive) {
-      if (seconds === 0 && minutes !== 0) {
-        setSeconds(59);
-        setMinutes(minutes => minutes - 1);
+        if (seconds === 0 && minutes !== 0) {
+          setSeconds(59);
+          setMinutes(minutes => minutes - 1);
       } if (minutes === 0 && hours !== 0) {
-        setMinutes(59);
-        setHours(hours => hours - 1);
+          if (seconds == 0) {
+            setSeconds(59);
+          }
+          setMinutes(59);
+          setHours(hours => hours - 1);
       }
       Interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
@@ -45,13 +49,18 @@ const Timer = () => {
 
   return (
       <View>
-        <Text>{hours}h:{minutes}m:{seconds}s</Text>
-        <View>
+        <Text style={{fontSize: 40, marginHorizontal: 110}} >{hours}h:{minutes}m:{seconds}s</Text>
+        <View style={{flexDirection:"row", marginHorizontal: 15}}>
+          <NumericInput initValue={0} minValue={0} value={hours} onChange={setHours} />
+          <NumericInput initValue={0} minValue={0} value={minutes} onChange={setMinutes} />
+          <NumericInput initValue={0} minValue={0} value={seconds} onChange={setSeconds} />
+        </View>
+        <View style={{flexDirection:"row", marginHorizontal: 15}}>
           <TouchableOpacity onPress={toggle}>
-            <Text>{isActive ? 'Stop' : 'Start'}</Text>
+            <Text style={{margin:5, marginHorizontal: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={reset}>
-            <Text>Reset</Text> 
+            <Text style={{margin:5, fontSize: 35}}>Reset</Text> 
           </TouchableOpacity>
         </View>
       </View>
