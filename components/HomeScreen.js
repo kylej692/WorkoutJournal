@@ -11,7 +11,11 @@ import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 
+var Datastore = require('react-native-local-mongodb')
+, db = new Datastore({ filename: 'asyncStorageKey', storage: AsyncStorage, autoload: true });
+
 const HomeScreen = () => {
+
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   var currDate = new Date();
   var currMonth = monthsInYear[currDate.getMonth()];
@@ -19,6 +23,7 @@ const HomeScreen = () => {
   var currDay = currDate.getDate().toString();
 
   const [items, setItems] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState();
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedMonthValue, setSelectedMonthValue] = useState(currMonth);
   const [selectedYearValue, setSelectedYearValue] = useState(currYear);
@@ -28,70 +33,30 @@ const HomeScreen = () => {
   const [isDateModalVisible, setDateModalVisible] = useState(false);
   const [selectedWorkout, setWorkout] = useState({});
   const [selectedItem, setItem] = useState({});
+  const [initial, setInitial] = useState(true);
 
-  const toggleInfoModal = (workout) => {
+  const toggleInfoModal = (itemId, workout) => {
     setInfoModalVisible(!isInfoModalVisible);
-    setWorkout(workout)
+    setWorkout(workout);
+    setSelectedItemId(itemId);
   }
 
   const toggleDateModal = (item) => {
     setDateModalVisible(!isDateModalVisible);
     setItem(item);
-}
-  //AsyncStorage functions
-  const storeData = async (key, value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem(key, jsonValue);
-    } catch (e) {
-      console.log(e);
-    }
+  }
+
+  const filter = (month, year, day) => {
+    var dateStr = month + " " + day + ", " + year;
+    db.find({ "time.date": dateStr }, function (err, docs) { 
+      setItems(docs);
+    })
   };
 
-  const getData = async (key) => {
-    try {
-      var jsonValue = await AsyncStorage.getItem(key);
-      return JSON.parse(jsonValue);
-    } catch(e) {
-      console.log(e);
-    }
-  };
-
-  const getAllKeys = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const result = await AsyncStorage.multiGet(keys);
-      
-      return result.map(req => JSON.parse(req[1])).forEach(item => {
-        setItems(prevItems => {
-          return [ item, ...prevItems ];
-        });
-
-        if(item.time.date.slice(0, 3) === selectedMonthValue && item.time.date.slice(8, 12) === selectedYearValue && item.time.date.slice(4, 6) == selectedDayValue) {
-          setFilteredItems(prevItems => {
-            return [ item, ...prevItems ];
-          });
-        };
-      });
-      
-    } catch(e) {
-      console.log(e);
-    };
-  };
-
-  const removeValue = async (key) => {
-    try {
-      await AsyncStorage.removeItem(key);
-    } catch(e) {
-      console.log(e);
-    };
-  
-    console.log('Done.');
-  };
-
-  //Get all workout logs from local storage
-  if(items.length == 0) {
-    getAllKeys()
+  //Initial data load
+  if(items.length == 0 && initial) {
+    filter(selectedMonthValue, selectedYearValue, selectedDayValue);
+    setInitial(false);
   };
 
   const sortItems = (items) => {
@@ -147,106 +112,90 @@ const HomeScreen = () => {
     return sorted;
   };
 
-  const filter = (month, year, day) => {
-    setFilteredItems(() => {
-      return items.filter(item => 
-        item.time.date.slice(0, 3) === month && item.time.date.slice(8, 12) === year && item.time.date.slice(4, 6) == day);
-    })
-  };
-
   const addItem = (time, workouts) => {
     if(!time || !workouts) {
       Alert.alert("Please enter a workout!")
     } else {
       var id = uuid()
-      setItems(prevItems => {
-        var newItem = {id: id, time: time, workouts: workouts};
-        storeData(newItem.id, newItem);
-        return [ newItem, ...prevItems ];
+      var newItem = {id: id, time: time, workouts: workouts};
+      db.insert(newItem, function(err, newDoc) {
+        if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue && time.date.slice(4, 6) === selectedDayValue) {
+          setItems(prevItems => {
+            return [ newDoc, ...prevItems ];
+          });
+        }
       });
-      if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue && time.date.slice(4, 6) === selectedDayValue) {
-        setFilteredItems(prevItems => {
-          var newItem = {id: id, time: time, workouts: workouts};
-          return [ newItem, ...prevItems ];
-        });
-      }
     }
   };
 
-  const deleteWorkout = (id) => {
-    setItems(prevItems => {
-      var emptyItemId = null;
-      prevItems.map((item) => {
-        item.workouts = item.workouts.filter(workout => workout.id != id);
-        storeData(item.id, item);
-        if(item.workouts.length == 0) {
-          emptyItemId = item.id;
-          removeValue(item.id);
+  const deleteWorkout = (itemId, workoutId) => {
+    var emptyItemId = null;
+    db.findOne({ id: itemId }, function(err, doc) {
+      doc.workouts = doc.workouts.filter(workout => workout.id != workoutId);
+      if(doc.workouts.length == 0) {
+        emptyItemId = itemId;
+        db.remove({ id: itemId }, {})
+      } else {
+        db.update({ id: itemId }, { $set: { workouts: doc.workouts} });
+      }
+      setItems(prevItems => {
+        for(var i = 0; i < prevItems.length; i++) {
+          if (prevItems[i].id == itemId) {
+            prevItems[i].workouts = doc.workouts;
+          };
         }
-      })
-      return prevItems.filter(item => item.id != emptyItemId);
-    });
-
-    setFilteredItems(prevItems => {
-      var emptyItemId = null;
-      prevItems.map((item) => {
-        item.workouts = item.workouts.filter(workout => workout.id != id);
-        if(item.workouts.length == 0) {
-          emptyItemId = item.id;
-        }
-      })
-      return prevItems.filter(item => item.id != emptyItemId);
-    });
-
+        return prevItems.filter(item => item.id != emptyItemId);
+      });
+    })
   };
 
-  const modifyWorkout = (modifiedWorkout) => {
-    setItems(prevItems => {
-      for(var i = 0; i < prevItems.length; i++) {
-        for(var j = 0; j < prevItems[i].workouts.length; j++) {
-          if(prevItems[i].workouts[j].id == modifiedWorkout.id) {
-            prevItems[i].workouts[j] = modifiedWorkout
-            storeData(prevItems[i].id, prevItems[i]);
-          }
-        }
-      }
-      return prevItems;
-    })
+  const modifyWorkout = (itemId, modifiedWorkout) => {
+    db.findOne({ id: itemId }, function(err, doc) {
 
-    setFilteredItems(prevItems => {
-      for(var i = 0; i < prevItems.length; i++) {
-        for(var j = 0; j < prevItems[i].workouts.length; j++) {
-          if(prevItems[i].workouts[j].id == modifiedWorkout.id) {
-            prevItems[i].workouts[j] = modifiedWorkout
-            storeData(prevItems[i].id, prevItems[i]);
+      for (var i = 0; i < doc.workouts.length; i++){
+        if(doc.workouts[i].id == modifiedWorkout.id) {
+          doc.workouts[i] = modifiedWorkout;
+          db.update({ id: itemId }, { $set: { workouts: doc.workouts} });
+        }
+      };
+
+      setItems(prevItems => {
+        for(var i = 0; i < prevItems.length; i++) {
+          if (prevItems[i].id == itemId) {
+            prevItems[i].workouts = doc.workouts;
           }
         }
-      }
-      return prevItems;
-    })
+        return [...prevItems];
+      });
+
+    });
   };
 
   const modifyDateTime = (itemId, date, start, end) => {
-    setItems(prevItems => {
-      for(var i = 0; i < prevItems.length; i++) {
-        if(prevItems[i].id == itemId) {
-          prevItems[i].time.date = date;
-          prevItems[i].time.start = start;
-          prevItems[i].time.end = end;
-          storeData(prevItems[i].id, prevItems[i]);
+    db.findOne({ id: itemId }, function(err, doc) {
+      doc.time.date = date;
+      doc.time.start = start;
+      doc.time.end = end;
+      db.update({ id: itemId }, { $set: { time: doc.time} });
 
-          if(prevItems[i].time.date.slice(0, 3) != selectedMonthValue || prevItems[i].time.date.slice(8, 12) != selectedYearValue || prevItems[i].time.date.slice(4, 6) != selectedDayValue) {
-            setFilteredItems(() => {
-              return filteredItems.filter(item => item.id != prevItems[i].id);
-            })
-          };
-        }
-      }
-      return sortItems(prevItems);
-    })
+      if(doc.time.date.slice(0, 3) === selectedMonthValue && doc.time.date.slice(8, 12) === selectedYearValue && doc.time.date.slice(4, 6) === selectedDayValue) {
+        setItems(prevItems => {
+          for(var i = 0; i < prevItems.length; i++) {
+            if (prevItems[i].id == itemId) {
+              prevItems[i].time = doc.time;
+            }
+          }
+          return sortItems(prevItems);
+        });
+      } else {
+        setItems(prevItems => {
+          return prevItems.filter(item => item.id != itemId);
+        });
+      };
+    });
   };
 
-  var sortedItems = sortItems(filteredItems);
+  var sortedItems = sortItems(items);
 
   return (
     <View style={styles.container}>
@@ -282,7 +231,7 @@ const HomeScreen = () => {
         setSelectedDayValue={setSelectedDayValue}
       />
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
-          <ModifyLog workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
+          <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
       </Modal>
       <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
           <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>

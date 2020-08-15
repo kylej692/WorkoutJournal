@@ -26,7 +26,7 @@ class LogEntry extends PureComponent {
                         <Card key={workoutData.item.id} style={styles.card}>
                             <CardItem header bordered style={styles.cardHeader}>  
                                 <TouchableOpacity onPress={() => {
-                                    this.props.toggleInfoModal(workoutData.item);
+                                    this.props.toggleInfoModal(this.props.item.id, workoutData.item);
                                 }}>
                                     <Text style={styles.workoutName}>{workoutData.item.name}</Text>
                                 </TouchableOpacity>

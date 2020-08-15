@@ -7,7 +7,7 @@ import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible }) => {
+const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const [newWorkout, setNewWorkout] = useState({...workout})
@@ -91,7 +91,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
                     removeClippedSubviews={false}
                 />
             <TouchableOpacity style={styles.deleteWorkoutBtn} onPress={() => {
-                                    deleteWorkout(newWorkout.id), 
+                                    deleteWorkout(itemId, newWorkout.id), 
                                     setInfoModalVisible(false)}}>
                 <Icon style={styles.deleteIcon} name="delete" size={20} />
             </TouchableOpacity>
@@ -100,7 +100,7 @@ const ModifyLog = ({ workout, modifyWorkout, deleteWorkout, setInfoModalVisible 
                     Alert.alert("           At least 1 set is needed!")
                 } else {
                     setInfoModalVisible(false), 
-                    modifyWorkout(newWorkout)
+                    modifyWorkout(itemId, newWorkout)
                 }
             }}>
                 <Text style={styles.doneText}>Done</Text>
