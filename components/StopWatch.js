@@ -42,7 +42,7 @@ const StopWatch = () => {
 
   return (
       <View>
-        <Text>{hours}:{minutes}:{seconds}</Text>
+        <Text>{hours}h:{minutes}m:{seconds}s</Text>
         <View>
           <TouchableOpacity onPress={toggle}>
             <Text>{isActive ? 'Stop' : 'Start'}</Text>
