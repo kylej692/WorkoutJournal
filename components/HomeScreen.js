@@ -211,7 +211,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
-      {isLoading && <Spinner />}
+      {isLoading && <Spinner color={"#2C95FF"} />}
       <FlatList style={styles.content}
         data={sortedItems}
         renderItem={(data) => (
@@ -228,7 +228,7 @@ const HomeScreen = () => {
         )}
         ListEmptyComponent={() => 
           <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
-            <Text style={{ fontSize: 20 }}>Log is Empty</Text>
+            {!isLoading && <Text style={{ fontSize: 20 }}>Log is Empty</Text>}
           </View>
         }
         initialNumToRender={6}
