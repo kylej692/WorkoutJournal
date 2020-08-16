@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-community/picker';
 import 'react-native-get-random-values';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';

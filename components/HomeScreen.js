@@ -24,7 +24,6 @@ const HomeScreen = () => {
 
   const [items, setItems] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState();
-  const [filteredItems, setFilteredItems] = useState([]);
   const [selectedMonthValue, setSelectedMonthValue] = useState(currMonth);
   const [selectedYearValue, setSelectedYearValue] = useState(currYear);
   const [selectedDayValue, setSelectedDayValue] = useState(currDay);
@@ -53,7 +52,7 @@ const HomeScreen = () => {
     })
   };
 
-  //Initial data load
+ //Initial data load
   if(items.length == 0 && initial) {
     filter(selectedMonthValue, selectedYearValue, selectedDayValue);
     setInitial(false);
