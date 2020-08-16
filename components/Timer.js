@@ -48,14 +48,15 @@ const Timer = () => {
   }, [isActive, seconds]);
 
   return (
-      <View>
-        <Text style={{fontSize: 40, marginHorizontal: 110}} >{hours}h:{minutes}m:{seconds}s</Text>
-        <View style={{flexDirection:"row", marginHorizontal: 15}}>
+      <View style={{top: 50, alignSelf: "center"}}>
+        <Text style={{fontSize: 40, bottom: 20, textAlign: 'center'}}>Timer</Text>
+        <Text style={{borderWidth: 1, borderRadius: 5, bottom: 10, fontSize: 40, textAlign: "center"}} >{hours}h:{minutes}m:{seconds}s</Text>
+        <View style={{flexDirection:"row"}}>
           <NumericInput initValue={0} minValue={0} value={hours} onChange={setHours} />
           <NumericInput initValue={0} minValue={0} value={minutes} onChange={setMinutes} />
           <NumericInput initValue={0} minValue={0} value={seconds} onChange={setSeconds} />
         </View>
-        <View style={{flexDirection:"row", marginHorizontal: 15}}>
+        <View style={{flexDirection:"row"}}>
           <TouchableOpacity onPress={toggle}>
             <Text style={{margin:5, marginHorizontal: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
           </TouchableOpacity>
