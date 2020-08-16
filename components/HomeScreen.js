@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Alert, FlatList, Text } from 'react-native';
+import { Spinner } from 'native-base'
 import Header from './Header';
 import LogEntry from './LogEntry';
 import AddLogButton from './AddLogButton';
@@ -33,6 +34,13 @@ const HomeScreen = () => {
   const [selectedWorkout, setWorkout] = useState({});
   const [selectedItem, setItem] = useState({});
   const [initial, setInitial] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 200);
+  }, [])
 
   const toggleInfoModal = (itemId, workout) => {
     setInfoModalVisible(!isInfoModalVisible);
@@ -48,7 +56,11 @@ const HomeScreen = () => {
   const filter = (month, year, day) => {
     var dateStr = month + " " + day + ", " + year;
     db.find({ "time.date": dateStr }, function (err, docs) { 
+      setIsLoading(true);
       setItems(docs);
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 100);
     })
   };
 
@@ -199,15 +211,20 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
+      {isLoading && <Spinner />}
       <FlatList style={styles.content}
         data={sortedItems}
         renderItem={(data) => (
-          <LogEntry 
-            item={data.item} 
-            toggleInfoModal={toggleInfoModal}
-            toggleDateModal={toggleDateModal}
-            key={data.item.id} 
-          />
+          <View>
+            {!isLoading &&
+              <LogEntry 
+                item={data.item} 
+                toggleInfoModal={toggleInfoModal}
+                toggleDateModal={toggleDateModal}
+                key={data.item.id} 
+              />
+            }
+          </View>
         )}
         ListEmptyComponent={() => 
           <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
