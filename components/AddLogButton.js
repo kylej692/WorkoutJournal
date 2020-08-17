@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
-import { Button } from 'native-base';
 import { Modal, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Platform, ToastAndroid } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
@@ -385,7 +384,7 @@ const AddLogButton = ({ addLog }) => {
             </View>
          </Modal>
          
-         <Button style={ styles.addButton } bordered primary onPress = {() => {
+         <TouchableOpacity style={ styles.addButton } onPress = {() => {
             toggleModal(true);
             setWorkout(defaultWorkout);
             setSet(defaultSet);
@@ -397,8 +396,8 @@ const AddLogButton = ({ addLog }) => {
             clearName();
             clearNote();
             }}>
-            <Text style={styles.title}>Add</Text>
-         </Button>
+            <Icon style={{ color: "white" }} name="plussquareo" size={25} />   
+         </TouchableOpacity>
       </View>
    );
 };
@@ -422,11 +421,8 @@ const styles = StyleSheet.create ({
       right: 10,
    },
    addButton: {
-      backgroundColor: "#2C95FF",
-      width: 70,
-      height: 35,
-      borderColor: "white",
-      justifyContent: "center",
+      marginTop: 7,
+      marginRight: 10
    },
    buttonView: {
       alignSelf: "center",
