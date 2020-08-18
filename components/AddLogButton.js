@@ -238,7 +238,7 @@ const AddLogButton = ({ addLog }) => {
                   }
                   renderItem={(data, rowMap) => (
                         <View style={styles.setView} key={data.item.id}>
-                           <Text style={styles.labelText}>{"Set " + data.item.num + ":"}</Text>
+                           <Text style={styles.labelText}>{"SET " + data.item.num + ":"}</Text>
                            <Text style={styles.infoText}>Reps </Text>
                            <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => modifyReps(newReps)} />
                            <Text style={styles.infoText}>Wt (lbs)</Text>
@@ -258,7 +258,7 @@ const AddLogButton = ({ addLog }) => {
                      <View>
                         <View style={styles.workoutView}>
                            <View style={styles.repsWeightView}>
-                              <Text style={styles.newSetText}>{"Set " + (setList.length + 1) + ": "}</Text>
+                              <Text style={styles.newSetText}>{"SET " + (setList.length + 1) + ": "}</Text>
                               <Text style={styles.infoText}>Reps </Text>
                               <TextInput keyboardType="numeric" style={styles.infoInput} onChangeText={onChangeReps} value={rep}/>
                               <Text style={styles.infoText}>Wt (lbs) </Text>
