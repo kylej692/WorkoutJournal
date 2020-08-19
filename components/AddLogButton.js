@@ -5,7 +5,7 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Header from './Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import Icon from 'react-native-vector-icons/dist/AntDesign';
+import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 const AddLogButton = ({ addLog }) => {
@@ -250,7 +250,7 @@ const AddLogButton = ({ addLog }) => {
                            deleteSet(data.item.id)
                         }}>
                            <View style={styles.rowFront}>
-                              <Icon style={styles.deleteIcon} name="closecircle" size={15} />    
+                              <Icon style={styles.deleteIcon} name="times" size={20} />    
                            </View>
                         </TouchableOpacity>  
                   )}
@@ -396,7 +396,7 @@ const AddLogButton = ({ addLog }) => {
             clearName();
             clearNote();
             }}>
-            <Icon style={{ color: "white" }} name="plussquareo" size={25} />   
+            <Icon style={{ color: "white" }} name="plus-square" size={25} />   
          </TouchableOpacity>
       </View>
    );
@@ -554,7 +554,7 @@ const styles = StyleSheet.create ({
       left: 365
    },
    deleteIcon: { 
-      color: "red",
+      color: "#BD0000",
       fontSize: 20
    },
 
