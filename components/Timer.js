@@ -48,20 +48,20 @@ const Timer = () => {
   }, [isActive, seconds]);
 
   return (
-      <View style={{top: 50, alignSelf: "center"}}>
-        <Text style={{fontSize: 40, bottom: 20, textAlign: 'center'}}>Timer</Text>
-        <Text style={{borderWidth: 1, borderRadius: 5, bottom: 10, fontSize: 40, textAlign: "center"}} >{hours}h:{minutes}m:{seconds}s</Text>
-        <View style={{flexDirection:"row"}}>
+      <View style={{borderTopWidth: 1, top: 10, alignSelf: "center"}}>
+        <Text style={{fontSize: 20, top: 50, textAlign: 'center'}}>Timer</Text>
+        <Text style={{textDecorationLine: 'underline', top: 80, fontSize: 40, textAlign: "center"}} >{hours}h:{minutes}m:{seconds}s</Text>
+        <View style={{flexDirection:"row", top: 90}}>
           <NumericInput initValue={0} minValue={0} value={hours} onChange={setHours} />
           <NumericInput initValue={0} minValue={0} value={minutes} onChange={setMinutes} />
           <NumericInput initValue={0} minValue={0} value={seconds} onChange={setSeconds} />
         </View>
         <View style={{flexDirection:"row"}}>
           <TouchableOpacity onPress={toggle}>
-            <Text style={{margin:5, marginHorizontal: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
+            <Text style={{top: 95, margin:5, marginHorizontal: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={reset}>
-            <Text style={{margin:5, fontSize: 35}}>Reset</Text> 
+            <Text style={{top: 95, margin:5, fontSize: 35}}>Reset</Text> 
           </TouchableOpacity>
         </View>
       </View>

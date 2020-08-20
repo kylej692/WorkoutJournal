@@ -42,8 +42,8 @@ const StopWatch = () => {
 
   return (
       <View style={{bottom: 90, alignSelf: "center"}}>
-        <Text style={{fontSize: 40, bottom: 15, textAlign: 'center'}}>StopWatch</Text>
-        <Text style={{borderWidth: 1, borderRadius: 5, fontSize: 40, textAlign: "center"}}>{hours}h:{minutes}m:{seconds}s</Text>
+        <Text style={{fontSize: 20, bottom: 40, textAlign: 'center'}}>StopWatch</Text>
+        <Text style={{textDecorationLine: 'underline', fontSize: 40, textAlign: "center"}}>{hours}h:{minutes}m:{seconds}s</Text>
         <View style={{flexDirection:"row"}}>
           <TouchableOpacity onPress={toggle}>
             <Text style={{margin:5, marginRight: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
