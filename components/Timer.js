@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, TextInput } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
+import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
 const Timer = () => {
 
@@ -48,20 +49,20 @@ const Timer = () => {
   }, [isActive, seconds]);
 
   return (
-      <View style={{borderTopWidth: 1, top: 10, alignSelf: "center"}}>
-        <Text style={{fontSize: 20, top: 50, textAlign: 'center'}}>Timer</Text>
-        <Text style={{textDecorationLine: 'underline', top: 80, fontSize: 40, textAlign: "center"}} >{hours}h:{minutes}m:{seconds}s</Text>
-        <View style={{flexDirection:"row", top: 90}}>
+      <View style={{position: 'absolute', borderTopWidth: 1, top: 335, alignSelf: "center"}}>
+        <Text style={{fontSize: 20, top: 60, textAlign: 'center'}}>Timer</Text>
+        <Text style={{textDecorationLine: 'underline', top: 90, fontSize: 40, textAlign: "center"}} >{hours}h:{minutes}m:{seconds}s</Text>
+        <View style={{flexDirection:"row", marginTop: 100}}>
           <NumericInput initValue={0} minValue={0} value={hours} onChange={setHours} />
           <NumericInput initValue={0} minValue={0} value={minutes} onChange={setMinutes} />
           <NumericInput initValue={0} minValue={0} value={seconds} onChange={setSeconds} />
         </View>
         <View style={{flexDirection:"row"}}>
-          <TouchableOpacity onPress={toggle}>
-            <Text style={{top: 95, margin:5, marginHorizontal: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
+          <TouchableOpacity style={{margin:5, marginHorizontal: 110, marginTop: 10}} onPress={toggle}>
+            <Icon name={isActive ? 'pause' : 'play'} size={30} color={'grey'} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={reset}>
-            <Text style={{top: 95, margin:5, fontSize: 35}}>Reset</Text> 
+          <TouchableOpacity style={{margin:5, fontSize: 35, marginTop: 10}} onPress={reset}>
+            <Icon name={'redo'} size={30} color={'grey'} />
           </TouchableOpacity>
         </View>
       </View>

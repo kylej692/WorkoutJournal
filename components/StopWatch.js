@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
 const StopWatch = () => {
 
@@ -41,15 +42,15 @@ const StopWatch = () => {
   }, [isActive, seconds]);
 
   return (
-      <View style={{bottom: 90, alignSelf: "center"}}>
+      <View style={{position:'absolute', bottom: 450, alignSelf: "center"}}>
         <Text style={{fontSize: 20, bottom: 40, textAlign: 'center'}}>StopWatch</Text>
         <Text style={{textDecorationLine: 'underline', fontSize: 40, textAlign: "center"}}>{hours}h:{minutes}m:{seconds}s</Text>
         <View style={{flexDirection:"row"}}>
-          <TouchableOpacity onPress={toggle}>
-            <Text style={{margin:5, marginRight: 70, fontSize: 35}}>{isActive ? 'Stop' : 'Start'}</Text>
+          <TouchableOpacity style={{margin:10, marginRight: 10}} onPress={toggle}>
+            <Icon name={isActive ? 'pause' : 'play'} size={30} color={'grey'} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={reset}>
-            <Text style={{margin:5, marginRight: 10, fontSize: 35}}>Reset</Text> 
+          <TouchableOpacity style={{margin:10, marginLeft: 90}} onPress={reset}>
+            <Icon name={'redo'} size={30} color={'grey'} />
           </TouchableOpacity>
         </View>
       </View>
