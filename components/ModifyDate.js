@@ -83,14 +83,14 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
             <Header title="Edit Date/Time" />
             <Content padder>
                 <View style={styles.dateTimeView}>
-                    <Icon style={styles.calendarTimeIcon} name="calendar" size={20}/>
+                    <Icon style={styles.calendarIcon} name="calendar" size={20}/>
                     <Text style={styles.dateTimeLabelText}>Date:</Text>
                     <TouchableOpacity onPress={showDatePicker}>
                         <Text style={styles.dateTimeText}>{newDateStr}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.dateTimeView}>
-                    <Icon style={styles.calendarTimeIcon} name="clock-o" size={20}/>
+                    <Icon style={styles.timeIcon} name="clock-o" size={20}/>
                     <Text style={styles.dateTimeLabelText}>Time:</Text>
                     <TouchableOpacity onPress={() => {showTimePicker(true)}}>
                         <Text style={styles.dateTimeText}>{newStart}</Text>
@@ -113,8 +113,10 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
                 )}
             </Content>
             <TouchableOpacity style={styles.doneBtn} onPress={() => {
-                modifyDateTime(item.id, newDateStr, newStart, newEnd),
-                setDateModalVisible(false)
+                if (newDateStr != item.time.date || newStart != item.time.start || newEnd != item.time.end) {
+                    modifyDateTime(item.id, newDateStr, newStart, newEnd);
+                }
+                setDateModalVisible(false);
             }}>
                 <Text style={styles.doneText}>Done</Text>
             </TouchableOpacity>
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 5,
         borderBottomWidth: 1,
-        borderBottomColor: "black",
+        borderBottomColor: "#B4B4B4",
     },
     hyphenText: {
         fontSize: 20,
@@ -164,7 +166,12 @@ const styles = StyleSheet.create({
         marginLeft: 3,
         color: "white"
     },
-    calendarTimeIcon: {
+    calendarIcon: {
+        marginLeft: 10,
+        marginTop: 7,
+        color: "#0061C1"
+    },
+    timeIcon: {
         marginLeft: 10,
         marginTop: 7,
         color: "black"
