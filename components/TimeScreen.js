@@ -5,7 +5,7 @@ import Timer from './Timer';
 
 const TimeScreen = () => {
   return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{backgroundColor: '#C8DEFF', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <StopWatch/>
         <Timer/>
       </View>

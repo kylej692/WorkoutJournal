@@ -53,9 +53,29 @@ const Timer = () => {
         <Text style={styles.header}>Timer</Text>
         <Text style={styles.display} >{hours}h:{minutes}m:{seconds}s</Text>
         <View style={styles.numericInput}>
-          <NumericInput initValue={0} minValue={0} value={hours} onChange={setHours} />
-          <NumericInput initValue={0} minValue={0} value={minutes} onChange={setMinutes} />
-          <NumericInput initValue={0} minValue={0} value={seconds} onChange={setSeconds} />
+          <NumericInput 
+            borderColor='black' 
+            rightButtonBackgroundColor='#2C95FF' 
+            leftButtonBackgroundColor='#2C95FF'
+            iconColorinitValue={0} 
+            minValue={0} value={hours} 
+            onChange={setHours} />
+          <NumericInput 
+            borderColor='black' 
+            rightButtonBackgroundColor='#2C95FF' 
+            leftButtonBackgroundColor='#2C95FF'
+            initValue={0} 
+            minValue={0} 
+            value={minutes} 
+            onChange={setMinutes} />
+          <NumericInput 
+            borderColor='black' 
+            rightButtonBackgroundColor='#2C95FF' 
+            leftButtonBackgroundColor='#2C95FF'
+            initValue={0} 
+            minValue={0} 
+            value={seconds} 
+            onChange={setSeconds} />
         </View>
         <View style={styles.button}>
           <TouchableOpacity style={styles.start} onPress={toggle}>
