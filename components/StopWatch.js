@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
 const StopWatch = () => {
@@ -42,19 +42,50 @@ const StopWatch = () => {
   }, [isActive, seconds]);
 
   return (
-      <View style={{position:'absolute', bottom: 450, alignSelf: "center"}}>
-        <Text style={{fontSize: 20, bottom: 40, textAlign: 'center'}}>StopWatch</Text>
-        <Text style={{textDecorationLine: 'underline', fontSize: 40, textAlign: "center"}}>{hours}h:{minutes}m:{seconds}s</Text>
-        <View style={{flexDirection:"row"}}>
-          <TouchableOpacity style={{margin:10, marginRight: 10}} onPress={toggle}>
-            <Icon name={isActive ? 'pause' : 'play'} size={30} color={'grey'} />
+      <View style={styles.container}>
+        <Text style={styles.header}>StopWatch</Text>
+        <Text style={styles.display}>{hours}h:{minutes}m:{seconds}s</Text>
+        <View style={styles.button}>
+          <TouchableOpacity style={styles.start} onPress={toggle}>
+            <Icon name={isActive ? 'pause' : 'play'} size={30} color={'black'} />
           </TouchableOpacity>
-          <TouchableOpacity style={{margin:10, marginLeft: 90}} onPress={reset}>
-            <Icon name={'redo'} size={30} color={'grey'} />
+          <TouchableOpacity style={styles.reset} onPress={reset}>
+            <Icon name={'redo'} size={30} color={'black'} /> 
           </TouchableOpacity>
         </View>
       </View>
     );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    position:'absolute', 
+    bottom: 450, 
+    alignSelf: "center",
+  },
+  header: {
+    color: 'black', 
+    fontSize: 20, 
+    bottom: 40, 
+    textAlign: 'center',
+  },
+  display: {
+    color: 'black', 
+    textDecorationLine: 'underline', 
+    fontSize: 40, 
+    textAlign: "center",
+  },
+  button: {
+    flexDirection:"row",
+  },
+  start: {
+    margin:10, 
+    marginRight: 10,
+  },
+  reset: {
+    margin:10, 
+    marginLeft: 90,
+  }
+});
 
 export default StopWatch;
