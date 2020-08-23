@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import 'react-native-get-random-values';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSelectedDayValue, selectedMonthValue, selectedDayValue, selectedYearValue }) => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const currMonth = months.indexOf(selectedMonthValue);
-    const currDay = parseInt(selectedDayValue);
-    const currYear = parseInt(selectedYearValue);
-
-    const [date, setDate] = useState(new Date(currYear, currMonth, currDay));
+    const month = months.indexOf(selectedMonthValue);
+    const day = parseInt(selectedDayValue);
+    const year = parseInt(selectedYearValue);
+    
+    const [date, setDate] = useState(new Date(year, month, day));
     const [show, setShow] = useState(false);
-  
+
     const onChangeDate = (month, year, day) => {
-        filter(month, year, day);
+        if(selectedMonthValue != month || selectedDayValue != day || selectedYearValue != year) {
+            filter(month, year, day);
+        }
     };
 
     const onChangeDateTime = (event, selectedDate) => {
@@ -30,7 +32,6 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
            setSelectedYearValue(yearStr);
            setSelectedDayValue(dayStr);
 
-           setShow(Platform.OS === 'ios');
            setDate(currentDate);
            onChangeDate(monthStr, yearStr, dayStr);
            
@@ -50,19 +51,42 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
 
     return (
         <View style={styles.dropDownMonthsView}>
-            <TouchableOpacity onPress={showDatepicker}>
-                <Icon style={{ color: "white" }} name="calendar" size={25}/>
-            </TouchableOpacity>
-            {show && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode={"date"}
-                    is24Hour={false}
-                    display="default"
-                    onChange={onChangeDateTime}
-                />
-            )}
+            <View style={{ marginLeft: 10 }}>
+                <TouchableOpacity onPress={showDatepicker}>
+                    <Icon style={{ color: "white" }} name="calendar-alt" size={25}/>
+                </TouchableOpacity>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={"date"}
+                        is24Hour={false}
+                        display="default"
+                        onChange={onChangeDateTime}
+                    />
+                )}
+            </View>
+            <View style={styles.dateView}>
+                <Icon style={{ right: 10 }}name="grip-lines" size={11}/>
+                <TouchableOpacity 
+                    onPress={() => {
+                        var currDate = new Date();
+                        var currMonth = months[currDate.getMonth()];
+                        var currYear = currDate.getFullYear().toString();
+                        var currDay = currDate.getDate().toString();
+                        if(currMonth != selectedMonthValue || currDay != selectedDayValue || currYear != selectedYearValue) {
+                            setSelectedMonthValue(currMonth);
+                            setSelectedDayValue(currDay);
+                            setSelectedYearValue(currYear);
+                            setDate(currDate);
+                            filter(currMonth, currYear, currDay);
+                        }
+                    }
+                }>
+                    <Text style={{ fontSize: 17 }}>{selectedMonthValue + " " + selectedDayValue + ", " + selectedYearValue}</Text>
+                </TouchableOpacity>
+                <Icon style={{ left: 10 }}name="grip-lines" size={11}/>
+            </View>
         </View>
     )
 }
@@ -70,11 +94,21 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
 const styles = StyleSheet.create({
     dropDownMonthsView: {
         flex: 1,
-        position: 'absolute',
+        position: "absolute",
         padding: 10,
-        marginTop: 7,
-        marginLeft: 10
-    }
+        marginTop: 7
+    },
+    dateView: { 
+        flex: 1,
+        flexDirection: "row",
+        position: "absolute",
+        justifyContent: "center", 
+        alignItems: "center", 
+        backgroundColor: "#9AC2FF", 
+        height: 35,
+        width: 420,
+        marginTop: 52,
+    },
 });
 
 export default FilterLogs;

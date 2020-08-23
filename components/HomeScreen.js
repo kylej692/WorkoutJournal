@@ -28,7 +28,6 @@ const HomeScreen = () => {
   const [selectedMonthValue, setSelectedMonthValue] = useState(currMonth);
   const [selectedYearValue, setSelectedYearValue] = useState(currYear);
   const [selectedDayValue, setSelectedDayValue] = useState(currDay);
-
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
   const [isDateModalVisible, setDateModalVisible] = useState(false);
   const [selectedWorkout, setWorkout] = useState({});
@@ -207,36 +206,9 @@ const HomeScreen = () => {
   };
 
   var sortedItems = sortItems(items);
-
   return (
     <View style={styles.container}>
       <Header title='Workout Journal'/>
-      {isLoading && <Spinner color={"#2C95FF"} />}
-      <FlatList style={styles.content}
-        data={sortedItems}
-        renderItem={(data) => (
-          <View>
-            {!isLoading &&
-              <LogEntry 
-                item={data.item} 
-                toggleInfoModal={toggleInfoModal}
-                toggleDateModal={toggleDateModal}
-                key={data.item.id} 
-              />
-            }
-          </View>
-        )}
-        ListEmptyComponent={() => 
-          <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
-            {!isLoading && <Text style={{ fontSize: 20 }}>Log is Empty</Text>}
-          </View>
-        }
-        initialNumToRender={6}
-        maxToRenderPerBatch={4}
-      />
-      <View style={styles.button}>
-        <AddLogButton addLog={addItem}/>
-      </View>
       <FilterLogs 
         filter={filter} 
         selectedMonthValue={selectedMonthValue}
@@ -246,6 +218,32 @@ const HomeScreen = () => {
         setSelectedYearValue={setSelectedYearValue} 
         setSelectedDayValue={setSelectedDayValue}
       />
+      {isLoading && <Spinner style={{ marginTop: 20 }} color={"#2C95FF"} />}
+      {!isLoading && 
+        <View style={{ marginTop: 35, marginBottom: 65 }}>
+          <FlatList style={styles.content}
+            data={sortedItems}
+            renderItem={(data) => (
+              <LogEntry 
+                item={data.item} 
+                toggleInfoModal={toggleInfoModal}
+                toggleDateModal={toggleDateModal}
+                key={data.item.id} 
+              />
+            )}
+            ListEmptyComponent={() => 
+              <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
+                {!isLoading && <Text style={{ fontSize: 20 }}>Log is Empty</Text>}
+              </View>
+            }
+            initialNumToRender={6}
+            maxToRenderPerBatch={4}
+          />
+        </View>
+        }
+      <View style={styles.button}>
+        <AddLogButton addLog={addItem}/>
+      </View>
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
           <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
       </Modal>

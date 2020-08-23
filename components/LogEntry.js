@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Header, Card, CardItem, Text } from 'native-base';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 class LogEntry extends PureComponent {
 
@@ -16,7 +17,7 @@ class LogEntry extends PureComponent {
                     this.props.toggleDateModal(this.props.item);
                 }}>
                     <Header style={styles.dateHeader}>
-                        <Text style={styles.dateText}>{this.props.item.time.date + "    "}</Text>
+                        <Icon style={{ color: "white", paddingRight: 10 }} name="clock-o" size={18}/>
                         <Text style={styles.timeText}>{this.props.item.time.start + "-" + this.props.item.time.end}</Text>
                     </Header>
                 </TouchableOpacity>
@@ -69,13 +70,9 @@ const styles = StyleSheet.create({
     dateTouchableOpacity: {
         marginTop: 5
     },
-    dateText: { 
-        fontSize: 17, 
-        marginRight: "auto", 
-        color: "white" 
-    },
     timeText: { 
-        fontSize: 13, 
+        fontSize: 15, 
+        marginRight: 10,
         color: "white" 
     },
     dateHeader: {
