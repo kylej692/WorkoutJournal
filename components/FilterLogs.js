@@ -67,7 +67,7 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                 )}
             </View>
             <View style={styles.dateView}>
-                <Icon style={{ right: 140, color: "black" }}name="circle" size={11}/>
+                <Icon style={{ position: "absolute", right: 20, color: "black" }}name="circle" size={11}/>
                 <TouchableOpacity 
                     onPress={() => {
                         var currDate = new Date();
@@ -85,7 +85,7 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                 }>
                     <Text style={{ fontSize: 17 }}>{selectedMonthValue + " " + selectedDayValue + ", " + selectedYearValue}</Text>
                 </TouchableOpacity>
-                <Icon style={{ left: 132, color: "black" }}name="circle" size={11}/>
+                <Icon style={{ position: "absolute", left: 13, color: "black" }}name="circle" size={11}/>
             </View>
         </View>
     )
