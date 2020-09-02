@@ -85,7 +85,7 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                 }>
                     <Text style={{ fontSize: 17 }}>{selectedMonthValue + " " + selectedDayValue + ", " + selectedYearValue}</Text>
                 </TouchableOpacity>
-                <Icon style={{ position: "absolute", left: 13, color: "black" }}name="circle" size={11}/>
+                <Icon style={{ position: "absolute", left: 12, color: "black" }}name="circle" size={11}/>
             </View>
         </View>
     )

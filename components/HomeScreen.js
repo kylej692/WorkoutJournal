@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Alert, FlatList, Text } from 'react-native';
+import { View, StyleSheet, Alert, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Spinner } from 'native-base'
 import Header from './Header';
 import LogEntry from './LogEntry';
 import AddLogButton from './AddLogButton';
+import Settings from './Settings';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,6 +12,7 @@ import FilterLogs from './FilterLogs';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
+import Icon from 'react-native-vector-icons/dist/Feather';
 
 var Datastore = require('react-native-local-mongodb')
 , db = new Datastore({ filename: 'asyncStorageKey', storage: AsyncStorage, autoload: true });
@@ -30,6 +32,8 @@ const HomeScreen = () => {
   const [selectedDayValue, setSelectedDayValue] = useState(currDay);
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
   const [isDateModalVisible, setDateModalVisible] = useState(false);
+  const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [unitSystem, setUnitSystem] = useState("Imperial");
   const [selectedWorkout, setWorkout] = useState({});
   const [selectedItem, setItem] = useState({});
   const [initial, setInitial] = useState(true);
@@ -218,9 +222,15 @@ const HomeScreen = () => {
         setSelectedYearValue={setSelectedYearValue} 
         setSelectedDayValue={setSelectedDayValue}
       />
+      <TouchableOpacity 
+        style={{ bottom: 43, left: 65 }} 
+        onPress={() => {setSettingsModalVisible(!isSettingsModalVisible)}}
+      >
+        <Icon color="white" name="settings" size={25} />
+      </TouchableOpacity>
       {isLoading && <Spinner style={{ marginTop: 20 }} color={"#2C95FF"} />}
       {!isLoading && 
-        <View style={{ marginTop: 35, marginBottom: 65 }}>
+        <View style={{ marginTop: 10, marginBottom: 90 }}>
           <FlatList style={styles.content}
             data={sortedItems}
             renderItem={(data) => (
@@ -244,11 +254,14 @@ const HomeScreen = () => {
       <View style={styles.button}>
         <AddLogButton addLog={addItem}/>
       </View>
+      <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
+        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} setSettingsModalVisible={setSettingsModalVisible}/>
+      </Modal>
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
-          <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
+        <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
       </Modal>
       <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
-          <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>
+        <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>
       </Modal>
     </View>
   )
@@ -266,6 +279,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12, 
     right: 5,
+  },
+  settingsModal: {
+    marginTop: 250,
+    marginBottom: 275,
+    backgroundColor: "white", 
+    flex: 1
   },
   infoModal: { 
     position: "relative",
