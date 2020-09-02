@@ -58,15 +58,13 @@ const StopWatch = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    position:'absolute', 
-    bottom: 450, 
+  container: { 
     alignSelf: "center",
   },
   header: {
     color: 'black', 
     fontSize: 20, 
-    bottom: 40, 
+    marginBottom: 40, 
     textAlign: 'center',
   },
   display: {

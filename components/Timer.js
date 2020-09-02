@@ -91,27 +91,26 @@ const Timer = () => {
 
 const styles = StyleSheet.create ({
   container: {
-    position: 'absolute',
     borderTopWidth: 1, 
-    top: 335,
+    marginTop: 50,
     alignSelf: 'center',
   },
   header: {
     color: 'black',
     fontSize: 20,
-    top: 60,
+    marginTop: 40,
     textAlign: 'center',
   },
   display: {
     color: 'black',
     textDecorationLine: 'underline',
-    top: 90,
+    marginTop: 10,
     fontSize: 40,
     textAlign: 'center',
   },
   numericInput: {
     flexDirection:"row", 
-    marginTop: 100,
+    marginTop: 10,
   },
   button: {
     flexDirection: 'row',

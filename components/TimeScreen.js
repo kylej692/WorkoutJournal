@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import StopWatch from './StopWatch';
 import Timer from './Timer';
 
