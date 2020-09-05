@@ -3,18 +3,33 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
+const Sound = require('react-native-sound');
+Sound.setCategory('Playback');
+
+const bell = new Sound('boxing_bell.mp3', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load sound', error);
+    return;
+  }
+
+  console.log('duration in seconds: ' + bell.getDuration() + 'number of channels: ' + bell.getNumberOfChannels());
+
+});
+
 const Timer = () => {
 
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [defaultTimer, setDefaultTimer] = useState(true);
 
   function toggle() {
     setIsActive(!isActive);
   };
 
   function reset() {
+    setDefaultTimer(true);
     setSeconds(0);
     setMinutes(0);
     setHours(0);
@@ -24,6 +39,7 @@ const Timer = () => {
   useEffect(() => {
     let Interval = null;
     if (isActive && seconds === 0 && minutes === 0 && hours === 0) {
+      setDefaultTimer(false);
       clearInterval(Interval);
       setIsActive(false);
     } else if (isActive) {
@@ -42,11 +58,20 @@ const Timer = () => {
       }, 1000);
     } else if (!isActive && (seconds !== 0 || minutes !== 0 || hours !== 0)) {
       clearInterval(Interval);
+    } else if (!isActive && !defaultTimer && seconds === 0 && minutes === 0 && hours === 0) {
+      bell.play((success) => {
+        if (success) {
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      });
     }
     return () => { 
+      setDefaultTimer(true);
       clearInterval(Interval);
     }
-  }, [isActive, seconds]);
+  }, [isActive, seconds, minutes, hours]);
 
   return (
       <View style={styles.container}>
