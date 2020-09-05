@@ -95,7 +95,7 @@ const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModal
                 removeClippedSubviews={false}
             />
             <View style={{ height: 50, backgroundColor: "#2C95FF" }}>
-                <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => {
+                <TouchableOpacity style={{ marginLeft: 10, width: 30 }} onPress={() => {
                                         deleteWorkout(itemId, newWorkout.id), 
                                         setInfoModalVisible(false)}}>
                     <Icon style={{ color: "white", marginTop: 15, marginLeft: 5 }} name="trash" size={20} />
