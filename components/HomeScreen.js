@@ -18,12 +18,29 @@ var Datastore = require('react-native-local-mongodb')
 , db = new Datastore({ filename: 'asyncStorageKey', storage: AsyncStorage, autoload: true });
 
 const HomeScreen = () => {
-
+  /*
+  for (var i = 1; i < 31; i++) {
+    var workouts = []
+    for(var j = 0; j < 8; j++) {
+      var sets = []
+      for(var k = 1; k < 6; k++) {
+        sets.append({id: uuid(), num: k, reps: "12", weight: "120"})
+      }
+      workouts.append({id: uuid(), name: "Perf Test " + j, sets: sets, notes: "-random stuff"})
+    }
+    var newItem = {id: uuid(), time: {date: "Sep " + i + ", 2020", start: "9:00am", end: "10:00am"}, workouts: workouts, unitSystem: unitSystem};
+    db.insert(newItem);
+  }
+  */
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   var currDate = new Date();
   var currMonth = monthsInYear[currDate.getMonth()];
   var currYear = currDate.getFullYear().toString();
   var currDay = currDate.getDate().toString();
+
+  if(currDay.length == 1) {
+    currDay = "0" + currDay
+  }
 
   const [items, setItems] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState();
@@ -33,7 +50,7 @@ const HomeScreen = () => {
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
   const [isDateModalVisible, setDateModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [unitSystem, setUnitSystem] = useState("Imperial");
+  const [unitSystem, setUnitSystem] = useState();
   const [selectedWorkout, setWorkout] = useState({});
   const [selectedItem, setItem] = useState({});
   const [initial, setInitial] = useState(true);
@@ -51,15 +68,44 @@ const HomeScreen = () => {
     setSelectedItemId(itemId);
   }
 
-  const toggleDateModal = (item) => {
+   const toggleDateModal = (item) => {
     setDateModalVisible(!isDateModalVisible);
     setItem(item);
+  }
+
+  const lbToKg = (weight) => {
+      var num = weight * 0.45359237
+      return num.toFixed(2)
+  }
+
+  const kgToLb = (weight) => {
+      var num = weight / 0.45359237
+      return num.toFixed(2)
   }
 
   const filter = (month, year, day) => {
     var dateStr = month + " " + day + ", " + year;
     db.find({ "time.date": dateStr }, function (err, docs) { 
       setIsLoading(true);
+      docs.map((doc) => {
+        if (doc.unitSystem == "Imperial" && unitSystem == "Metric") {
+          doc.workouts.map((workout) => {
+            workout.sets.map((set) => {
+              set.weight = lbToKg(set.weight);
+            })
+          })
+          db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
+          db.update({ id: doc.id }, { $set: { unitSystem: unitSystem} });
+        } else if (doc.unitSystem == "Metric" && unitSystem == "Imperial") {
+          doc.workouts.map((workout) => {
+            workout.sets.map((set) => {
+              set.weight = kgToLb(set.weight);
+            })
+          })
+          db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
+          db.update({ id: doc.id }, { $set: { unitSystem: unitSystem} });
+        }
+      });
       setItems(docs);
       setTimeout(() => {
         setIsLoading(false)
@@ -69,10 +115,18 @@ const HomeScreen = () => {
 
  //Initial data load
   if(items.length == 0 && initial) {
+    db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
+      if(doc == null) {
+        db.insert({ unitSystem: "Imperial" });
+        setUnitSystem("Imperial");
+      } else {
+        setUnitSystem(doc.unitSystem);
+      }
+    })
     filter(selectedMonthValue, selectedYearValue, selectedDayValue);
     setInitial(false);
   };
-
+  
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
       const month1 = monthsInYear.indexOf(a.time.date.slice(0, 3)) + 1;
@@ -131,7 +185,7 @@ const HomeScreen = () => {
       Alert.alert("Please enter a workout!")
     } else {
       var id = uuid()
-      var newItem = {id: id, time: time, workouts: workouts};
+      var newItem = {id: id, time: time, workouts: workouts, unitSystem: unitSystem};
       db.insert(newItem, function(err, newDoc) {
         if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue && time.date.slice(4, 6) === selectedDayValue) {
           setItems(prevItems => {
@@ -223,7 +277,7 @@ const HomeScreen = () => {
         setSelectedDayValue={setSelectedDayValue}
       />
       <TouchableOpacity 
-        style={{ bottom: 43, left: 65 }} 
+        style={{ bottom: 43, left: 65, width: 30 }} 
         onPress={() => {setSettingsModalVisible(!isSettingsModalVisible)}}
       >
         <Icon color="white" name="settings" size={25} />
@@ -238,6 +292,7 @@ const HomeScreen = () => {
                 item={data.item} 
                 toggleInfoModal={toggleInfoModal}
                 toggleDateModal={toggleDateModal}
+                unitSystem={unitSystem}
                 key={data.item.id} 
               />
             )}
@@ -252,13 +307,13 @@ const HomeScreen = () => {
         </View>
         }
       <View style={styles.button}>
-        <AddLogButton addLog={addItem}/>
+        <AddLogButton addLog={addItem} unitSystem={unitSystem}/>
       </View>
       <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
-        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} setSettingsModalVisible={setSettingsModalVisible}/>
+        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} setSettingsModalVisible={setSettingsModalVisible} db={db} items={items} kgToLb={kgToLb} lbToKg={lbToKg}/>
       </Modal>
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
-        <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible}/>
+        <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible} unitSystem={unitSystem}/>
       </Modal>
       <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
         <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>

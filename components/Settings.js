@@ -3,8 +3,8 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 
-const Settings = ({ unitSystem, setUnitSystem, setSettingsModalVisible }) => {
-
+const Settings = ({ items, unitSystem, setUnitSystem, setSettingsModalVisible, db, kgToLb, lbToKg }) => {
+    
     return(
         <View>
             <View style={styles.unitSystemView}>
@@ -14,7 +14,33 @@ const Settings = ({ unitSystem, setUnitSystem, setSettingsModalVisible }) => {
                     style={styles.unitSystemPicker}
                     mode={"dropdown"}
                     selectedValue={unitSystem}
-                    onValueChange={(itemValue) => setUnitSystem(itemValue)}
+                    onValueChange={(itemValue) => {
+                            setUnitSystem(itemValue)
+                            if(itemValue == "Imperial") {
+                                db.update({ unitSystem: "Metric" }, { unitSystem: "Imperial" })
+                                items.map((item) => {
+                                    item.workouts.map((workout) => {
+                                        workout.sets.map((set) => {
+                                            set.weight = kgToLb(set.weight);
+                                        })
+                                    })
+                                    db.update({ id: item.id }, { $set: { workouts: item.workouts} });
+                                    db.update({ id: item.id }, { $set: { unitSystem: "Imperial"} });
+                                })
+                            } else {
+                                db.update({ unitSystem: "Imperial" }, { unitSystem: "Metric" })
+                                items.map((item) => {
+                                    item.workouts.map((workout) => {
+                                        workout.sets.map((set) => {
+                                            set.weight = lbToKg(set.weight);
+                                        })
+                                    })
+                                    db.update({ id: item.id }, { $set: { workouts: item.workouts} });
+                                    db.update({ id: item.id }, { $set: { unitSystem: "Metric"} });
+                                })
+                            }
+                        }
+                    }
                 >
                     <Picker.Item label="Imperial" value="Imperial"/>
                     <Picker.Item label="Metric" value="Metric"/>
@@ -45,7 +71,7 @@ const styles = StyleSheet.create({
     unitSystemPicker: {
         alignSelf: "center",
         width: 140,
-        marginLeft: 15
+        marginLeft: 10
     },
     doneBtn: { 
         position: "absolute", 

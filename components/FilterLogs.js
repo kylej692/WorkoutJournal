@@ -74,6 +74,9 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                         var currMonth = months[currDate.getMonth()];
                         var currYear = currDate.getFullYear().toString();
                         var currDay = currDate.getDate().toString();
+                        if(currDay.length == 1) {
+                            currDay = "0" + currDay
+                          }
                         if(currMonth != selectedMonthValue || currDay != selectedDayValue || currYear != selectedYearValue) {
                             setSelectedMonthValue(currMonth);
                             setSelectedDayValue(currDay);

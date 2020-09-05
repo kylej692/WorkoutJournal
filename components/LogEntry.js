@@ -35,7 +35,8 @@ class LogEntry extends PureComponent {
                             <CardItem bordered>
                                 <Text>Set</Text>
                                 <Text style={styles.cardText}>Reps</Text>
-                                <Text style={styles.cardText}>Wt (lbs)</Text>
+                                {this.props.unitSystem == "Imperial" && <Text style={styles.cardText}>Wt (lbs)</Text>}
+                                {this.props.unitSystem == "Metric" && <Text style={styles.cardText}>Wt (kgs)</Text>}
                             </CardItem>  
                             <FlatList 
                                 data={workoutData.item.sets}

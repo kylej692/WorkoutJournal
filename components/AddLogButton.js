@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const AddLogButton = ({ addLog }) => {
+const AddLogButton = ({ addLog, unitSystem }) => {
    const defaultTime = {
       date: '',
       start: '',
@@ -241,7 +241,8 @@ const AddLogButton = ({ addLog }) => {
                            <Text style={styles.labelText}>{"SET " + data.item.num + ":"}</Text>
                            <Text style={styles.infoText}>Reps </Text>
                            <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => modifyReps(newReps)} />
-                           <Text style={styles.infoText}>Wt (lbs)</Text>
+                           {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
+                           {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
                            <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => modifyWeight(newWeight)} />  
                         </View>
                   )}
@@ -261,7 +262,8 @@ const AddLogButton = ({ addLog }) => {
                               <Text style={styles.newSetText}>{"SET " + (setList.length + 1) + ": "}</Text>
                               <Text style={styles.infoText}>Reps </Text>
                               <TextInput keyboardType="numeric" style={styles.infoInput} onChangeText={onChangeReps} value={rep}/>
-                              <Text style={styles.infoText}>Wt (lbs) </Text>
+                              {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
+                              {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
                               <TextInput keyboardType="numeric" style={styles.infoInput} onChangeText={onChangeWeight} value={weight}/>
                            </View>
                            <TouchableOpacity style={styles.set} onPress={() => { 

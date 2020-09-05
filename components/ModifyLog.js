@@ -7,7 +7,7 @@ import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible }) => {
+const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible, unitSystem }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const [newWorkout, setNewWorkout] = useState({...workout})
@@ -65,7 +65,8 @@ const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModal
                         <Text style={styles.labelText}>{"SET " + data.item.num + ":"}</Text>
                         <Text style={styles.infoText}>Reps </Text>
                         <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
-                        <Text style={styles.infoText}>Wt (lbs)</Text>
+                        {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
+                        {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
                         <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
                     </View>
                 )}
