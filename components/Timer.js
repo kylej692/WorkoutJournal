@@ -110,7 +110,7 @@ const styles = StyleSheet.create ({
   },
   numericInput: {
     flexDirection:"row", 
-    marginTop: 10,
+    marginTop: 15,
   },
   button: {
     flexDirection: 'row',
