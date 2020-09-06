@@ -58,7 +58,7 @@ const Settings = ({ items, unitSystem, setUnitSystem, setSettingsModalVisible, d
 
 const styles = StyleSheet.create({
     unitSystemView: {
-        marginBottom: 85,
+        marginBottom: 75,
         borderBottomWidth: 1,
         borderBottomColor: "#BDBDBD"
     },
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     },
     doneBtn: { 
         position: "absolute", 
-        bottom: 10, 
+        bottom: 20, 
         alignSelf: "center",
         backgroundColor: "#2C95FF",
         height: 35,

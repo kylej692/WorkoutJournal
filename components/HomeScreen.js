@@ -18,20 +18,6 @@ var Datastore = require('react-native-local-mongodb')
 , db = new Datastore({ filename: 'asyncStorageKey', storage: AsyncStorage, autoload: true });
 
 const HomeScreen = () => {
-  /*
-  for (var i = 1; i < 31; i++) {
-    var workouts = []
-    for(var j = 0; j < 8; j++) {
-      var sets = []
-      for(var k = 1; k < 6; k++) {
-        sets.append({id: uuid(), num: k, reps: "12", weight: "120"})
-      }
-      workouts.append({id: uuid(), name: "Perf Test " + j, sets: sets, notes: "-random stuff"})
-    }
-    var newItem = {id: uuid(), time: {date: "Sep " + i + ", 2020", start: "9:00am", end: "10:00am"}, workouts: workouts, unitSystem: unitSystem};
-    db.insert(newItem);
-  }
-  */
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   var currDate = new Date();
   var currMonth = monthsInYear[currDate.getMonth()];
@@ -75,12 +61,12 @@ const HomeScreen = () => {
 
   const lbToKg = (weight) => {
       var num = weight * 0.45359237
-      return num.toFixed(2)
+      return +num.toFixed(2)
   }
 
   const kgToLb = (weight) => {
       var num = weight / 0.45359237
-      return num.toFixed(2)
+      return +num.toFixed(2)
   }
 
   const filter = (month, year, day) => {
@@ -336,8 +322,8 @@ const styles = StyleSheet.create({
     right: 5,
   },
   settingsModal: {
-    marginTop: 250,
-    marginBottom: 275,
+    marginTop: 265,
+    marginBottom: 280,
     backgroundColor: "white", 
     flex: 1
   },
