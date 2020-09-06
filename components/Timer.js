@@ -38,14 +38,15 @@ const Timer = () => {
 
   useEffect(() => {
     let Interval = null;
-    if (isActive && seconds === 0 && minutes === 0 && hours === 0) {
-      setDefaultTimer(false);
-      clearInterval(Interval);
-      setIsActive(false);
-    } else if (isActive) {
-        if (seconds === 0 && minutes !== 0) {
-          setSeconds(59);
-          setMinutes(minutes => minutes - 1);
+    if (isActive) {
+      if (seconds === 0 && minutes === 0 && hours === 0) {
+        setDefaultTimer(false);
+        clearInterval(Interval);
+        setIsActive(false);
+      }
+      if (seconds === 0 && minutes !== 0) {
+        setSeconds(59);
+        setMinutes(minutes => minutes - 1);
       } if (minutes === 0 && hours !== 0) {
           if (seconds == 0) {
             setSeconds(59);
@@ -57,15 +58,16 @@ const Timer = () => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
     } else if (!isActive && (seconds !== 0 || minutes !== 0 || hours !== 0)) {
-      clearInterval(Interval);
+        clearInterval(Interval);
     } else if (!isActive && !defaultTimer && seconds === 0 && minutes === 0 && hours === 0) {
-      bell.play((success) => {
-        if (success) {
-          console.log('successfully finished playing');
-        } else {
-          console.log('playback failed due to audio decoding errors');
-        }
-      });
+        bell.play((success) => {
+          if (success) {
+            console.log('successfully finished playing');
+            setDefaultTimer(true);
+          } else {
+            console.log('playback failed due to audio decoding errors');
+          }
+        });
     }
     return () => { 
       setDefaultTimer(true);
