@@ -296,7 +296,7 @@ const HomeScreen = () => {
         <AddLogButton addLog={addItem} unitSystem={unitSystem}/>
       </View>
       <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
-        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} setSettingsModalVisible={setSettingsModalVisible} db={db} items={items} kgToLb={kgToLb} lbToKg={lbToKg}/>
+        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} db={db} items={items} kgToLb={kgToLb} lbToKg={lbToKg}/>
       </Modal>
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
         <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible} unitSystem={unitSystem}/>

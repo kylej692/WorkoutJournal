@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 
-const Settings = ({ items, unitSystem, setUnitSystem, setSettingsModalVisible, db, kgToLb, lbToKg }) => {
+const Settings = ({ items, unitSystem, setUnitSystem, db, kgToLb, lbToKg }) => {
     
     return(
         <View>
