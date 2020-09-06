@@ -46,12 +46,6 @@ const Settings = ({ items, unitSystem, setUnitSystem, setSettingsModalVisible, d
                     <Picker.Item label="Metric" value="Metric"/>
                 </Picker>
             </View>
-            <TouchableOpacity 
-                style={styles.doneBtn} 
-                onPress={() => setSettingsModalVisible(false)}
-            >
-                <Text style={styles.doneText}>Done</Text>
-            </TouchableOpacity>
         </View>
     )
 }
@@ -64,32 +58,14 @@ const styles = StyleSheet.create({
     },
     unitSystemText: {
         marginTop: 10,
+        marginLeft: 20,
         fontSize: 20,
-        color: "black",
-        alignSelf: "center"
+        color: "black"
     },
     unitSystemPicker: {
-        alignSelf: "center",
         width: 140,
         marginLeft: 10
-    },
-    doneBtn: { 
-        position: "absolute", 
-        bottom: 20, 
-        alignSelf: "center",
-        backgroundColor: "#2C95FF",
-        height: 35,
-        width: 55,
-        padding: 5,
-        borderRadius: 8,
-        flexWrap: "wrap",
-        flexDirection: "row" 
-    },
-    doneText: {
-        marginLeft: 3,
-        fontSize: 16,
-        color: "white"
-    },
+    }
 })
 
 export default Settings;
