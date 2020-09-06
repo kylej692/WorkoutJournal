@@ -39,12 +39,23 @@ const Timer = () => {
   useEffect(() => {
     let Interval = null;
     if (isActive) {
-      if (seconds === 0 && minutes === 0 && hours === 0) {
+      if (seconds !== 0 || minutes !== 0 || hours !== 0) {
         setDefaultTimer(false);
+      }
+      if (seconds === 0 && minutes === 0 && hours === 0) {
+        if (!defaultTimer) {
+          bell.play((success) => {
+            if (success) {
+              console.log('successfully finished playing');
+              setDefaultTimer(true);
+            } else {
+              console.log('playback failed due to audio decoding errors');
+            }
+          });
+        }
         clearInterval(Interval);
         setIsActive(false);
-      }
-      if (seconds === 0 && minutes !== 0) {
+      } if (seconds === 0 && minutes !== 0) {
         setSeconds(59);
         setMinutes(minutes => minutes - 1);
       } if (minutes === 0 && hours !== 0) {
@@ -59,18 +70,8 @@ const Timer = () => {
       }, 1000);
     } else if (!isActive && (seconds !== 0 || minutes !== 0 || hours !== 0)) {
         clearInterval(Interval);
-    } else if (!isActive && !defaultTimer && seconds === 0 && minutes === 0 && hours === 0) {
-        bell.play((success) => {
-          if (success) {
-            console.log('successfully finished playing');
-            setDefaultTimer(true);
-          } else {
-            console.log('playback failed due to audio decoding errors');
-          }
-        });
-    }
+    } 
     return () => { 
-      setDefaultTimer(true);
       clearInterval(Interval);
     }
   }, [isActive, seconds, minutes, hours]);
@@ -85,6 +86,7 @@ const Timer = () => {
             rightButtonBackgroundColor='#2C95FF' 
             leftButtonBackgroundColor='#2C95FF'
             iconColorinitValue={0} 
+            initValue={0}
             minValue={0} value={hours} 
             onChange={setHours} />
           <NumericInput 
