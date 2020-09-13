@@ -7,15 +7,12 @@ import AddLogButton from './AddLogButton';
 import Settings from './Settings';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
-import AsyncStorage from '@react-native-community/async-storage';
 import FilterLogs from './FilterLogs';
 import Modal from 'react-native-modal';
 import ModifyLog from '../components/ModifyLog';
 import ModifyDate from '../components/ModifyDate';
 import Icon from 'react-native-vector-icons/dist/Feather';
-
-var Datastore = require('react-native-local-mongodb')
-, db = new Datastore({ filename: 'asyncStorageKey', storage: AsyncStorage, autoload: true });
+import { db } from '../Database.js';
 
 const HomeScreen = () => {
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
