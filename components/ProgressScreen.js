@@ -4,16 +4,19 @@ import { db } from '../Database.js';
 
 const ProgressScreen = () => {
 
-  const [exercise, setExercise] = useState('');
+  const [exercises, setExercises] = useState('');
 
   const onChangeTextInput = (textValue) => {
-    
+    console.log(textValue)
+    db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
+      console.log(err);
+      console.log(docs);
+    })
   };
 
   return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TextInput placeholder="Enter Exercise Name" onChangeText={onChangeTextInput} />
-        <Text>{exercise}</Text>
+        <TextInput placeholder="Enter Exercise Name" onChangeText={onChangeTextInput}/>
       </View>
     );
 };
