@@ -7,6 +7,7 @@ import Header from './Header';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import AddLogPicker from './AddLogPicker';
 
 const AddLogButton = ({ addLog, unitSystem }) => {
    const defaultTime = {
@@ -46,7 +47,8 @@ const AddLogButton = ({ addLog, unitSystem }) => {
    const [displayDate, setDisplayDate] = useState(false);
    const [displayTime, setDisplayTime] = useState(false);
    const [displaySetWorkout, setDisplaySetWorkout] = useState(true);
-
+   const [createRoutine, setCreateRoutine] = useState(false);
+   
    //Handles time attribute
    const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
    const onChangeStart = (startValue) => setTime({...time, start: startValue });
@@ -204,34 +206,37 @@ const AddLogButton = ({ addLog, unitSystem }) => {
             onRequestClose = {() => { toggleModal(!modalVisible) } 
          }>  
             <View style = {styles.modal}>
-               <Header title='Add a Log'/>
+               <AddLogPicker setCreateRoutine={setCreateRoutine} />
                <SwipeListView 
                   data={setList}
                   keyboardShouldPersistTaps={'handled'}
                   ListHeaderComponent={
                      <View style={styles.workoutView}>
-                        <View style={styles.buttonView}>
-                           <TouchableOpacity style={styles.time} onPress={showDatepicker}>
-                                 <Text style={styles.buttonText}> Set Date</Text>
-                           </TouchableOpacity>
-                           <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(true)}}>
-                                 <Text style={styles.buttonText}> Set Start Time</Text>
-                           </TouchableOpacity>
-                           <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(false)}}>
-                                 <Text style={styles.buttonText}> Set End Time</Text>
-                           </TouchableOpacity>
-                           {show && (
-                              <DateTimePicker
-                                 testID="dateTimePicker"
-                                 value={date}
-                                 mode={mode}
-                                 is24Hour={false}
-                                 display="default"
-                                 onChange={onChangeTime}
-                              />
-                           )}
-                        </View>
+                        {!createRoutine &&
+                           <View style={styles.buttonView}>
+                              <TouchableOpacity style={styles.time} onPress={showDatepicker}>
+                                    <Text style={styles.buttonText}> Set Date</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(true)}}>
+                                    <Text style={styles.buttonText}> Set Start Time</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity style={styles.time} onPress={() => {showTimepicker(false)}}>
+                                    <Text style={styles.buttonText}> Set End Time</Text>
+                              </TouchableOpacity>
+                              {show && (
+                                 <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={date}
+                                    mode={mode}
+                                    is24Hour={false}
+                                    display="default"
+                                    onChange={onChangeTime}
+                                 />
+                              )}
+                           </View>
+                        }
                         <View style={{ marginTop: 10 }}>
+                           {createRoutine && <TextInput placeholder="Enter Routine Name" style={styles.routineNameInput} />}
                            <TextInput placeholder="Enter Exercise Name" style={styles.input} onChangeText={onChangeName} value={wName} />
                         </View>
                      </View>
@@ -407,6 +412,14 @@ const AddLogButton = ({ addLog, unitSystem }) => {
 const styles = StyleSheet.create ({
    container: {
       flex: 1
+   },
+   routineNameInput: {
+      height: 60,
+      padding: 8,
+      fontSize: 16,
+      left: 5,
+      borderColor: "#BDBDBD",
+      borderBottomWidth: 1
    },
    input: {
       height: 60,
