@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import { Picker } from '@react-native-community/picker';
 
-const AddLogPicker = ({ setCreateRoutine }) => {
-    const [routines, setRoutines] = useState(["Routine 1", "Routine 2"]);
+const AddLogPicker = ({ setCreateRoutine, setPressedRoutine, db }) => {
+    const [routines, setRoutines] = useState([]);
     const [selectedValue, setSelectedValue] = useState("Add a Log");
+
+
+    useEffect(() => {
+        db.find({ routineName: { $exists: true } }, function(err, docs) {
+            routineNames = []
+            docs.map(doc => {
+                routineNames.push(doc.routineName)
+            })
+            setRoutines(routineNames)
+        })
+    }, [])
 
     return (
         <View style={styles.pickerView}>
@@ -19,8 +30,13 @@ const AddLogPicker = ({ setCreateRoutine }) => {
                 setSelectedValue(itemValue);
                 if(itemValue == "Add Routine") {
                     setCreateRoutine(true);
+                    setPressedRoutine(false);
+                } else if(itemValue == "Add a Log"){
+                    setCreateRoutine(false);
+                    setPressedRoutine(false);
                 } else {
                     setCreateRoutine(false);
+                    setPressedRoutine(true);
                 }
             }}
             >

@@ -182,6 +182,13 @@ const HomeScreen = () => {
     }
   };
 
+  const addRoutine = (routineName, workouts) => {
+    var newItem = { routineName: routineName, workouts: workouts};
+    db.insert(newItem, function(err, newDoc){
+      console.log(newDoc);
+    })
+  }
+
   const deleteWorkout = (itemId, workoutId) => {
     var emptyItemId = null;
     db.findOne({ id: itemId }, function(err, doc) {
@@ -293,7 +300,7 @@ const HomeScreen = () => {
         </View>
         }
       <View style={styles.button}>
-        <AddLogButton addLog={addItem} unitSystem={unitSystem}/>
+        <AddLogButton addLog={addItem} addRoutine={addRoutine} unitSystem={unitSystem} db={db} />
       </View>
       <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
         <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} db={db} items={items} kgToLb={kgToLb} lbToKg={lbToKg}/>
