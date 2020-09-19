@@ -4,10 +4,9 @@ import { db } from '../Database.js';
 
 const ProgressScreen = () => {
 
-  const [exercises, setExercises] = useState('');
+  const [myTextInput, setMyTextInput] = useState(React.createRef());
 
-  const onChangeTextInput = (textValue) => {
-    console.log(textValue)
+  const findExercise = (textValue) => {
     db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
       console.log(err);
       console.log(docs);
@@ -16,7 +15,13 @@ const ProgressScreen = () => {
 
   return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TextInput placeholder="Enter Exercise Name" onChangeText={onChangeTextInput}/>
+        <TextInput 
+          ref={myTextInput}
+          placeholder="Enter Exercise Name" 
+          onSubmitEditing={ (event) => {
+            findExercise(event.nativeEvent.text)
+            myTextInput.current.clear()
+          }}/>
       </View>
     );
 };
