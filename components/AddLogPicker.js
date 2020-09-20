@@ -4,10 +4,9 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import { Picker } from '@react-native-community/picker';
 
-const AddLogPicker = ({ setCreateRoutine, setPressedRoutine, db }) => {
+const AddLogPicker = ({ setCreateRoutine, setRoutineName, setPressedRoutine, db }) => {
     const [routines, setRoutines] = useState([]);
     const [selectedValue, setSelectedValue] = useState("Add a Log");
-
 
     useEffect(() => {
         db.find({ routineName: { $exists: true } }, function(err, docs) {
@@ -35,16 +34,17 @@ const AddLogPicker = ({ setCreateRoutine, setPressedRoutine, db }) => {
                     setCreateRoutine(false);
                     setPressedRoutine(false);
                 } else {
+                    setRoutineName(itemValue);
                     setCreateRoutine(false);
                     setPressedRoutine(true);
                 }
             }}
             >
-            <Picker.Item label="Add a Log" value="Add a Log" />
+            <Picker.Item key={uuid()} label="Add a Log" value="Add a Log" />
             {routines.map((routine) => {
                 return <Picker.Item key={uuid()} label={routine} value={routine} />
             })}
-            <Picker.Item label="Add Routine" value="Add Routine" />
+            <Picker.Item key={uuid()} label="Add Routine" value="Add Routine" />
             </Picker>
         </View>
     )

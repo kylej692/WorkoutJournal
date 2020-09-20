@@ -19,7 +19,6 @@ const LogEntry = ({ item, toggleInfoModal, toggleDateModal, unitSystem }) => {
             <WorkoutListDisplay
                 item={item} 
                 toggleInfoModal={toggleInfoModal}
-                toggleDateModal={toggleDateModal}
                 unitSystem={unitSystem}
                 key={item.id} 
             />

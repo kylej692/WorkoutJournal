@@ -41,7 +41,7 @@ const HomeScreen = () => {
   const [selectedItem, setItem] = useState({});
   const [initial, setInitial] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false)
@@ -183,7 +183,7 @@ const HomeScreen = () => {
   };
 
   const addRoutine = (routineName, workouts) => {
-    var newItem = { routineName: routineName, workouts: workouts};
+    var newItem = { id: uuid(), routineName: routineName, workouts: workouts};
     db.insert(newItem, function(err, newDoc){
       console.log(newDoc);
     })
