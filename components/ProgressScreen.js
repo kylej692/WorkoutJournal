@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TextInput, Alert } from 'react-native';
 import Header from './Header';
 import { db } from '../Database.js';
 import { Picker } from '@react-native-community/picker';
@@ -10,9 +10,13 @@ const ProgressScreen = () => {
   const [mode, setMode] = useState("Progressive Overload");
 
   const findExercise = (textValue) => {
+    var newText = textValue.replace(/\s/g, '');
+    newText = newText.toLowerCase();
     db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
-      console.log(err);
       console.log(docs);
+      if (docs.length == 0) {
+        Alert.alert("Exercise not found");
+      }
     })
   };
 
