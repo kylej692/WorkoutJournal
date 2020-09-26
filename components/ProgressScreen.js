@@ -7,15 +7,43 @@ import { Picker } from '@react-native-community/picker';
 const ProgressScreen = () => {
 
   const [myTextInput, setMyTextInput] = useState(React.createRef());
-  const [mode, setMode] = useState("Progressive Overload");
+  const [mode, setMode] = useState("Max Weight");
 
-  const findExercise = (textValue) => {
-    var newText = textValue.replace(/\s/g, '');
-    newText = newText.toLowerCase();
+  const findExercise = (textValue, mode) => {
+    //var newText = textValue.replace(/\s/g, '');
+    //newText = newText.toLowerCase();
+    let workoutInfo = [];
+    let setInfo = [];
+
     db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
       console.log(docs);
+
       if (docs.length == 0) {
         Alert.alert("Exercise not found");
+      } else {
+        docs.forEach(function (item, index) {
+          let workout = item.workouts
+
+          workout.forEach(function (item, index) {
+            if (item.name === textValue) {
+              workoutInfo.push(item);
+            }
+          });
+        });
+        console.log(workoutInfo);
+
+        workoutInfo.forEach(function (item, index) {
+          setInfo.push(item.sets);
+        });
+        console.log(setInfo);
+      
+        if (mode === "Max Weight") {
+
+          console.log("mode 1")
+        } else if (mode === "Max Reps") {
+  
+          console.log("mode 2")
+        }
       }
     })
   };
@@ -29,14 +57,14 @@ const ProgressScreen = () => {
           onValueChange={(itemValue, itemIndex) => 
             setMode(itemValue)
           }>
-          <Picker.Item label="Progressive Overload" value="Progressive Overload"/>
-          <Picker.Item label="Repetitions" value="Repetitions"/>
+          <Picker.Item label="Max Weight" value="Max Weight"/>
+          <Picker.Item label="Max Reps" value="Max Reps"/>
         </Picker>
         <TextInput 
           ref={myTextInput}
           placeholder="Enter Exercise Name" 
           onSubmitEditing={ (event) => {
-            findExercise(event.nativeEvent.text)
+            findExercise(event.nativeEvent.text, mode)
             myTextInput.current.clear()
         }}/>
       </View>
