@@ -9,7 +9,7 @@ import AddLogPicker from './AddLogPicker';
 import SetDateTime from './SetDateTime'
 import Routine from './Routine'
 
-const AddLogButton = ({ addLog, addRoutine, unitSystem, db }) => {
+const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb, db }) => {
    const defaultTime = {
       date: '',
       start: '',
@@ -45,7 +45,6 @@ const AddLogButton = ({ addLog, addRoutine, unitSystem, db }) => {
    const [displayTime, setDisplayTime] = useState(false);
    const [displaySetWorkout, setDisplaySetWorkout] = useState(true);
    const [createRoutine, setCreateRoutine] = useState(false);
-   const [pressedRoutine, setPressedRoutine] = useState(false);
    const [routineName, setRoutineName] = useState('');
 
    //Handles workouts attribute
@@ -161,7 +160,16 @@ const AddLogButton = ({ addLog, addRoutine, unitSystem, db }) => {
                   />
                }
                {pressedRoutine &&
-                  <Routine routineName={routineName} unitSystem={unitSystem} db={db} />
+                  <Routine 
+                     routine={routine} 
+                     setRoutine={setRoutine} 
+                     routineName={routineName} 
+                     toggleInfoModal={toggleInfoModal} 
+                     unitSystem={unitSystem} 
+                     lbToKg={lbToKg}
+                     kgToLb={kgToLb}
+                     db={db}
+                  />
                }
                {!pressedRoutine &&
                   <SwipeListView 
@@ -316,7 +324,7 @@ const AddLogButton = ({ addLog, addRoutine, unitSystem, db }) => {
                         if(time.date == '' || time.start == '' || time.end == '' || workoutList.length == 0) {
                            Alert.alert("Please fill everything out!")
                         } else {
-                           { addLog(time, workoutList), toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), setDate(new Date()), setCreateRoutine(false) }
+                           { addLog(time, workoutList), toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), setDate(new Date()) }
                         } 
                      } else if(createRoutine){
                         db.findOne({ routineName: routineName }, function(err, doc) {
@@ -333,7 +341,7 @@ const AddLogButton = ({ addLog, addRoutine, unitSystem, db }) => {
                      <Text style={styles.finishText}>Finish</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.cancel} onPress={() => { 
-                     toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), clearRep(), clearWeight(), clearName(), clearNote(), setDate(new Date()), setCreateRoutine(false)
+                     toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), clearRep(), clearWeight(), clearName(), clearNote(), setDate(new Date()), setCreateRoutine(false), setPressedRoutine(false)
                      }}>
                      <Text style={styles.cancelText}>Cancel</Text>
                   </TouchableOpacity>

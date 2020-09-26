@@ -41,6 +41,8 @@ const HomeScreen = () => {
   const [selectedItem, setItem] = useState({});
   const [initial, setInitial] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [pressedRoutine, setPressedRoutine] = useState(false);
+  const [routine, setRoutine] = useState({});
   
   useEffect(() => {
     setTimeout(() => {
@@ -183,10 +185,8 @@ const HomeScreen = () => {
   };
 
   const addRoutine = (routineName, workouts) => {
-    var newItem = { id: uuid(), routineName: routineName, workouts: workouts};
-    db.insert(newItem, function(err, newDoc){
-      console.log(newDoc);
-    })
+    var newItem = { id: uuid(), routineName: routineName, workouts: workouts, unitSystem: unitSystem};
+    db.insert(newItem);
   }
 
   const deleteWorkout = (itemId, workoutId) => {
@@ -230,6 +230,30 @@ const HomeScreen = () => {
       });
 
     });
+  };
+
+  const deleteRoutineWorkout = (routineId, workoutId) => {
+    db.findOne({ id: routineId }, function(err, doc) {
+        doc.workouts = doc.workouts.filter(workout => workout.id != workoutId);
+        db.update({ id: routineId }, { $set: { workouts: doc.workouts} });
+        var newRoutine = routine
+        newRoutine.workouts = doc.workouts
+        setRoutine({...newRoutine});
+    })
+  };
+
+  const modifyRoutineWorkout = (routineId, modifiedWorkout) => {
+      db.findOne({ id: routineId }, function(err, doc) {
+          for (var i = 0; i < doc.workouts.length; i++){
+              if(doc.workouts[i].id == modifiedWorkout.id) {
+                  doc.workouts[i] = modifiedWorkout;
+                  db.update({ id: routineId }, { $set: { workouts: doc.workouts} });
+              }
+          };
+          var newRoutine = routine
+          newRoutine.workouts = doc.workouts
+          setRoutine({...newRoutine});
+      });
   };
 
   const modifyDateTime = (itemId, date, start, end) => {
@@ -300,16 +324,58 @@ const HomeScreen = () => {
         </View>
         }
       <View style={styles.button}>
-        <AddLogButton addLog={addItem} addRoutine={addRoutine} unitSystem={unitSystem} db={db} />
+        <AddLogButton 
+          lbToKg={lbToKg}
+          kgToLb={kgToLb}
+          routine={routine} 
+          setRoutine={setRoutine} 
+          pressedRoutine={pressedRoutine} 
+          setPressedRoutine={setPressedRoutine} 
+          toggleInfoModal={toggleInfoModal} 
+          addLog={addItem} 
+          addRoutine={addRoutine} 
+          unitSystem={unitSystem} 
+          db={db} 
+        />
       </View>
       <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
-        <Settings unitSystem={unitSystem} setUnitSystem={setUnitSystem} db={db} items={items} kgToLb={kgToLb} lbToKg={lbToKg}/>
+        <Settings 
+          unitSystem={unitSystem}
+          setUnitSystem={setUnitSystem} 
+          db={db} 
+          items={items} 
+          kgToLb={kgToLb} 
+          lbToKg={lbToKg}
+        />
       </Modal>
       <Modal onRequestClose={() => {setInfoModalVisible(!isInfoModalVisible)}} isVisible={ isInfoModalVisible } style={styles.infoModal}>
-        <ModifyLog itemId={selectedItemId} workout={selectedWorkout} modifyWorkout={modifyWorkout} deleteWorkout={deleteWorkout} setInfoModalVisible={setInfoModalVisible} unitSystem={unitSystem}/>
+        {pressedRoutine && 
+          <ModifyLog 
+            itemId={selectedItemId} 
+            workout={selectedWorkout} 
+            modifyWorkout={modifyRoutineWorkout} 
+            deleteWorkout={deleteRoutineWorkout} 
+            setInfoModalVisible={setInfoModalVisible} 
+            unitSystem={unitSystem}
+          />
+        }
+        {!pressedRoutine && 
+          <ModifyLog 
+            itemId={selectedItemId} 
+            workout={selectedWorkout} 
+            modifyWorkout={modifyWorkout} 
+            deleteWorkout={deleteWorkout} 
+            setInfoModalVisible={setInfoModalVisible} 
+            unitSystem={unitSystem}
+          />
+        }
       </Modal>
       <Modal onRequestClose={() => {setDateModalVisible(!isDateModalVisible)}} isVisible={ isDateModalVisible } style={styles.dateModal}>
-        <ModifyDate item={selectedItem} modifyDateTime={modifyDateTime} setDateModalVisible={setDateModalVisible}/>
+        <ModifyDate 
+          item={selectedItem}
+          modifyDateTime={modifyDateTime} 
+          setDateModalVisible={setDateModalVisible}
+        />
       </Modal>
     </View>
   )
