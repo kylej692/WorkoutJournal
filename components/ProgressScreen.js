@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Alert } from 'react-native';
+import { Text, View, TextInput, Alert, ScrollView } from 'react-native';
 import Header from './Header';
 import { db } from '../Database.js';
 import { Picker } from '@react-native-community/picker';
+import { LineChart } from 'react-native-chart-kit';
+import { Dimensions } from "react-native";
 
 const ProgressScreen = () => {
 
   const [myTextInput, setMyTextInput] = useState(React.createRef());
   const [mode, setMode] = useState("Max Weight");
+  const [label, setLabel] = useState();
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
+  const weight = [];
+  const dataset = [1.1, 2.3, 3.4, 4.5];
+  const [keyPress, setKeyPress] = useState(false);
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -63,6 +69,10 @@ const ProgressScreen = () => {
     return sorted;
   };
 
+  const maxWeight = (weight) => {
+
+  };
+
   const findExercise = (textValue, mode) => {
     //var newText = textValue.replace(/\s/g, '');
     //newText = newText.toLowerCase();
@@ -87,6 +97,7 @@ const ProgressScreen = () => {
             }
           });
         });
+        setLabel(labels);
         console.log(workoutInfo);
 
         workoutInfo.forEach(function (item, index) {
@@ -101,9 +112,19 @@ const ProgressScreen = () => {
   
           console.log("mode 2")
         }
+        console.log(labels);
       }
     })
   };
+
+  const data = {
+    labels: label,
+    datasets: [
+      {
+        data: dataset,
+      }
+    ]
+  }
 
   return (
       <View style={{ flex: 1 }}>
@@ -123,7 +144,38 @@ const ProgressScreen = () => {
           onSubmitEditing={ (event) => {
             findExercise(event.nativeEvent.text, mode)
             myTextInput.current.clear()
+            setKeyPress(true);
         }}/>
+        <ScrollView>
+          {keyPress === true && <LineChart
+            data={ data }
+            width={Dimensions.get("window").width}
+            height={220}
+            yAxisSuffix="lbs"
+            yAxisInterval={2} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: "#e26a00",
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 1, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              }
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />}
+        </ScrollView>
       </View>
     );
 };
