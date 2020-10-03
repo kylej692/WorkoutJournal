@@ -5,6 +5,7 @@ import Header from './Header';
 import LogEntry from './LogEntry';
 import AddLogButton from './AddLogButton';
 import Settings from './Settings';
+import AddRoutineWorkout from './AddRoutineWorkout';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -379,10 +380,8 @@ const HomeScreen = () => {
           setDateModalVisible={setDateModalVisible}
         />
       </Modal>
-      <Modal onRequestClose={() => setRoutineModalVisible(!isRoutineModalVisible)} isVisible={ isRoutineModalVisible } style={styles.infoModal}>
-        <View>
-
-        </View>
+      <Modal onRequestClose={() => setRoutineModalVisible(!isRoutineModalVisible)} isVisible={ isRoutineModalVisible } style={styles.routineModal}>
+        <AddRoutineWorkout routine={routine} unitSystem={unitSystem} db={db}/>
       </Modal>
     </View>
   )
@@ -411,6 +410,14 @@ const styles = StyleSheet.create({
     position: "relative",
     marginTop: 50,
     marginBottom: 50,
+    backgroundColor: "white", 
+    flex: 1,
+    alignItems: "center"
+  },
+  routineModal: {
+    position: "relative",
+    marginTop: 100,
+    marginBottom: 100,
     backgroundColor: "white", 
     flex: 1,
     alignItems: "center"
