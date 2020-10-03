@@ -36,6 +36,7 @@ const HomeScreen = () => {
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
   const [isDateModalVisible, setDateModalVisible] = useState(false);
   const [isSettingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [isRoutineModalVisible, setRoutineModalVisible] = useState(false);
   const [unitSystem, setUnitSystem] = useState();
   const [selectedWorkout, setWorkout] = useState({});
   const [selectedItem, setItem] = useState({});
@@ -332,6 +333,7 @@ const HomeScreen = () => {
           pressedRoutine={pressedRoutine} 
           setPressedRoutine={setPressedRoutine} 
           toggleInfoModal={toggleInfoModal} 
+          setRoutineModalVisible={setRoutineModalVisible}
           addLog={addItem} 
           addRoutine={addRoutine} 
           unitSystem={unitSystem} 
@@ -376,6 +378,11 @@ const HomeScreen = () => {
           modifyDateTime={modifyDateTime} 
           setDateModalVisible={setDateModalVisible}
         />
+      </Modal>
+      <Modal onRequestClose={() => setRoutineModalVisible(!isRoutineModalVisible)} isVisible={ isRoutineModalVisible } style={styles.infoModal}>
+        <View>
+
+        </View>
       </Modal>
     </View>
   )

@@ -9,7 +9,7 @@ import AddLogPicker from './AddLogPicker';
 import SetDateTime from './SetDateTime'
 import Routine from './Routine'
 
-const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb, db }) => {
+const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb, db }) => {
    const defaultTime = {
       date: '',
       start: '',
@@ -165,6 +165,7 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                      setRoutine={setRoutine} 
                      routineName={routineName} 
                      toggleInfoModal={toggleInfoModal} 
+                     setRoutineModalVisible={setRoutineModalVisible}
                      unitSystem={unitSystem} 
                      lbToKg={lbToKg}
                      kgToLb={kgToLb}

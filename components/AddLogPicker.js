@@ -51,20 +51,19 @@ const AddLogPicker = ({ setCreateRoutine, setRoutineName, setPressedRoutine, db 
 }
 
 const styles = StyleSheet.create ({
-    container: {
-       flex: 1
-    },
     pickerView: {
+       flexDirection: "row",
        height: 60, 
        padding: 15, 
        backgroundColor: '#2C95FF'
     },
     pickerStyle: {
+       position: "absolute",
        alignSelf: "center",
        color: "white",
        height: 30,
-       width: 155, 
-       marginLeft: 60,
+       width: 152, 
+       marginLeft: 150,
        transform: [
           { scaleX: 1.4 }, 
           { scaleY: 1.4 },
@@ -73,7 +72,7 @@ const styles = StyleSheet.create ({
     pickerItemStyle: {
        fontSize: 23,
        textAlign: 'center'
-    },
+    }
 });
 
 export default AddLogPicker;

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import WorkoutListDisplay from './WorkoutListDisplay'
+import Icon from 'react-native-vector-icons/dist/Ionicons';
 
-const Routine = ({ routine, setRoutine, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
+const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
 
     useEffect(() => {
         db.findOne({ routineName: routineName }, function(err, doc) {
@@ -30,23 +31,33 @@ const Routine = ({ routine, setRoutine, toggleInfoModal, routineName, unitSystem
     }, [routineName])
 
     return(
-        <View style={styles.workoutsView}>
-            <WorkoutListDisplay 
-                item={routine} 
-                toggleInfoModal={toggleInfoModal}
-                unitSystem={unitSystem}
-                key={uuid()} 
-            />
+        <View>
+             <TouchableOpacity onPress={() => {setRoutineModalVisible(true)}} style={styles.addWorkout}>
+                    <Icon color="white" name="ios-add" size={35} />
+            </TouchableOpacity>  
+            <View style={styles.workoutsView}>
+                <WorkoutListDisplay 
+                    item={routine} 
+                    toggleInfoModal={toggleInfoModal}
+                    unitSystem={unitSystem}
+                    key={uuid()} 
+                />
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     workoutsView: {
-        marginTop: 15,
+        marginTop: -10,
         marginLeft: 5,
         marginRight: 5,
-        height: 575
+        height: 565
+    },
+    addWorkout: {
+        alignSelf: "flex-end",
+        bottom: 88,
+        right: 15
     }
 })
 
