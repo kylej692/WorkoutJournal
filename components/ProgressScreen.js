@@ -169,7 +169,6 @@ const ProgressScreen = () => {
                 stroke: "#ffa726"
               }
             }}
-            bezier
             style={{
               marginVertical: 8,
               borderRadius: 16
