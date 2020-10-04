@@ -189,7 +189,15 @@ const HomeScreen = () => {
   const addRoutine = (routineName, workouts) => {
     var newItem = { id: uuid(), routineName: routineName, workouts: workouts, unitSystem: unitSystem};
     db.insert(newItem);
-  }
+  };
+
+  const addRoutineWorkout = (workout) => {
+    db.findOne({ id: routine.id }, function(err, doc) {
+      doc.workouts.push(workout)
+      db.update({ id: routine.id }, { $set: { workouts: doc.workouts } })
+      setRoutine(doc);
+    })
+  };
 
   const deleteWorkout = (itemId, workoutId) => {
     var emptyItemId = null;
@@ -381,7 +389,11 @@ const HomeScreen = () => {
         />
       </Modal>
       <Modal onRequestClose={() => setRoutineModalVisible(!isRoutineModalVisible)} isVisible={ isRoutineModalVisible } style={styles.routineModal}>
-        <AddRoutineWorkout routine={routine} unitSystem={unitSystem} db={db}/>
+        <AddRoutineWorkout 
+          setRoutineModalVisible={setRoutineModalVisible} 
+          addRoutineWorkout={addRoutineWorkout}
+          unitSystem={unitSystem} 
+        />
       </Modal>
     </View>
   )

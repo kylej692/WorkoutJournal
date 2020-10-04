@@ -12,21 +12,26 @@ const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModal
         <View>
             <Header title="Edit Log" />
             <SwipeListWorkoutView newWorkout={newWorkout} setNewWorkout={setNewWorkout} containsNotes={true} unitSystem={unitSystem}/>
-            <View style={{ height: 50, backgroundColor: "#2C95FF" }}>
-                <TouchableOpacity style={{ marginLeft: 10, width: 30 }} onPress={() => {
-                                        deleteWorkout(itemId, newWorkout.id), 
-                                        setInfoModalVisible(false)}}>
-                    <Icon style={{ color: "white", marginTop: 15, marginLeft: 5 }} name="trash" size={20} />
+            <View style={styles.footerView}>
+                <TouchableOpacity 
+                    style={styles.deleteBtn}
+                    onPress={() => {
+                        deleteWorkout(itemId, newWorkout.id), 
+                        setInfoModalVisible(false)
+                    }}>
+                    <Icon style={styles.deleteIcon} name="trash" size={20} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.doneBtn} onPress={() => {
-                    if (newWorkout.sets.length == 0) {
-                        Alert.alert("           At least 1 set is needed!")
-                    } else {
-                        setInfoModalVisible(false), 
-                        modifyWorkout(itemId, newWorkout)
-                    }
-                }}>
-                    <Text style={{color: "white", fontSize: 20 }}>Done</Text>
+                <TouchableOpacity 
+                    style={styles.doneBtn} 
+                    onPress={() => {
+                        if (newWorkout.sets.length == 0) {
+                            Alert.alert("           At least 1 set is needed!")
+                        } else {
+                            setInfoModalVisible(false), 
+                            modifyWorkout(itemId, newWorkout)
+                        }
+                    }}>
+                    <Text style={styles.doneText}>Done</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -34,11 +39,28 @@ const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModal
 }
 
 const styles = StyleSheet.create({
+    footerView: {
+        height: 50, 
+        backgroundColor: "#2C95FF"
+    },
+    deleteBtn: {
+        marginLeft: 10, 
+        width: 30
+    },
+    deleteIcon: {
+        color: "white", 
+        marginTop: 15, 
+        marginLeft: 5
+    },
     doneBtn: { 
         flexDirection: "row", 
         position: "absolute", 
         bottom: 10, 
         right: 15
+    },
+    doneText: {
+        color: "white", 
+        fontSize: 20
     }
 });
 
