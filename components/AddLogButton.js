@@ -160,17 +160,27 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                   />
                }
                {pressedRoutine &&
-                  <Routine 
-                     routine={routine} 
-                     setRoutine={setRoutine} 
-                     routineName={routineName} 
-                     toggleInfoModal={toggleInfoModal} 
-                     setRoutineModalVisible={setRoutineModalVisible}
-                     unitSystem={unitSystem} 
-                     lbToKg={lbToKg}
-                     kgToLb={kgToLb}
-                     db={db}
-                  />
+                  <View>
+                     <View style={styles.dateHeaderRoutineView}> 
+                        {displayDate && 
+                           <Text style={styles.dateHeaderText}>{time.date}</Text>
+                        }
+                        {displayTime && 
+                           <Text style={styles.timeHeaderText}>{time.start + " - " + time.end}</Text>
+                        }
+                     </View>
+                     <Routine 
+                        routine={routine} 
+                        setRoutine={setRoutine} 
+                        routineName={routineName} 
+                        toggleInfoModal={toggleInfoModal} 
+                        setRoutineModalVisible={setRoutineModalVisible}
+                        unitSystem={unitSystem} 
+                        lbToKg={lbToKg}
+                        kgToLb={kgToLb}
+                        db={db}
+                     />
+                  </View>
                }
                {!pressedRoutine &&
                   <SwipeListView 
@@ -321,7 +331,7 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                }
                <Header/>
                   <TouchableOpacity style={styles.finish} onPress={() => {
-                     if(!createRoutine){
+                     if(!createRoutine && !pressedRoutine){
                         if(time.date == '' || time.start == '' || time.end == '' || workoutList.length == 0) {
                            Alert.alert("Please fill everything out!")
                         } else {
@@ -337,6 +347,12 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                               { addRoutine(routineName, workoutList), toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), setDate(new Date()), setCreateRoutine(false) }
                            }
                         })
+                     } else if(pressedRoutine) {
+                        if(time.date == '' || time.start == '' || time.end == '' || routine.workouts.length == 0) {
+                           Alert.alert("Please fill everything out!")
+                        } else {
+                           { addLog(time, routine.workouts), toggleModal(!modalVisible), setDisplaySetWorkout(true), setDisplayDate(false), setDisplayTime(false), setDate(new Date()), setPressedRoutine(false) }
+                        } 
                      }
                      }}>
                      <Text style={styles.finishText}>Finish</Text>
@@ -531,6 +547,15 @@ const styles = StyleSheet.create ({
       alignItems: "stretch",
       backgroundColor: "#A4D1FF"
    },
+   dateHeaderRoutineView: {
+      position: "absolute",
+      flexDirection: "row",
+      alignItems: "stretch",
+      backgroundColor: "#A4D1FF",
+      marginTop: 20,
+      height: 40,
+      width: 415
+  },  
    workoutDisplayView: {
       backgroundColor: "#C5E2FF",
       marginTop: 10,

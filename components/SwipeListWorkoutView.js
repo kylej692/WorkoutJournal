@@ -125,7 +125,8 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginLeft: 8,
         paddingBottom: 1,
-        borderRadius: 8
+        borderRadius: 8,
+        borderBottomWidth: 0.4
     },
     infoInput: {
         textAlignVertical: "bottom",

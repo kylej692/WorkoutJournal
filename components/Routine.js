@@ -32,7 +32,7 @@ const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal,
 
     return(
         <View>
-             <TouchableOpacity onPress={() => {setRoutineModalVisible(true)}} style={styles.addWorkout}>
+            <TouchableOpacity onPress={() => {setRoutineModalVisible(true)}} style={styles.addWorkout}>
                     <Icon color="white" name="ios-add" size={35} />
             </TouchableOpacity>  
             <View style={styles.workoutsView}>
@@ -47,12 +47,12 @@ const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal,
     )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
     workoutsView: {
-        marginTop: -10,
+        marginTop: 30,
         marginLeft: 5,
         marginRight: 5,
-        height: 565
+        height: 525
     },
     addWorkout: {
         alignSelf: "flex-end",
