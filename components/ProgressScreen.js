@@ -10,12 +10,14 @@ const ProgressScreen = () => {
 
   const [myTextInput, setMyTextInput] = useState(React.createRef());
   const [mode, setMode] = useState("Max Weight");
-  const [label, setLabel] = useState();
+  const [chartLabel, setChartLabel] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [keyPress, setKeyPress] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [yAxisSuffix, setYAxisSuffix] = useState("lbs");
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
-  const weight = [];
-  const dataset = [1.1, 2.3, 3.4, 4.5];
-  const [keyPress, setKeyPress] = useState(false);
+  let dataSet = [];
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -69,8 +71,24 @@ const ProgressScreen = () => {
     return sorted;
   };
 
-  const maxWeight = (weight) => {
-
+  const findMax = (item, mode) => {
+    if (mode === "weight") {
+      let maxWeight = 0;
+      item.forEach(function (setInfo, index) {
+        if (setInfo.weight >= maxWeight) {
+          maxWeight = setInfo.weight;
+        }
+      });
+      return maxWeight;
+    } else if (mode === "reps") {
+      let maxRep = 0;
+      item.forEach(function (setInfo, index) {
+        if (setInfo.reps >= maxRep) {
+          maxRep = setInfo.reps;
+        }
+      });
+      return maxRep;
+    }
   };
 
   const findExercise = (textValue, mode) => {
@@ -83,21 +101,19 @@ const ProgressScreen = () => {
       if (docs.length == 0) {
         Alert.alert("Exercise not found");
       } else {
-        //Sort the list of objects here
         sortedDocs = sortItems(docs)
         console.log(sortedDocs);
         
         sortedDocs.forEach(function (item, index) {
           let workout = item.workouts
           labels.push(item.time.date);
-          console.log(labels);
           workout.forEach(function (item, index) {
             if (item.name === textValue) {
               workoutInfo.push(item);
             }
           });
         });
-        setLabel(labels);
+        setChartLabel(labels);
         console.log(workoutInfo);
 
         workoutInfo.forEach(function (item, index) {
@@ -106,25 +122,32 @@ const ProgressScreen = () => {
         console.log(setInfo);
       
         if (mode === "Max Weight") {
-
+          setYAxisSuffix("lbs");
+          setInfo.forEach(function (item, index) {
+            let maxWeight = findMax(item, "weight");
+            dataSet.push(maxWeight);
+          });
+          setChartData(dataSet);
+          console.log(dataSet);
+          console.log(chartData);
+          dataSet = [];
           console.log("mode 1")
+          setLoaded(true);
         } else if (mode === "Max Reps") {
-  
+          setYAxisSuffix("reps");
+          setInfo.forEach(function (item, index) {
+            let maxRep = findMax(item, "reps");
+            dataSet.push(maxRep);
+          });
+          setChartData(dataSet);
+          console.log(dataSet);
+          dataSet = [];
           console.log("mode 2")
+          setLoaded(true);
         }
-        console.log(labels);
       }
     })
   };
-
-  const data = {
-    labels: label,
-    datasets: [
-      {
-        data: dataset,
-      }
-    ]
-  }
 
   return (
       <View style={{ flex: 1 }}>
@@ -147,17 +170,24 @@ const ProgressScreen = () => {
             setKeyPress(true);
         }}/>
         <ScrollView>
-          {keyPress === true && <LineChart
-            data={ data }
+          {keyPress === true && loaded === true && <LineChart
+            data={{
+              labels: chartLabel,
+              datasets: [
+                {
+                  data: chartData,
+                }
+              ]
+            }}
             width={Dimensions.get("window").width}
             height={220}
-            yAxisSuffix="lbs"
+            yAxisSuffix= {yAxisSuffix}
             yAxisInterval={2} // optional, defaults to 1
             chartConfig={{
               backgroundColor: "#e26a00",
               backgroundGradientFrom: "#fb8c00",
               backgroundGradientTo: "#ffa726",
-              decimalPlaces: 1, // optional, defaults to 2dp
+              decimalPlaces: 0, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
