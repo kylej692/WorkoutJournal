@@ -134,7 +134,8 @@ const ProgressScreen = () => {
         if (mode === "Max Weight") {
           findUnitSystem(db);
           setInfo.forEach(function (item, index) {
-            let maxWeight = findMax(item, "weight");
+            let maxWeightStr = findMax(item, "weight");
+            let maxWeight = parseInt(maxWeightStr);
             dataSet.push(maxWeight);
           });
           setChartData(dataSet);
@@ -145,7 +146,8 @@ const ProgressScreen = () => {
         } else if (mode === "Max Reps") {
           setYAxisSuffix("reps");
           setInfo.forEach(function (item, index) {
-            let maxRep = findMax(item, "reps");
+            let maxRepStr = findMax(item, "reps");
+            let maxRep = parseInt(maxRepStr);
             dataSet.push(maxRep);
           });
           setChartData(dataSet);
