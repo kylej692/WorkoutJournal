@@ -14,10 +14,20 @@ const ProgressScreen = () => {
   const [chartData, setChartData] = useState([]);
   const [keyPress, setKeyPress] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [yAxisSuffix, setYAxisSuffix] = useState("lbs");
+  const [yAxisSuffix, setYAxisSuffix] = useState("");
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
   let dataSet = [];
+
+  const findUnitSystem = (db) => {
+    db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
+      if (doc.unitSystem === "Metric") {
+        setYAxisSuffix("kgs");
+      } else if (doc.unitSystem === "Imperial") {
+        setYAxisSuffix("lbs");
+      }
+    })
+  };
 
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -122,14 +132,13 @@ const ProgressScreen = () => {
         console.log(setInfo);
       
         if (mode === "Max Weight") {
-          setYAxisSuffix("lbs");
+          findUnitSystem(db);
           setInfo.forEach(function (item, index) {
             let maxWeight = findMax(item, "weight");
             dataSet.push(maxWeight);
           });
           setChartData(dataSet);
           console.log(dataSet);
-          console.log(chartData);
           dataSet = [];
           console.log("mode 1")
           setLoaded(true);
@@ -169,7 +178,6 @@ const ProgressScreen = () => {
             myTextInput.current.clear()
             setKeyPress(true);
         }}/>
-        <ScrollView>
           {keyPress === true && loaded === true && <LineChart
             data={{
               labels: chartLabel,
@@ -204,7 +212,6 @@ const ProgressScreen = () => {
               borderRadius: 16
             }}
           />}
-        </ScrollView>
       </View>
     );
 };
