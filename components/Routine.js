@@ -5,7 +5,7 @@ import { uuid } from 'uuidv4';
 import WorkoutListDisplay from './WorkoutListDisplay'
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 
-const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
+const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
 
     useEffect(() => {
         db.findOne({ routineName: routineName }, function(err, doc) {
@@ -34,7 +34,18 @@ const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal,
         <View>
             <TouchableOpacity onPress={() => {setRoutineModalVisible(true)}} style={styles.addWorkout}>
                     <Icon color="white" name="ios-add" size={35} />
-            </TouchableOpacity>  
+            </TouchableOpacity>    
+            <TouchableOpacity 
+                onPress={() => {
+                    db.remove({ id: routine.id }, {}, function() {
+                        setModal(false);
+                        setPressedRoutine(false);
+                    });
+                }}
+                style={styles.deleteRoutine}
+            >
+                    <Icon color="white" name="ios-close-circle" size={30} />
+            </TouchableOpacity>   
             <View style={styles.workoutsView}>
                 <WorkoutListDisplay 
                     item={routine} 
@@ -49,15 +60,20 @@ const Routine = ({ routine, setRoutine, setRoutineModalVisible, toggleInfoModal,
 
 const styles = StyleSheet.create({ 
     workoutsView: {
-        marginTop: 30,
+        marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
         height: 525
     },
     addWorkout: {
         alignSelf: "flex-end",
-        bottom: 88,
+        bottom: 108,
         right: 15
+    },
+    deleteRoutine: {
+        position: "absolute",
+        bottom: 645,
+        left: 15
     }
 })
 

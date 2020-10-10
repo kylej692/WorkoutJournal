@@ -162,6 +162,7 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                {pressedRoutine &&
                   <View>
                      <View style={styles.dateHeaderRoutineView}> 
+                        <Text style={styles.dateHeaderTitle}>DATE:</Text>
                         {displayDate && 
                            <Text style={styles.dateHeaderText}>{time.date}</Text>
                         }
@@ -170,7 +171,9 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                         }
                      </View>
                      <Routine 
+                        setModal={setModal}
                         routine={routine} 
+                        setPressedRoutine={setPressedRoutine}
                         setRoutine={setRoutine} 
                         routineName={routineName} 
                         toggleInfoModal={toggleInfoModal} 
@@ -397,7 +400,7 @@ const styles = StyleSheet.create ({
       borderBottomWidth: 1
    },
    input: {
-      height: 60,
+      height: 50,
       padding: 8,
       fontSize: 16,
       left: 5
@@ -488,7 +491,7 @@ const styles = StyleSheet.create ({
    },
    workoutView: {
       borderColor: "#2C95FF",
-      borderBottomWidth: 1
+      borderBottomWidth: 1,
    },
    repsWeightView: {
       flex: 1,
@@ -552,7 +555,6 @@ const styles = StyleSheet.create ({
       flexDirection: "row",
       alignItems: "stretch",
       backgroundColor: "#A4D1FF",
-      marginTop: 20,
       height: 40,
       width: 415
   },  
@@ -566,9 +568,15 @@ const styles = StyleSheet.create ({
       fontSize: 18,
       color: "black"
    },
-   dateHeaderText: {
+   dateHeaderTitle: {
+      color: "black",
       padding: 8,
       marginLeft: 10,
+      fontSize: 16
+   },
+   dateHeaderText: {
+      padding: 8,
+      marginLeft: 5,
       fontSize: 16
    },
    timeHeaderText: {

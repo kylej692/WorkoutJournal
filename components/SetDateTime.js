@@ -100,7 +100,8 @@ const styles = StyleSheet.create ({
     buttonView: {
         alignSelf: "center",
         flexDirection: "row",
-        marginTop: 5
+        marginTop: 5,
+        marginBottom: 20
      },
      time: {
         backgroundColor: "#2C95FF",
