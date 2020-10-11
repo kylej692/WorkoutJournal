@@ -4,6 +4,7 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import WorkoutListDisplay from './WorkoutListDisplay'
 import Icon from 'react-native-vector-icons/dist/Ionicons';
+import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
 
 const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
 
@@ -44,7 +45,7 @@ const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineM
                 }}
                 style={styles.deleteRoutine}
             >
-                    <Icon color="white" name="ios-close-circle" size={30} />
+                <Icon2 color="white" name="trash" size={20} />
             </TouchableOpacity>   
             <View style={styles.workoutsView}>
                 <WorkoutListDisplay 
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     },
     deleteRoutine: {
         position: "absolute",
-        bottom: 645,
+        bottom: 650,
         left: 15
     }
 })
