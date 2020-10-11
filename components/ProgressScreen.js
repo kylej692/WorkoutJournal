@@ -9,6 +9,7 @@ import { Dimensions } from "react-native";
 const ProgressScreen = () => {
 
   const [myTextInput, setMyTextInput] = useState(React.createRef());
+  const [graphTitle, setGraphTitle] = useState();
   const [mode, setMode] = useState("Max Weight");
   const [chartLabel, setChartLabel] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -188,10 +189,13 @@ const ProgressScreen = () => {
           placeholder="Enter Exercise Name" 
           onSubmitEditing={ (event) => {
             findExercise(event.nativeEvent.text, mode)
+            setGraphTitle(event.nativeEvent.text)
             myTextInput.current.clear()
             setKeyPress(true);
         }}/>
           {keyPress === true && loaded === true && 
+          <View>
+          <Text>{graphTitle}</Text>
           <ScrollView horizontal={true}>
             <LineChart
               data={{
@@ -227,7 +231,8 @@ const ProgressScreen = () => {
                 marginVertical: 10,
               }}
             />
-          </ScrollView>}
+          </ScrollView>
+          </View>}
       </View>
     );
 };
