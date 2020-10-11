@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Alert, ScrollView } from 'react-native';
+import { Text, View, TextInput, Alert, ScrollView, StyleSheet } from 'react-native';
 import Header from './Header';
 import { db } from '../Database.js';
 import { Picker } from '@react-native-community/picker';
@@ -18,13 +18,14 @@ const ProgressScreen = () => {
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
   let dataSet = [];
+  const [dataSetLen, setDataSetLen] = useState(0);
 
   const findUnitSystem = (db) => {
     db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
       if (doc.unitSystem === "Metric") {
-        setYAxisSuffix("kgs");
+        setYAxisSuffix(" kgs");
       } else if (doc.unitSystem === "Imperial") {
-        setYAxisSuffix("lbs");
+        setYAxisSuffix(" lbs");
       }
     })
   };
@@ -140,6 +141,7 @@ const ProgressScreen = () => {
           });
           setChartData(dataSet);
           console.log(dataSet);
+          setDataSetLen(dataSet.length);
           dataSet = [];
           console.log("mode 1")
           setLoaded(true);
@@ -152,6 +154,7 @@ const ProgressScreen = () => {
           });
           setChartData(dataSet);
           console.log(dataSet);
+          setDataSetLen(dataSet.length);
           dataSet = [];
           console.log("mode 2")
           setLoaded(true);
@@ -159,6 +162,14 @@ const ProgressScreen = () => {
       }
     })
   };
+
+  const findWidth = (dataSetLen) => {
+    if (dataSetLen < 3) {
+      return Dimensions.get("window").width
+    } else {
+      return (Dimensions.get("window").width) * (dataSetLen / 3)
+    }
+  }
 
   return (
       <View style={{ flex: 1 }}>
@@ -180,40 +191,43 @@ const ProgressScreen = () => {
             myTextInput.current.clear()
             setKeyPress(true);
         }}/>
-          {keyPress === true && loaded === true && <LineChart
-            data={{
-              labels: chartLabel,
-              datasets: [
-                {
-                  data: chartData,
+          {keyPress === true && loaded === true && 
+          <ScrollView horizontal={true}>
+            <LineChart
+              data={{
+                labels: chartLabel,
+                datasets: [
+                  {
+                    data: chartData,
+                  }
+                ]
+              }}
+              width={findWidth(dataSetLen)}
+              height={470}
+              yAxisSuffix= {yAxisSuffix}
+              yAxisInterval={2} 
+              verticalLabelRotation={0}
+              chartConfig={{
+                backgroundColor: "#ffffff",
+                backgroundGradientFrom: "#2C95FF",
+                backgroundGradientTo: "#2C95FF",
+                decimalPlaces: 0,
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16
+                },
+                propsForDots: {
+                  r: "6",
+                  strokeWidth: "2",
+                  stroke: "#2C95FF"
                 }
-              ]
-            }}
-            width={Dimensions.get("window").width}
-            height={220}
-            yAxisSuffix= {yAxisSuffix}
-            yAxisInterval={2} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16
-              },
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726"
-              }
-            }}
-            style={{
-              marginVertical: 8,
-              borderRadius: 16
-            }}
-          />}
+              }}
+              style={{
+                marginVertical: 10,
+              }}
+            />
+          </ScrollView>}
       </View>
     );
 };
