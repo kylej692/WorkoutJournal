@@ -6,7 +6,7 @@ import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSystem }) => {
+const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, lbToKg, kgToLb, unitSystem }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const deleteCopySet = (setId) => {
@@ -20,7 +20,7 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
 
     const addNewSet = () => {
         var copyWorkout = {...newWorkout};
-        copyWorkout.sets = [...copyWorkout.sets, {id: uuid(), num: copyWorkout.sets.length + 1, reps: 0, weight: 0}];
+        copyWorkout.sets = [...copyWorkout.sets, {id: uuid(), num: copyWorkout.sets.length + 1, reps: 0, weightLbs: 0, weightKgs: 0}];
         setNewWorkout(copyWorkout);
     }
 
@@ -35,7 +35,13 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
     };
 
     const onChangeWeight = (newWeight) => {
-        newWorkout.sets[selectedSetNumber - 1].weight = newWeight;
+        if(unitSystem == "Imperial") {
+            newWorkout.sets[selectedSetNumber - 1].weightLbs = newWeight;
+            newWorkout.sets[selectedSetNumber - 1].weightKgs = lbToKg(newWeight);
+        } else if(unitSystem == "Metric") {
+            newWorkout.sets[selectedSetNumber - 1].weightKgs = newWeight;
+            newWorkout.sets[selectedSetNumber - 1].weightLbs = kgToLb(newWeight);
+        }
         setNewWorkout(newWorkout);
     };
 
@@ -62,7 +68,8 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
                     <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
                     {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
                     {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
-                    <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
+                    {unitSystem == "Imperial" && <TextInput keyboardType="numeric" defaultValue={data.item.weightLbs.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />}
+                    {unitSystem == "Metric" && <TextInput keyboardType="numeric" defaultValue={data.item.weightKgs.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />}  
                 </View>
             )}
             renderHiddenItem={ (data, rowMap) => (

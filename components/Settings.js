@@ -21,7 +21,9 @@ const Settings = ({ items, unitSystem, setUnitSystem, db, kgToLb, lbToKg }) => {
                                 items.map((item) => {
                                     item.workouts.map((workout) => {
                                         workout.sets.map((set) => {
-                                            set.weight = kgToLb(set.weight);
+                                            if(set.weightLbs == '') {
+                                                set.weightLbs = kgToLb(set.weightKgs);
+                                            }
                                         })
                                     })
                                     db.update({ id: item.id }, { $set: { workouts: item.workouts} });
@@ -32,7 +34,9 @@ const Settings = ({ items, unitSystem, setUnitSystem, db, kgToLb, lbToKg }) => {
                                 items.map((item) => {
                                     item.workouts.map((workout) => {
                                         workout.sets.map((set) => {
-                                            set.weight = lbToKg(set.weight);
+                                            if(set.weightKgs == '') {
+                                                set.weightKgs = lbToKg(set.weightLbs);
+                                            }
                                         })
                                     })
                                     db.update({ id: item.id }, { $set: { workouts: item.workouts} });

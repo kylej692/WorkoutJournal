@@ -25,7 +25,8 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
       id: uuid(),
       num: 1,
       reps: '',
-      weight: '',
+      weightLbs: '',
+      weightKgs: ''
    };
 
    const [modalVisible, setModal] = useState(false);
@@ -71,7 +72,11 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
    };
 
    const onChangeWeight = (weightValue) => { 
-      setSet({...set, weight: weightValue });
+      if(unitSystem == "Metric") {
+         setSet({...set, weightKgs: weightValue });
+      } else if (unitSystem == "Imperial") {
+         setSet({...set, weightLbs: weightValue });
+      }
       setWeight(weightValue);
    };
 
@@ -128,7 +133,11 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
    };
 
    const modifyWeight = (newWeight) => {
-      setList[selectedSetNumber - 1].weight = newWeight;
+      if(unitSystem == "Metric") {
+         setList[selectedSetNumber - 1].weightKgs = newWeight;
+      } else if (unitSystem == "Imperial") {
+         setList[selectedSetNumber - 1].weightLbs = newWeight;
+      }
    };
    
    const alternatingColors = ["#D7EBFF", "#C1D4E6"];
@@ -204,7 +213,8 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                               <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => modifyReps(newReps)} />
                               {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
                               {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
-                              <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => modifyWeight(newWeight)} />  
+                              {unitSystem == "Imperial" && <TextInput keyboardType="numeric" defaultValue={data.item.weightLbs.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => modifyWeight(newWeight)} />}
+                              {unitSystem == "Metric" && <TextInput keyboardType="numeric" defaultValue={data.item.weightKgs.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => modifyWeight(newWeight)} />}  
                            </View>
                      )}
                      renderHiddenItem={ (data, rowMap) => (
@@ -313,7 +323,8 @@ const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, 
                                              <View style={{ flexDirection: "row", borderTopWidth: 1, borderColor: "#5782AB" }} key={set.id}>
                                                 <Text style={styles.logPreviewHeaderText}>{"Set " + set.num + ": "}</Text>
                                                 <Text style={styles.logPreviewText}>{"Reps: " + set.reps}</Text>
-                                                <Text style={styles.logPreviewText}> {"Weight (lbs): " + set.weight}</Text>
+                                                {unitSystem == "Imperial" && <Text style={styles.logPreviewText}> {"Weight (lbs): " + set.weightLbs}</Text>}
+                                                {unitSystem == "Metric" && <Text style={styles.logPreviewText}> {"Weight (kgs): " + set.weightKgs}</Text>}
                                              </View>
                                           )
                                        })}

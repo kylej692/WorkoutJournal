@@ -81,7 +81,9 @@ const HomeScreen = () => {
         if (doc.unitSystem == "Imperial" && unitSystem == "Metric") {
           doc.workouts.map((workout) => {
             workout.sets.map((set) => {
-              set.weight = lbToKg(set.weight);
+              if(set.weightKgs == '') {
+                set.weightKgs = lbToKg(set.weightLbs);
+              }
             })
           })
           db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
@@ -89,7 +91,9 @@ const HomeScreen = () => {
         } else if (doc.unitSystem == "Metric" && unitSystem == "Imperial") {
           doc.workouts.map((workout) => {
             workout.sets.map((set) => {
-              set.weight = kgToLb(set.weight);
+              if(set.weightLbs == '') {
+                set.weightLbs = kgToLb(set.weightKgs);
+              }
             })
           })
           db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
@@ -377,6 +381,8 @@ const HomeScreen = () => {
             modifyWorkout={modifyWorkout} 
             deleteWorkout={deleteWorkout} 
             setInfoModalVisible={setInfoModalVisible} 
+            lbToKg={lbToKg}
+            kgToLb={kgToLb}
             unitSystem={unitSystem}
           />
         }
@@ -392,6 +398,8 @@ const HomeScreen = () => {
         <AddRoutineWorkout 
           setRoutineModalVisible={setRoutineModalVisible} 
           addRoutineWorkout={addRoutineWorkout}
+          lbToKg={lbToKg}
+          kgToLb={kgToLb}
           unitSystem={unitSystem} 
         />
       </Modal>
