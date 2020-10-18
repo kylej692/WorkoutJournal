@@ -162,6 +162,20 @@ const ProgressScreen = () => {
           dataSet = [];
           console.log("mode 2")
           setLoaded(true);
+        } else if (mode === "Max Volume") {
+          findUnitSystem(db);
+          setInfo.forEach(function (item, index) {
+            let rep = parseInt(findMax(item, "reps"));
+            let weight = parseInt(findMax(item, "weight"));
+            let maxVol = rep * weight * item.length;
+            dataSet.push(maxVol);
+          });
+          setChartData(dataSet);
+          console.log(dataSet);
+          setDataSetLen(dataSet.length);
+          dataSet = [];
+          console.log("mode 3");
+          setLoaded(true);
         }
       }
     })
@@ -186,6 +200,7 @@ const ProgressScreen = () => {
           }>
           <Picker.Item label="Max Weight" value="Max Weight"/>
           <Picker.Item label="Max Reps" value="Max Reps"/>
+          <Picker.Item label="Max Volume" value="Max Volume"/>
         </Picker>
         <TextInput 
           ref={myTextInput}
