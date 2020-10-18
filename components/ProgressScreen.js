@@ -15,6 +15,7 @@ const ProgressScreen = () => {
   const [chartData, setChartData] = useState([]);
   const [keyPress, setKeyPress] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [exists, setExists] = useState(false);
   const [yAxisSuffix, setYAxisSuffix] = useState("");
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
@@ -111,8 +112,10 @@ const ProgressScreen = () => {
 
     db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
       if (docs.length == 0) {
+        setExists(false);
         Alert.alert("Exercise not found");
       } else {
+        setExists(true);
         sortedDocs = sortItems(docs)
         console.log(sortedDocs);
         
@@ -193,9 +196,9 @@ const ProgressScreen = () => {
             myTextInput.current.clear()
             setKeyPress(true);
         }}/>
-          {keyPress === true && loaded === true && 
+          {keyPress === true && loaded === true && exists === true &&
           <View>
-          <Text>{graphTitle}</Text>
+          <Text style={{fontSize: 18, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>{graphTitle}</Text>
           <ScrollView horizontal={true}>
             <LineChart
               data={{
@@ -228,7 +231,7 @@ const ProgressScreen = () => {
                 }
               }}
               style={{
-                marginVertical: 10,
+                marginVertical: 0,
               }}
             />
           </ScrollView>
