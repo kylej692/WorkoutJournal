@@ -212,44 +212,45 @@ const ProgressScreen = () => {
             setKeyPress(true);
         }}/>
           {keyPress === true && loaded === true && exists === true &&
-          <View>
-          <Text style={{fontSize: 18, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>{graphTitle}</Text>
-          <ScrollView horizontal={true}>
-            <LineChart
-              data={{
-                labels: chartLabel,
-                datasets: [
-                  {
-                    data: chartData,
-                  }
-                ]
-              }}
-              width={findWidth(dataSetLen)}
-              height={470}
-              yAxisSuffix= {yAxisSuffix}
-              yAxisInterval={2} 
-              verticalLabelRotation={0}
-              chartConfig={{
-                backgroundColor: "#ffffff",
-                backgroundGradientFrom: "#2C95FF",
-                backgroundGradientTo: "#2C95FF",
-                decimalPlaces: 0,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {
-                  borderRadius: 16
-                },
-                propsForDots: {
-                  r: "6",
-                  strokeWidth: "2",
-                  stroke: "#2C95FF"
-                }
-              }}
-              style={{
-                marginVertical: 0,
-              }}
-            />
-          </ScrollView>
+            <View style={{backgroundColor: "#2C95FF" }}>
+            <Text style={{fontSize: 18, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>{graphTitle}</Text>
+            <ScrollView horizontal={true}>
+              <LineChart
+                style={{
+                  marginVertical: 10,
+                  marginHorizontal: 20,
+                }}
+                data={{
+                  labels: chartLabel,
+                  datasets: [
+                    {
+                      data: chartData,
+                    }]
+                }}
+                width={findWidth(dataSetLen)}
+                height={470}
+                yAxisSuffix= {yAxisSuffix}
+                chartConfig={{
+                  backgroundColor: "#ffffff",
+                  backgroundGradientFrom: "#2C95FF",
+                  backgroundGradientTo: "#2C95FF",
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                  style: {
+                    borderRadius: 16
+                  },
+                  propsForDots: {
+                    r: "6",
+                    strokeWidth: "2",
+                    stroke: "#2C95FF"
+                  },
+                  propsForBackgroundLines: {
+                    strokeDasharray: '',
+                  },
+                }}
+              />
+            </ScrollView>
           </View>}
       </View>
     );
