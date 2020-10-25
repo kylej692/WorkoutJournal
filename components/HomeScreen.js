@@ -39,6 +39,37 @@ const HomeScreen = () => {
   const [initial, setInitial] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
+  /*
+  db.remove({}, { multi: true }, function (err, numRemoved) {
+  });
+  */
+  /*
+  for(var i = 0; i < 12; i++) {
+    for(var j = 0; j < 25; j++) {
+      var item = {id: uuid(), unitSystem: "Imperial"};
+      var day = j.toString();
+      if (day.length == 1) {
+        day = "0" + day;
+      };
+      var time = {date: monthsInYear[i] + " " + day + ", 2020", start: "9:00am", end: "10:00am"};
+      var workouts = [];
+      for(var k = 0; k < 6; k++) {
+        var workout = {id: uuid(), name: "Test " + k.toString(), notes: ''}
+        var sets = []
+        for(var l = 0; l < 5; l++) {
+          var set = {id: uuid(), num: l + 1, reps: '5', weight: '20'}
+          sets.push(set);
+        }
+        workout.sets = sets;
+        workouts.push(workout);
+      }
+      item.time = time;
+      item.workouts = workouts;
+      db.insert(item);
+    }
+  }
+ */
+
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false)

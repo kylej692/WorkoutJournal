@@ -79,7 +79,7 @@ const ProgressScreen = () => {
       const aDate = new Date(date1 + " " + time1);
       const bDate = new Date(date2 + " " + time2);
 
-      return aDate - bDate;
+      return bDate - aDate;
     });
     return sorted;
   };
@@ -109,6 +109,7 @@ const ProgressScreen = () => {
     //newText = newText.toLowerCase();
     let workoutInfo = [];
     let setInfo = [];
+    let count = 0;
 
     db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
       if (docs.length == 0) {
@@ -118,16 +119,21 @@ const ProgressScreen = () => {
         setExists(true);
         sortedDocs = sortItems(docs)
         console.log(sortedDocs);
-        
-        sortedDocs.forEach(function (item, index) {
-          let workout = item.workouts
-          labels.push(item.time.date);
-          workout.forEach(function (item, index) {
-            if (item.name === textValue) {
-              workoutInfo.push(item);
+
+        for (i = 0; i < sortedDocs.length; i++) {
+          count++;
+          if (count >= 20) {
+            break;
+          }
+          let workout = sortedDocs[i].workouts;
+          labels.unshift(sortedDocs[i].time.date);
+          for (j = 0; j < workout.length; j++) {
+            if (workout[j].name === textValue) {
+              workoutInfo.unshift(workout[j])
             }
-          });
-        });
+          }
+        }
+
         setChartLabel(labels);
         console.log(workoutInfo);
 
@@ -214,11 +220,11 @@ const ProgressScreen = () => {
           {keyPress === true && loaded === true && exists === true &&
             <View style={{backgroundColor: "#2C95FF" }}>
             <Text style={{fontSize: 18, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>{graphTitle}</Text>
+            <Text style={{fontStyle: 'italic', fontSize: 15, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>Last 20 Workouts</Text>
             <ScrollView horizontal={true}>
               <LineChart
                 style={{
-                  marginVertical: 10,
-                  marginHorizontal: 20,
+                  marginHorizontal: 17,
                 }}
                 data={{
                   labels: chartLabel,
@@ -228,7 +234,7 @@ const ProgressScreen = () => {
                     }]
                 }}
                 width={findWidth(dataSetLen)}
-                height={470}
+                height={460}
                 yAxisSuffix= {yAxisSuffix}
                 chartConfig={{
                   backgroundColor: "#ffffff",
