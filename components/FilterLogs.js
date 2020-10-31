@@ -50,10 +50,10 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
 
 
     return (
-        <View style={styles.dropDownMonthsView}>
-            <View style={{ marginLeft: 10 }}>
+        <View style={styles.filterCalendarView}>
+            <View style={styles.calendarFilterBtn}>
                 <TouchableOpacity onPress={showDatepicker}>
-                    <Icon style={{ color: "white" }} name="calendar-alt" size={25}/>
+                    <Icon style={styles.calendarIcon} name="calendar-alt" size={25}/>
                 </TouchableOpacity>
                 {show && (
                     <DateTimePicker
@@ -67,7 +67,7 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                 )}
             </View>
             <View style={styles.dateView}>
-                <Icon style={{ position: "absolute", right: 20, color: "black" }}name="circle" size={11}/>
+                <Icon style={styles.leftCircle} name="circle" size={11}/>
                 <TouchableOpacity 
                     onPress={() => {
                         var currDate = new Date();
@@ -86,16 +86,16 @@ const FilterLogs = ({ filter, setSelectedMonthValue, setSelectedYearValue, setSe
                         }
                     }
                 }>
-                    <Text style={{ fontSize: 17 }}>{selectedMonthValue + " " + selectedDayValue + ", " + selectedYearValue}</Text>
+                    <Text style={styles.dateText}>{selectedMonthValue + " " + selectedDayValue + ", " + selectedYearValue}</Text>
                 </TouchableOpacity>
-                <Icon style={{ position: "absolute", left: 12, color: "black" }}name="circle" size={11}/>
+                <Icon style={styles.rightCircle} name="circle" size={11}/>
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    dropDownMonthsView: {
+    filterCalendarView: {
         flex: 1,
         position: "absolute",
         padding: 10,
@@ -112,6 +112,25 @@ const styles = StyleSheet.create({
         width: 420,
         marginTop: 52,
     },
+    calendarFilterBtn: {
+        marginLeft: 10 
+    },
+    calendarIcon: { 
+        color: "white" 
+    },
+    leftCircle: { 
+        position: "absolute", 
+        right: 20, 
+        color: "black" 
+    },
+    rightCircle: { 
+        position: "absolute", 
+        left: 12, 
+        color: "black" 
+    },
+    dateText: { 
+        fontSize: 17 
+    }
 });
 
 export default FilterLogs;

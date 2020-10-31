@@ -62,21 +62,21 @@ const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
             setDateShow(Platform.OS === 'ios');
             setDate(currentDate);
         }
-      };
+    };
     
-      const showMode = currentMode => {
+    const showMode = currentMode => {
         setDateShow(true);
         setMode(currentMode);
-      };
+    };
     
-      const showDatePicker = () => {
+    const showDatePicker = () => {
         showMode("date");
-      };
+    };
     
-      const showTimePicker = (isStart) => {
+    const showTimePicker = (isStart) => {
         showMode("time");
         setIsStart(isStart);
-      };    
+    };    
 
     return (
         <View>

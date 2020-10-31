@@ -37,7 +37,10 @@ const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineM
 
     return(
         <View>
-            <TouchableOpacity onPress={() => {setRoutineModalVisible(true)}} style={styles.addWorkout}>
+            <TouchableOpacity 
+                onPress={() => {setRoutineModalVisible(true)}} 
+                style={styles.addWorkout}
+            >
                     <Icon color="white" name="ios-add" size={35} />
             </TouchableOpacity>    
             <TouchableOpacity 
