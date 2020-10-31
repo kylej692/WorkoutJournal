@@ -17,10 +17,10 @@ const ProgressScreen = () => {
   const [loaded, setLoaded] = useState(false);
   const [exists, setExists] = useState(false);
   const [yAxisSuffix, setYAxisSuffix] = useState("");
+  const [dataSetLen, setDataSetLen] = useState(0);
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
   let dataSet = [];
-  const [dataSetLen, setDataSetLen] = useState(0);
 
   const findUnitSystem = (db) => {
     db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
@@ -105,8 +105,6 @@ const ProgressScreen = () => {
   };
 
   const findExercise = (textValue, mode) => {
-    //var newText = textValue.replace(/\s/g, '');
-    //newText = newText.toLowerCase();
     let workoutInfo = [];
     let setInfo = [];
     let count = 0;
@@ -118,7 +116,6 @@ const ProgressScreen = () => {
       } else {
         setExists(true);
         sortedDocs = sortItems(docs)
-        console.log(sortedDocs);
 
         for (i = 0; i < sortedDocs.length; i++) {
           count++;
@@ -135,52 +132,50 @@ const ProgressScreen = () => {
         }
 
         setChartLabel(labels);
-        console.log(workoutInfo);
 
         workoutInfo.forEach(function (item, index) {
           setInfo.push(item.sets);
         });
-        console.log(setInfo);
       
         if (mode === "Max Weight") {
           findUnitSystem(db);
+
           setInfo.forEach(function (item, index) {
             let maxWeightStr = findMax(item, "weight");
             let maxWeight = parseInt(maxWeightStr);
             dataSet.push(maxWeight);
           });
+
           setChartData(dataSet);
-          console.log(dataSet);
           setDataSetLen(dataSet.length);
           dataSet = [];
-          console.log("mode 1")
           setLoaded(true);
         } else if (mode === "Max Reps") {
           setYAxisSuffix("reps");
+
           setInfo.forEach(function (item, index) {
             let maxRepStr = findMax(item, "reps");
             let maxRep = parseInt(maxRepStr);
             dataSet.push(maxRep);
           });
+
           setChartData(dataSet);
-          console.log(dataSet);
           setDataSetLen(dataSet.length);
           dataSet = [];
-          console.log("mode 2")
           setLoaded(true);
         } else if (mode === "Max Volume") {
           findUnitSystem(db);
+
           setInfo.forEach(function (item, index) {
             let rep = parseInt(findMax(item, "reps"));
             let weight = parseInt(findMax(item, "weight"));
             let maxVol = rep * weight * item.length;
             dataSet.push(maxVol);
           });
+
           setChartData(dataSet);
-          console.log(dataSet);
           setDataSetLen(dataSet.length);
           dataSet = [];
-          console.log("mode 3");
           setLoaded(true);
         }
       }
@@ -196,7 +191,7 @@ const ProgressScreen = () => {
   }
 
   return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
         <Header title='Progress Tracker'/>
         <Picker
           mode={"dropdown"}
@@ -218,48 +213,71 @@ const ProgressScreen = () => {
             setKeyPress(true);
         }}/>
           {keyPress === true && loaded === true && exists === true &&
-            <View style={{backgroundColor: "#2C95FF" }}>
-            <Text style={{fontSize: 18, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>{graphTitle}</Text>
-            <Text style={{fontStyle: 'italic', fontSize: 15, textAlign: 'center', backgroundColor: "#2C95FF", color: "#ffffff"}}>Last 20 Workouts</Text>
-            <ScrollView horizontal={true}>
-              <LineChart
-                style={{
-                  marginHorizontal: 17,
-                }}
-                data={{
-                  labels: chartLabel,
-                  datasets: [
-                    {
-                      data: chartData,
-                    }]
-                }}
-                width={findWidth(dataSetLen)}
-                height={460}
-                yAxisSuffix= {yAxisSuffix}
-                chartConfig={{
-                  backgroundColor: "#ffffff",
-                  backgroundGradientFrom: "#2C95FF",
-                  backgroundGradientTo: "#2C95FF",
-                  decimalPlaces: 0,
-                  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                  style: {
-                    borderRadius: 16
-                  },
-                  propsForDots: {
-                    r: "6",
-                    strokeWidth: "2",
-                    stroke: "#2C95FF"
-                  },
-                  propsForBackgroundLines: {
-                    strokeDasharray: '',
-                  },
-                }}
-              />
-            </ScrollView>
-          </View>}
+            <View style={styles.graph}>
+              <Text style={styles.graphTitle}>{graphTitle}</Text>
+              <Text style={styles.subTitle}>Last 20 Workouts</Text>
+              <ScrollView horizontal={true}>
+                <LineChart
+                  style={styles.lineChart}
+                  data={{
+                    labels: chartLabel,
+                    datasets: [
+                      {
+                        data: chartData,
+                      }]
+                  }}
+                  width={findWidth(dataSetLen)}
+                  height={460}
+                  yAxisSuffix= {yAxisSuffix}
+                  chartConfig={{
+                    backgroundColor: "#ffffff",
+                    backgroundGradientFrom: "#2C95FF",
+                    backgroundGradientTo: "#2C95FF",
+                    decimalPlaces: 0,
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    style: {
+                      borderRadius: 16
+                    },
+                    propsForDots: {
+                      r: "6",
+                      strokeWidth: "2",
+                      stroke: "#2C95FF"
+                    },
+                    propsForBackgroundLines: {
+                      strokeDasharray: '',
+                    },
+                  }}
+                />
+              </ScrollView>
+            </View>}
       </View>
     );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  graph: {
+    backgroundColor: "#2C95FF"
+  },
+  graphTitle: {
+    fontSize: 18, 
+    textAlign: 'center', 
+    backgroundColor: "#2C95FF", 
+    color: "#ffffff"
+  },
+  subTitle: {
+    fontStyle: 'italic', 
+    fontSize: 15, 
+    textAlign: 'center', 
+    backgroundColor: "#2C95FF", 
+    color: "#ffffff"
+  },
+  lineChart: {
+    marginHorizontal: 17,
+  }
+});
 
 export default ProgressScreen;
