@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Alert, ScrollView, StyleSheet } from 'react-native';
 import Header from './Header';
 import { db } from '../Database.js';
@@ -18,6 +18,7 @@ const ProgressScreen = () => {
   const [exists, setExists] = useState(false);
   const [yAxisSuffix, setYAxisSuffix] = useState("");
   const [dataSetLen, setDataSetLen] = useState(0);
+  const [unitSystem, setUnitSystem] = useState("");
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
   let dataSet = [];
@@ -32,6 +33,19 @@ const ProgressScreen = () => {
     })
   };
 
+  const findUS = (db) => {
+    db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
+      setUnitSystem(doc.unitSystem);
+    })
+    console.log("uh:" + unitSystem);
+  };
+  
+  useEffect (() => {
+    //findUnitSystem(db);
+    findUS(db);
+    console.log("gang");
+  }, [graphTitle])
+  
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
       const month1 = monthsInYear.indexOf(a.time.date.slice(0, 3)) + 1;
@@ -86,13 +100,25 @@ const ProgressScreen = () => {
 
   const findMax = (item, mode) => {
     if (mode === "weight") {
-      let maxWeight = 0;
+      let maxWeightKgs = 0;
+      let maxWeightLbs = 0;
+      let unitS = unitSystem;
+      console.log(unitS);
       item.forEach(function (setInfo, index) {
-        if (setInfo.weight >= maxWeight) {
-          maxWeight = setInfo.weight;
+        if (unitS === "Metric") {
+          if (setInfo.weightKgs >= maxWeightKgs) {
+            maxWeightKgs = setInfo.weightKgs;
+          }
+        } else {
+          if (setInfo.weightLbs >= maxWeightLbs) {
+            maxWeightLbs = setInfo.weightLbs;
+          }
         }
       });
-      return maxWeight;
+      if (unitS === "Metric") {
+        return maxWeightKgs;
+      }
+      return maxWeightLbs;
     } else if (mode === "reps") {
       let maxRep = 0;
       item.forEach(function (setInfo, index) {
