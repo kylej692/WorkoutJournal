@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Text } from 'native-base';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSystem }) => {
+const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, lbToKg, kgToLb, unitSystem }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const deleteCopySet = (setId) => {
@@ -20,7 +20,7 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
 
     const addNewSet = () => {
         var copyWorkout = {...newWorkout};
-        copyWorkout.sets = [...copyWorkout.sets, {id: uuid(), num: copyWorkout.sets.length + 1, reps: 0, weight: 0}];
+        copyWorkout.sets = [...copyWorkout.sets, {id: uuid(), num: copyWorkout.sets.length + 1, reps: 0, weightLbs: 0, weightKgs: 0}];
         setNewWorkout(copyWorkout);
     }
 
@@ -35,7 +35,13 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
     };
 
     const onChangeWeight = (newWeight) => {
-        newWorkout.sets[selectedSetNumber - 1].weight = newWeight;
+        if(unitSystem == "Imperial") {
+            newWorkout.sets[selectedSetNumber - 1].weightLbs = newWeight;
+            newWorkout.sets[selectedSetNumber - 1].weightKgs = lbToKg(newWeight);
+        } else if(unitSystem == "Metric") {
+            newWorkout.sets[selectedSetNumber - 1].weightKgs = newWeight;
+            newWorkout.sets[selectedSetNumber - 1].weightLbs = kgToLb(newWeight);
+        }
         setNewWorkout(newWorkout);
     };
 
@@ -56,21 +62,44 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
             }
             renderItem={(data, rowMap) => (
                 <View style={styles.setView} key={data.item.id}>
-                    <Icon style={{ color: "#2C95FF", top: 22 }} name="angle-right" size={20}/>
+                    <Icon style={styles.angleIcon} name="angle-right" size={20}/>
                     <Text style={styles.labelText}>{"SET " + data.item.num + ":"}</Text>
                     <Text style={styles.infoText}>Reps </Text>
-                    <TextInput keyboardType="numeric" defaultValue={data.item.reps.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newReps) => onChangeReps(newReps)} />
+                    <TextInput 
+                        keyboardType="numeric" 
+                        defaultValue={data.item.reps.toString()} 
+                        style={styles.infoInput} 
+                        onTouchStart={() => setSetNumber(data.item.num)} 
+                        onChangeText={(newReps) => onChangeReps(newReps)} 
+                    />
                     {unitSystem == "Imperial" && <Text style={styles.infoText}>Wt (lbs)</Text>}
                     {unitSystem == "Metric" && <Text style={styles.infoText}>Wt (kgs)</Text>}
-                    <TextInput keyboardType="numeric" defaultValue={data.item.weight.toString()} style={styles.infoInput} onTouchStart={() => setSetNumber(data.item.num)} onChangeText={(newWeight) => onChangeWeight(newWeight)} />  
+                    {unitSystem == "Imperial" && 
+                        <TextInput 
+                            keyboardType="numeric" 
+                            defaultValue={data.item.weightLbs.toString()} 
+                            style={styles.infoInput} 
+                            onTouchStart={() => setSetNumber(data.item.num)} 
+                            onChangeText={(newWeight) => onChangeWeight(newWeight)} 
+                        />
+                    }
+                    {unitSystem == "Metric" && 
+                        <TextInput 
+                            keyboardType="numeric" 
+                            defaultValue={data.item.weightKgs.toString()} 
+                            style={styles.infoInput} 
+                            onTouchStart={() => setSetNumber(data.item.num)} 
+                            onChangeText={(newWeight) => onChangeWeight(newWeight)} 
+                        />
+                    }  
                 </View>
             )}
             renderHiddenItem={ (data, rowMap) => (
-                <TouchableOpacity style={{ top: 18 }} onPress={() => {
+                <TouchableOpacity style={styles.closeIconView} onPress={() => {
                     deleteCopySet(data.item.id)
                 }}>
                     <View style={styles.rowFront}>
-                        <Icon style={{ color: "#BD0000" }} name="times" size={20} />    
+                        <Icon style={styles.closeIcon} name="times" size={20} />    
                     </View>
                 </TouchableOpacity>  
             )}
@@ -82,7 +111,13 @@ const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSy
                     {containsNotes && 
                         <View style={styles.notesView}>
                             <Text style={styles.notesText}><Icon style={styles.notesIcon} name="edit" size={15}/>  Notes</Text>
-                            <TextInput placeholder="Write here..." defaultValue={newWorkout.notes} multiline={true} style={styles.notesInput} onChangeText={onChangeNotes} />
+                            <TextInput 
+                                placeholder="Write here..." 
+                                defaultValue={newWorkout.notes} 
+                                multiline={true} 
+                                style={styles.notesInput} 
+                                onChangeText={onChangeNotes} 
+                            />
                         </View>
                     }
                 </View>
@@ -195,6 +230,16 @@ const styles = StyleSheet.create({
         position: "absolute", 
         bottom: 10, 
         right: 15
+    },
+    angleIcon: { 
+        color: "#2C95FF", 
+        top: 22 
+    },
+    closeIconView: { 
+        top: 18 
+    },
+    closeIcon: { 
+        color: "#BD0000" 
     }
 });
 

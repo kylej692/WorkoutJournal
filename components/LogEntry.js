@@ -12,7 +12,7 @@ const LogEntry = ({ item, toggleInfoModal, toggleDateModal, unitSystem }) => {
                 toggleDateModal(item);
             }}>
                 <Header style={styles.dateHeader}>
-                    <Icon style={{ color: "white", paddingRight: 10 }} name="clock-o" size={18}/>
+                    <Icon style={styles.clockIcon} name="clock-o" size={18}/>
                     <Text style={styles.timeText}>{item.time.start + "-" + item.time.end}</Text>
                 </Header>
             </TouchableOpacity>
@@ -39,6 +39,10 @@ const styles = StyleSheet.create({
         height: 30, 
         alignItems: "center", 
         backgroundColor: "#2C95FF"
+    },
+    clockIcon: { 
+        color: "white", 
+        paddingRight: 10 
     }
   });
 

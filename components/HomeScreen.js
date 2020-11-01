@@ -78,7 +78,9 @@ const HomeScreen = () => {
         if (doc.unitSystem == "Imperial" && unitSystem == "Metric") {
           doc.workouts.map((workout) => {
             workout.sets.map((set) => {
-              set.weight = lbToKg(set.weight);
+              if(set.weightKgs == '') {
+                set.weightKgs = lbToKg(set.weightLbs);
+              }
             })
           })
           db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
@@ -86,7 +88,9 @@ const HomeScreen = () => {
         } else if (doc.unitSystem == "Metric" && unitSystem == "Imperial") {
           doc.workouts.map((workout) => {
             workout.sets.map((set) => {
-              set.weight = kgToLb(set.weight);
+              if(set.weightLbs == '') {
+                set.weightLbs = kgToLb(set.weightKgs);
+              }
             })
           })
           db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
@@ -301,14 +305,14 @@ const HomeScreen = () => {
         setSelectedDayValue={setSelectedDayValue}
       />
       <TouchableOpacity 
-        style={{ bottom: 43, left: 65, width: 30 }} 
+        style={styles.settingsIcon} 
         onPress={() => {setSettingsModalVisible(!isSettingsModalVisible)}}
       >
         <Icon color="white" name="settings" size={25} />
       </TouchableOpacity>
-      {isLoading && <Spinner style={{ marginTop: 20 }} color={"#2C95FF"} />}
+      {isLoading && <Spinner style={styles.spinner} color={"#2C95FF"} />}
       {!isLoading && 
-        <View style={{ marginTop: 10, marginBottom: 90 }}>
+        <View style={styles.flatListView}>
           <FlatList style={styles.content}
             data={sortedItems}
             renderItem={(data) => (
@@ -321,8 +325,8 @@ const HomeScreen = () => {
               />
             )}
             ListEmptyComponent={() => 
-              <View style={{ marginTop: 300, alignItems: "center", justifyContent: "center" }}> 
-                {!isLoading && <Text style={{ fontSize: 20 }}>Log is Empty</Text>}
+              <View style={styles.emptyLogView}> 
+                {!isLoading && <Text style={styles.emptyLogText}>Log is Empty</Text>}
               </View>
             }
             initialNumToRender={6}
@@ -374,6 +378,8 @@ const HomeScreen = () => {
             modifyWorkout={modifyWorkout} 
             deleteWorkout={deleteWorkout} 
             setInfoModalVisible={setInfoModalVisible} 
+            lbToKg={lbToKg}
+            kgToLb={kgToLb}
             unitSystem={unitSystem}
           />
         }
@@ -389,6 +395,8 @@ const HomeScreen = () => {
         <AddRoutineWorkout 
           setRoutineModalVisible={setRoutineModalVisible} 
           addRoutineWorkout={addRoutineWorkout}
+          lbToKg={lbToKg}
+          kgToLb={kgToLb}
           unitSystem={unitSystem} 
         />
       </Modal>
@@ -408,6 +416,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12, 
     right: 5,
+  },
+  settingsIcon: { 
+    bottom: 43, 
+    left: 65, 
+    width: 30 
   },
   settingsModal: {
     marginTop: 265,
@@ -438,6 +451,21 @@ const styles = StyleSheet.create({
       backgroundColor: "white", 
       flex: 1,
       alignItems: "center"
+  },
+  spinner: { 
+    marginTop: 20 
+  },
+  flatListView: { 
+    marginTop: 10,
+    marginBottom: 90 
+  },
+  emptyLogView: { 
+    marginTop: 300, 
+    alignItems: "center", 
+    justifyContent: "center" 
+  },
+  emptyLogText: { 
+    fontSize: 20 
   }
 });
 

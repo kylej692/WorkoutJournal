@@ -43,7 +43,8 @@ class WorkoutListDisplay extends PureComponent {
                                                     <Text style={styles.repsNum}>{setData.item.reps}</Text>
                                                 </View>
                                                 <View style={styles.itemView}>
-                                                    <Text style={styles.weightNum}>{setData.item.weight}</Text>
+                                                    {this.props.unitSystem == "Imperial" && <Text style={styles.weightNum}>{setData.item.weightLbs}</Text>}
+                                                    {this.props.unitSystem == "Metric" && <Text style={styles.weightNum}>{setData.item.weightKgs}</Text>}
                                                 </View>   
                                             </View>                                  
                                         </CardItem>
