@@ -8,8 +8,9 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import AddLogPicker from './AddLogPicker';
 import SetDateTime from './SetDateTime'
 import Routine from './Routine'
+import { db } from '../Database.js';
 
-const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb, db }) => {
+const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb }) => {
    const defaultTime = {
       date: '',
       start: '',

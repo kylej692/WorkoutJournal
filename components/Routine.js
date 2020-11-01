@@ -5,8 +5,9 @@ import { uuid } from 'uuidv4';
 import WorkoutListDisplay from './WorkoutListDisplay'
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
+import { db } from '../Database.js';
 
-const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb, db }) => {
+const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem, lbToKg, kgToLb }) => {
 
     useEffect(() => {
         db.findOne({ routineName: routineName }, function(err, doc) {
