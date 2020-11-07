@@ -10,7 +10,7 @@ import SetDateTime from './SetDateTime'
 import Routine from './Routine'
 import { db } from '../Database.js';
 
-const AddLogButton = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb }) => {
+const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb }) => {
    const defaultTime = {
       date: '',
       start: '',
@@ -717,4 +717,4 @@ const styles = StyleSheet.create ({
    }
 });
 
-export default AddLogButton;
+export default AddLog;

@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert, FlatList, Text, TouchableOpacity } from 'react
 import { Spinner } from 'native-base'
 import Header from './Header';
 import LogEntry from './LogEntry';
-import AddLogButton from './AddLogButton';
+import AddLog from './AddLog';
 import Settings from './Settings';
 import AddRoutineWorkout from './AddRoutineWorkout';
 import 'react-native-get-random-values';
@@ -335,7 +335,7 @@ const HomeScreen = () => {
         </View>
         }
       <View style={styles.button}>
-        <AddLogButton 
+        <AddLog 
           lbToKg={lbToKg}
           kgToLb={kgToLb}
           routine={routine} 
