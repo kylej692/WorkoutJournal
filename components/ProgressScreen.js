@@ -18,7 +18,6 @@ const ProgressScreen = () => {
   const [exists, setExists] = useState(false);
   const [yAxisSuffix, setYAxisSuffix] = useState("");
   const [dataSetLen, setDataSetLen] = useState(0);
-  const [unitSystem, setUnitSystem] = useState("");
   const monthsInYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const labels = [];
   let dataSet = [];
@@ -32,19 +31,6 @@ const ProgressScreen = () => {
       }
     })
   };
-
-  const findUS = (db) => {
-    db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, doc) {
-      setUnitSystem(doc.unitSystem);
-    })
-    console.log("uh:" + unitSystem);
-  };
-  
-  useEffect (() => {
-    //findUnitSystem(db);
-    findUS(db);
-    console.log("gang");
-  }, [graphTitle])
   
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
@@ -98,11 +84,10 @@ const ProgressScreen = () => {
     return sorted;
   };
 
-  const findMax = (item, mode) => {
+  const findMax = (item, mode, unitS) => {
     if (mode === "weight") {
       let maxWeightKgs = 0;
       let maxWeightLbs = 0;
-      let unitS = unitSystem;
       console.log(unitS);
       item.forEach(function (setInfo, index) {
         if (unitS === "Metric") {
@@ -135,76 +120,78 @@ const ProgressScreen = () => {
     let setInfo = [];
     let count = 0;
 
-    db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs) {
-      if (docs.length == 0) {
-        setExists(false);
-        Alert.alert("Exercise not found");
-      } else {
-        setExists(true);
-        sortedDocs = sortItems(docs)
-
-        for (i = 0; i < sortedDocs.length; i++) {
-          count++;
-          if (count >= 20) {
-            break;
-          }
-          let workout = sortedDocs[i].workouts;
-          labels.unshift(sortedDocs[i].time.date);
-          for (j = 0; j < workout.length; j++) {
-            if (workout[j].name === textValue) {
-              workoutInfo.unshift(workout[j])
+    db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, docs1) {
+      db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs2) {
+        if (docs2.length == 0) {
+          setExists(false);
+          Alert.alert("Exercise not found");
+        } else {
+          setExists(true);
+          sortedDocs = sortItems(docs2)
+  
+          for (i = 0; i < sortedDocs.length; i++) {
+            count++;
+            if (count >= 20) {
+              break;
+            }
+            let workout = sortedDocs[i].workouts;
+            labels.unshift(sortedDocs[i].time.date);
+            for (j = 0; j < workout.length; j++) {
+              if (workout[j].name === textValue) {
+                workoutInfo.unshift(workout[j])
+              }
             }
           }
+  
+          setChartLabel(labels);
+  
+          workoutInfo.forEach(function (item, index) {
+            setInfo.push(item.sets);
+          });
+        
+          if (mode === "Max Weight") {
+            findUnitSystem(db);
+  
+            setInfo.forEach(function (item, index) {
+              let maxWeightStr = findMax(item, "weight", docs1.unitSystem);
+              let maxWeight = parseInt(maxWeightStr);
+              dataSet.push(maxWeight);
+            });
+  
+            setChartData(dataSet);
+            setDataSetLen(dataSet.length);
+            dataSet = [];
+            setLoaded(true);
+          } else if (mode === "Max Reps") {
+            setYAxisSuffix("reps");
+  
+            setInfo.forEach(function (item, index) {
+              let maxRepStr = findMax(item, "reps", docs1.unitSystem);
+              let maxRep = parseInt(maxRepStr);
+              dataSet.push(maxRep);
+            });
+  
+            setChartData(dataSet);
+            setDataSetLen(dataSet.length);
+            dataSet = [];
+            setLoaded(true);
+          } else if (mode === "Max Volume") {
+            findUnitSystem(db);
+  
+            setInfo.forEach(function (item, index) {
+              let rep = parseInt(findMax(item, "reps", docs1.unitSystem));
+              let weight = parseInt(findMax(item, "weight", docs1.unitSystem));
+              let maxVol = rep * weight * item.length;
+              dataSet.push(maxVol);
+            });
+  
+            setChartData(dataSet);
+            setDataSetLen(dataSet.length);
+            dataSet = [];
+            setLoaded(true);
+          }
         }
-
-        setChartLabel(labels);
-
-        workoutInfo.forEach(function (item, index) {
-          setInfo.push(item.sets);
-        });
-      
-        if (mode === "Max Weight") {
-          findUnitSystem(db);
-
-          setInfo.forEach(function (item, index) {
-            let maxWeightStr = findMax(item, "weight");
-            let maxWeight = parseInt(maxWeightStr);
-            dataSet.push(maxWeight);
-          });
-
-          setChartData(dataSet);
-          setDataSetLen(dataSet.length);
-          dataSet = [];
-          setLoaded(true);
-        } else if (mode === "Max Reps") {
-          setYAxisSuffix("reps");
-
-          setInfo.forEach(function (item, index) {
-            let maxRepStr = findMax(item, "reps");
-            let maxRep = parseInt(maxRepStr);
-            dataSet.push(maxRep);
-          });
-
-          setChartData(dataSet);
-          setDataSetLen(dataSet.length);
-          dataSet = [];
-          setLoaded(true);
-        } else if (mode === "Max Volume") {
-          findUnitSystem(db);
-
-          setInfo.forEach(function (item, index) {
-            let rep = parseInt(findMax(item, "reps"));
-            let weight = parseInt(findMax(item, "weight"));
-            let maxVol = rep * weight * item.length;
-            dataSet.push(maxVol);
-          });
-
-          setChartData(dataSet);
-          setDataSetLen(dataSet.length);
-          dataSet = [];
-          setLoaded(true);
-        }
-      }
+      })
     })
   };
 
