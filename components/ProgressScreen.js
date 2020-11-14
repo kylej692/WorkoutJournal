@@ -32,6 +32,16 @@ const ProgressScreen = () => {
     })
   };
   
+  const lbToKg = (weight) => {
+    var num = weight * 0.45359237
+    return +num.toFixed(2)
+}
+
+  const kgToLb = (weight) => {
+      var num = weight / 0.45359237
+      return +num.toFixed(2)
+  }
+
   const sortItems = (items) => {
     const sorted = [...items].sort((a, b) => {
       const month1 = monthsInYear.indexOf(a.time.date.slice(0, 3)) + 1;
@@ -92,11 +102,21 @@ const ProgressScreen = () => {
       item.forEach(function (setInfo, index) {
         if (unitS === "Metric") {
           if (setInfo.weightKgs >= maxWeightKgs) {
-            maxWeightKgs = setInfo.weightKgs;
+            if (setInfo.weightKgs === '') {
+              setInfo.weightKgs = lbToKg(setInfo.weightLbs);
+              maxWeightKgs = setInfo.weightKgs;
+            } else {
+              maxWeightKgs = setInfo.weightKgs;
+            }
           }
         } else {
           if (setInfo.weightLbs >= maxWeightLbs) {
-            maxWeightLbs = setInfo.weightLbs;
+            if (setInfo.weightLbs === '') {
+              setInfo.weightLbs = kgToLb(setInfo.weightKgs)
+              maxWeightLgs = setInfo.weightLbs;
+            } else {
+              maxWeightLbs = setInfo.weightLbs;
+            }
           }
         }
       });
@@ -289,7 +309,7 @@ const styles = StyleSheet.create({
     color: "#ffffff"
   },
   lineChart: {
-    marginHorizontal: 17,
+    marginHorizontal: 15,
   }
 });
 
