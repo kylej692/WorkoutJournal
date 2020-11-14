@@ -445,12 +445,12 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   dateModal: {
-      position: "relative",
-      marginTop: 250,
-      marginBottom: 275,
-      backgroundColor: "white", 
-      flex: 1,
-      alignItems: "center"
+    position: "relative",
+    marginTop: 250,
+    marginBottom: 275,
+    backgroundColor: "white", 
+    flex: 1,
+    alignItems: "center"
   },
   spinner: { 
     marginTop: 20 
