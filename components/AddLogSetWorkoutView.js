@@ -351,14 +351,14 @@ const styles = StyleSheet.create ({
        backgroundColor: "#2C95FF",
        padding: 5,
        borderRadius: 8,
-       bottom: 5,
+       marginBottom: 10,
        left: 85,
     },
     clearWorkout: {
        backgroundColor: "#9A9A9A",
        padding: 5,
        borderRadius: 8,
-       bottom: 5,
+       marginBottom: 10,
        right: 85
     },
     buttonText: {
