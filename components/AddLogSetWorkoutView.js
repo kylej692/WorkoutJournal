@@ -5,7 +5,7 @@ import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displaySetWorkout, setWList, workoutList, setNote, createRoutine, unitSystem, displayDate, displayTime, time, setDisplaySetWorkout, setRoutineName }) => {
+const AddLogSetWorkoutView = ({ setList, setSList, note, displaySetWorkout, setWList, workoutList, setNote, createRoutine, unitSystem, displayDate, displayTime, time, setDisplaySetWorkout, setRoutineName }) => {
     
     const defaultWorkout = {
         id: uuid(),
@@ -23,6 +23,7 @@ const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displa
     };
 
     const [workout, setWorkout] = useState(defaultWorkout);
+    const [wName, setWName] = useState('');
     const [set, setSet] = useState(defaultSet);
     const [workoutId, setWorkoutId] = useState('');
     const [selectedSetNumber, setSetNumber] = useState(1);
@@ -173,11 +174,11 @@ const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displa
                             Alert.alert("Can't add a blank set")
                         } else {
                             { 
-                                onChangeSetID(uuid()), 
-                                addSetList(set), 
-                                notifyMessage("Added set"), 
-                                setRep(''), 
-                                setWeight('') 
+                                onChangeSetID(uuid()); 
+                                addSetList(set); 
+                                notifyMessage("Added set"); 
+                                setRep(''); 
+                                setWeight('');
                             }
                         }}}>
                         <Text style={styles.buttonText}>Add Set</Text>
@@ -193,15 +194,15 @@ const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displa
                                     Alert.alert("Please add one or more sets for your workout!")
                                 } else {
                                     { 
-                                    onChangeWorkoutID(uuid()), 
-                                    addWorkoutList(setList, workout), 
-                                    notifyMessage("Added workout"), 
-                                    setWorkout({id: uuid()}), 
-                                    setRep(''), 
-                                    setWeight(''), 
-                                    setWName(''), 
-                                    setNote(''), 
-                                    Keyboard.dismiss() 
+                                    onChangeWorkoutID(uuid()); 
+                                    addWorkoutList(setList, workout); 
+                                    notifyMessage("Added workout"); 
+                                    setWorkout({id: uuid()}); 
+                                    setRep(''); 
+                                    setWeight(''); 
+                                    setWName(''); 
+                                    setNote(''); 
+                                    Keyboard.dismiss(); 
                                     }
                                 }
                             }
@@ -214,14 +215,14 @@ const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displa
                         <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.clearWorkout} 
                             onPress={() => {
-                                setWorkout({id: uuid()}), 
-                                setSList([]), 
-                                setRep(''), 
-                                setWeight(''), 
-                                setWName(''), 
-                                setNote(''), 
-                                setDisplaySetWorkout(true), 
-                                Keyboard.dismiss() 
+                                setWorkout({id: uuid()}); 
+                                setSList([]); 
+                                setRep(''); 
+                                setWeight(''); 
+                                setWName(''); 
+                                setNote(''); 
+                                setDisplaySetWorkout(true); 
+                                Keyboard.dismiss();
                             }
                         }>
                             <Text style={styles.buttonText}>Clear</Text>
@@ -232,16 +233,16 @@ const AddLogSetWorkoutView = ({ setList, setSList, wName, setWName, note, displa
                                     Alert.alert("Please add one or more sets for your workout!")
                                 } else {
                                     { 
-                                    modifyWorkoutList(workoutId, workoutList), 
-                                    notifyMessage("Updated workout"), 
-                                    setWorkout({id: uuid()}), 
-                                    setSList([]), 
-                                    setRep(''), 
-                                    setWeight(''), 
-                                    setWName(''), 
-                                    setNote(''), 
-                                    setDisplaySetWorkout(true), 
-                                    Keyboard.dismiss() 
+                                    modifyWorkoutList(workoutId, workoutList); 
+                                    notifyMessage("Updated workout"); 
+                                    setWorkout({id: uuid()});
+                                    setSList([]); 
+                                    setRep(''); 
+                                    setWeight(''); 
+                                    setWName(''); 
+                                    setNote(''); 
+                                    setDisplaySetWorkout(true); 
+                                    Keyboard.dismiss(); 
                                     }
                                 }
                             }

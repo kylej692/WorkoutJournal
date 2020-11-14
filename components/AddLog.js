@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import 'react-native-get-random-values';
-import { uuid } from 'uuidv4';
 import Header from './Header';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import AddLogPicker from './AddLogPicker';
@@ -23,7 +22,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
    const [date, setDate] = useState(new Date());
    const [workoutList, setWList] = useState([]);
    const [setList, setSList] = useState([]);
-   const [wName, setWName] = useState('');
    const [note, setNote] = useState('');
    const [displayDate, setDisplayDate] = useState(false);
    const [displayTime, setDisplayTime] = useState(false);
@@ -31,9 +29,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
    const [createRoutine, setCreateRoutine] = useState(false);
    const [routineName, setRoutineName] = useState('');
    
-   const clearName = () => {
-      setWName('');
-   };
    const clearNote = () => {
       setNote('');
    };
@@ -100,8 +95,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                   <AddLogSetWorkoutView 
                      setList={setList}
                      setSList={setSList}
-                     wName={wName}
-                     setWName={setWName}
                      note={note}
                      displaySetWorkout={displaySetWorkout}
                      workoutList={workoutList}
@@ -123,12 +116,12 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                            Alert.alert("Please fill everything out!")
                         } else {
                            { 
-                              addLog(time, workoutList), 
-                              toggleModal(!modalVisible), 
-                              setDisplaySetWorkout(true), 
-                              setDisplayDate(false), 
-                              setDisplayTime(false), 
-                              setDate(new Date()) 
+                              addLog(time, workoutList); 
+                              toggleModal(!modalVisible); 
+                              setDisplaySetWorkout(true); 
+                              setDisplayDate(false);
+                              setDisplayTime(false); 
+                              setDate(new Date()); 
                            }
                         } 
                      } else if(createRoutine){
@@ -139,13 +132,13 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                               Alert.alert("Please fill everything out!")
                            } else {
                               { 
-                                 addRoutine(routineName, workoutList), 
-                                 toggleModal(!modalVisible), 
-                                 setDisplaySetWorkout(true), 
-                                 setDisplayDate(false), 
-                                 setDisplayTime(false), 
-                                 setDate(new Date()), 
-                                 setCreateRoutine(false) 
+                                 addRoutine(routineName, workoutList); 
+                                 toggleModal(!modalVisible); 
+                                 setDisplaySetWorkout(true); 
+                                 setDisplayDate(false); 
+                                 setDisplayTime(false); 
+                                 setDate(new Date()); 
+                                 setCreateRoutine(false);
                               }
                            }
                         })
@@ -154,13 +147,13 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                            Alert.alert("Please fill everything out!")
                         } else {
                            { 
-                              addLog(time, routine.workouts), 
-                              toggleModal(!modalVisible), 
-                              setDisplaySetWorkout(true), 
-                              setDisplayDate(false), 
-                              setDisplayTime(false), 
-                              setDate(new Date()), 
-                              setPressedRoutine(false) 
+                              addLog(time, routine.workouts);
+                              toggleModal(!modalVisible); 
+                              setDisplaySetWorkout(true); 
+                              setDisplayDate(false); 
+                              setDisplayTime(false); 
+                              setDate(new Date()); 
+                              setPressedRoutine(false); 
                            }
                         } 
                      }
@@ -170,15 +163,14 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                   <TouchableOpacity 
                      style={styles.cancel} 
                      onPress={() => { 
-                           toggleModal(!modalVisible), 
-                           setDisplaySetWorkout(true), 
-                           setDisplayDate(false), 
-                           setDisplayTime(false), 
-                           clearName(), 
-                           clearNote(), 
-                           setDate(new Date()), 
-                           setCreateRoutine(false), 
-                           setPressedRoutine(false)
+                           toggleModal(!modalVisible); 
+                           setDisplaySetWorkout(true); 
+                           setDisplayDate(false); 
+                           setDisplayTime(false);
+                           clearNote();
+                           setDate(new Date()); 
+                           setCreateRoutine(false); 
+                           setPressedRoutine(false);
                         }
                      }
                   >
@@ -195,7 +187,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                   setTime(defaultTime);
                   setSList([]);
                   setWList([]); 
-                  clearName();
                   clearNote();
                }
             }
