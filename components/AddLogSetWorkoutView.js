@@ -30,8 +30,6 @@ const AddLogSetWorkoutView = ({ setList, setSList, note, displaySetWorkout, setW
     const [rep, setRep] = useState('');
     const [weight, setWeight] = useState('');
 
-    const onChangeWorkoutID = (id) => setWorkout({...workout, id: id});
-
     const onChangeName = (nameValue) => { 
        setWorkout({...workout, name: nameValue });
        setWName(nameValue);
@@ -193,17 +191,14 @@ const AddLogSetWorkoutView = ({ setList, setSList, note, displaySetWorkout, setW
                                 if (setList.length == 0) {
                                     Alert.alert("Please add one or more sets for your workout!")
                                 } else {
-                                    { 
-                                    onChangeWorkoutID(uuid()); 
                                     addWorkoutList(setList, workout); 
                                     notifyMessage("Added workout"); 
-                                    setWorkout({id: uuid()}); 
+                                    setWorkout(defaultWorkout); 
                                     setRep(''); 
                                     setWeight(''); 
                                     setWName(''); 
                                     setNote(''); 
                                     Keyboard.dismiss(); 
-                                    }
                                 }
                             }
                         }>
@@ -215,7 +210,7 @@ const AddLogSetWorkoutView = ({ setList, setSList, note, displaySetWorkout, setW
                         <View style={styles.buttonView}>
                         <TouchableOpacity style={styles.clearWorkout} 
                             onPress={() => {
-                                setWorkout({id: uuid()}); 
+                                setWorkout(defaultWorkout); 
                                 setSList([]); 
                                 setRep(''); 
                                 setWeight(''); 
