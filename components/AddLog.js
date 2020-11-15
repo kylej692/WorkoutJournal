@@ -9,7 +9,7 @@ import Routine from './Routine'
 import AddLogSetWorkoutView from './AddLogSetWorkoutView';
 import { db } from '../Database.js';
 
-const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem, lbToKg, kgToLb }) => {
+const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem }) => {
    
    const defaultTime = {
       date: '',
@@ -85,8 +85,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                         toggleInfoModal={toggleInfoModal} 
                         setRoutineModalVisible={setRoutineModalVisible}
                         unitSystem={unitSystem} 
-                        lbToKg={lbToKg}
-                        kgToLb={kgToLb}
                         db={db}
                      />
                   </View>

@@ -5,7 +5,7 @@ import Header from './Header';
 import SwipeListWorkoutView from './SwipeListWorkoutView';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
-const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible, lbToKg, kgToLb, unitSystem }) => {
+const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible, unitSystem }) => {
     const [newWorkout, setNewWorkout] = useState({...workout})
 
     return (
@@ -15,8 +15,6 @@ const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModal
                 newWorkout={newWorkout} 
                 setNewWorkout={setNewWorkout} 
                 containsNotes={true} 
-                lbToKg={lbToKg}
-                kgToLb={kgToLb}
                 unitSystem={unitSystem}
             />
             <View style={styles.footerView}>
