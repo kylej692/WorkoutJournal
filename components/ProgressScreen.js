@@ -98,7 +98,6 @@ const ProgressScreen = () => {
     if (mode === "weight") {
       let maxWeightKgs = 0;
       let maxWeightLbs = 0;
-      console.log(unitS);
       item.forEach(function (setInfo, index) {
         if (unitS === "Metric") {
           if (setInfo.weightKgs >= maxWeightKgs) {
