@@ -48,22 +48,20 @@ const ProgressScreen = () => {
       let maxWeightLbs = 0;
       item.forEach(function (setInfo, index) {
         if (unitS === "Metric") {
-          if (setInfo.weightKgs >= maxWeightKgs) {
-            if (setInfo.weightKgs === '') {
-              setInfo.weightKgs = lbToKg(setInfo.weightLbs);
-              maxWeightKgs = setInfo.weightKgs;
-            } else {
-              maxWeightKgs = setInfo.weightKgs;
-            }
+          if (setInfo.weightKgs === '') {
+            setInfo.weightKgs = lbToKg(setInfo.weightLbs);
+          }
+          let setWeightKgsInt = parseInt(setInfo.weightKgs);
+          if (setWeightKgsInt >= maxWeightKgs) {
+              maxWeightKgs = setWeightKgsInt;
           }
         } else {
-          if (setInfo.weightLbs >= maxWeightLbs) {
-            if (setInfo.weightLbs === '') {
-              setInfo.weightLbs = kgToLb(setInfo.weightKgs)
-              maxWeightLgs = setInfo.weightLbs;
-            } else {
-              maxWeightLbs = setInfo.weightLbs;
-            }
+          if (setInfo.weightLbs === '') {
+            setInfo.weightLbs = kgToLb(setInfo.weightKgs)
+          }
+          let setWeightLbsInt = parseInt(setInfo.weightLbs);
+          if (setWeightLbsInt >= maxWeightLbs) {
+              maxWeightLbs = setWeightLbsInt;
           }
         }
       });
@@ -74,8 +72,9 @@ const ProgressScreen = () => {
     } else if (mode === "reps") {
       let maxRep = 0;
       item.forEach(function (setInfo, index) {
-        if (setInfo.reps >= maxRep) {
-          maxRep = setInfo.reps;
+        let setRepsInt = parseInt(setInfo.reps);
+        if (setRepsInt >= maxRep) {
+          maxRep = setRepsInt;
         }
       });
       return maxRep;
@@ -88,7 +87,7 @@ const ProgressScreen = () => {
     let count = 0;
 
     db.findOne({ $or: [{ unitSystem: "Metric" }, { unitSystem: "Imperial" }] }, function(err, docs1) {
-      db.find({ "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs2) {
+      db.find({ "routineName": {$exists: false}, "workouts": {$elemMatch:{"name": textValue}} }, function (err, docs2) {
         if (docs2.length == 0) {
           setExists(false);
           Alert.alert("Exercise not found");
@@ -115,7 +114,6 @@ const ProgressScreen = () => {
           workoutInfo.forEach(function (item, index) {
             setInfo.push(item.sets);
           });
-        
           if (mode === "Max Weight") {
             findUnitSystem(db);
   
