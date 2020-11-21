@@ -4,32 +4,13 @@ import { Content, Text } from 'native-base';
 import Header from '../components/Header';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { timeConvertTo12 } from '../utils';
 
 const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const currMonth = months.indexOf(item.time.date.slice(0, 3));
     const currDay = parseInt(item.time.date.slice(4, 6));
     const currYear = parseInt(item.time.date.slice(8, 12));
-
-    const timeConvertTo12 = (time) => {
-        var hour = parseInt(time.slice(0, 2));
-        var minute = time.slice(3, 5);
-        var meridiem;
-        
-        if(hour == 12) {
-            meridiem = "pm";
-        } else if(hour == 0) {
-            hour = 12;
-            meridiem = "am";
-        } else if (hour > 12) {
-            hour = hour - 12;
-            meridiem = "pm";
-        } else {
-            meridiem = "am";
-        }
-
-        return hour + ":" + minute + meridiem;
-    };
     
     const [newDate, setDate] = useState(new Date(currYear, currMonth, currDay));
     const [newDateStr, setDateStr] = useState(item.time.date);

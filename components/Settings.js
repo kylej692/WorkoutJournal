@@ -2,8 +2,10 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
+import { db } from '../Database.js';
+import { lbToKg, kgToLb } from '../utils';
 
-const Settings = ({ items, unitSystem, setUnitSystem, db, kgToLb, lbToKg }) => {
+const Settings = ({ items, unitSystem, setUnitSystem }) => {
     
     return(
         <View>

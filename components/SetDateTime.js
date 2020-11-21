@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {  Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import 'react-native-get-random-values';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { timeConvertTo12 } from '../utils';
 
 const SetDateTime = ({ date, setDate, time, setTime, setDisplayDate, setDisplayTime }) => {
     const [show, setShow] = useState(false);
@@ -11,26 +12,6 @@ const SetDateTime = ({ date, setDate, time, setTime, setDisplayDate, setDisplayT
     const onChangeDate = (dateValue) => setTime({...time, date: dateValue });
     const onChangeStart = (startValue) => setTime({...time, start: startValue });
     const onChangeEnd = (endValue) => setTime({...time, end: endValue });
-
-    const timeConvertTo12 = (time) => {
-        var hour = parseInt(time.slice(0, 2));
-        var minute = time.slice(3, 5);
-        var meridiem;
-        
-        if(hour == 12) {
-            meridiem = "pm";
-        } else if(hour == 0) {
-            hour = 12;
-            meridiem = "am";
-        } else if (hour > 12) {
-            hour = hour - 12;
-            meridiem = "pm";
-        } else {
-            meridiem = "am";
-        }
-  
-        return hour + ":" + minute + meridiem;
-     };
 
     const onChangeTime = (event, selectedDate) => {
         if(event.type === "set") {
@@ -71,7 +52,7 @@ const SetDateTime = ({ date, setDate, time, setTime, setDisplayDate, setDisplayT
         setIsStart(isStart);
      };
 
-    return(
+    return (
         <View style={styles.buttonView}>
             <TouchableOpacity style={styles.time} onPress={showDatepicker}>
                 <Text style={styles.buttonText}> Set Date</Text>

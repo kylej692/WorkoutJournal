@@ -5,8 +5,9 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { lbToKg, kgToLb } from '../utils';
 
-const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, lbToKg, kgToLb, unitSystem }) => {
+const SwipeListWorkoutView = ({ newWorkout, setNewWorkout, containsNotes, unitSystem }) => {
     const [selectedSetNumber, setSetNumber] = useState(1); 
 
     const deleteCopySet = (setId) => {

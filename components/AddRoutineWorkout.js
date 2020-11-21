@@ -5,7 +5,7 @@ import SwipeListWorkoutView from './SwipeListWorkoutView';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 
-const AddRoutineWorkout = ({ setRoutineModalVisible, unitSystem, lbToKg, kgToLb, addRoutineWorkout }) => {
+const AddRoutineWorkout = ({ setRoutineModalVisible, unitSystem, addRoutineWorkout }) => {
     const [newWorkout, setNewWorkout] = useState({id: uuid(), name: "", sets: [{id: uuid(), num: 1, reps: 0, weightKgs: 0, weightLbs: 0}], notes:""})
 
     return(
@@ -15,8 +15,6 @@ const AddRoutineWorkout = ({ setRoutineModalVisible, unitSystem, lbToKg, kgToLb,
                 newWorkout={newWorkout} 
                 setNewWorkout={setNewWorkout} 
                 containsNotes={false} 
-                lbToKg={lbToKg} 
-                kgToLb={kgToLb} 
                 unitSystem={unitSystem}
             />
             <View style={styles.footerView}>

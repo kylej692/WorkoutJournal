@@ -3,8 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import { Picker } from '@react-native-community/picker';
+import { db } from '../Database.js';
 
-const AddLogPicker = ({ setCreateRoutine, setRoutineName, setPressedRoutine, db }) => {
+const AddLogPicker = ({ setCreateRoutine, setRoutineName, setPressedRoutine }) => {
     const [routines, setRoutines] = useState([]);
     const [selectedValue, setSelectedValue] = useState("Add a Log");
 
