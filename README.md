@@ -1,8 +1,7 @@
 ## WorkoutJournal
 A workout tracker app that allows users to log their workouts, create routines, and track their progress over time.
 
-## Installation
-Provide step by step series of examples and explanations about how to get a development env running.
+## Live Demo
 
 ## Screenshots
 <p float="left">
@@ -12,10 +11,9 @@ Provide step by step series of examples and explanations about how to get a deve
   <img src="Images/TimeScreen.png">
 </p>
 
-
 ## Features
 - Easy conversion between Imperial (Lbs) and Metric (Kgs)
-- Add a routine feature for faster addition of workout logs
+- Add a routine for faster addition of workout logs
 - Graph to display your progress in a specified exercise
 - Stopwatch and Timer 
 
