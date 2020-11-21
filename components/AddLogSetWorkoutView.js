@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, ToastAndroid, Keyboard } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
