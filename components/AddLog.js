@@ -105,74 +105,75 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                      setRoutineName={setRoutineName}
                   />
                }
-               <Header/>
-                  <TouchableOpacity style={styles.finish} onPress={() => {
-                     if(!createRoutine && !pressedRoutine){
-                        if(time.date == '' || time.start == '' || time.end == '' || workoutList.length == 0) {
-                           Alert.alert("Please fill everything out!")
-                        } else {
-                           { 
-                              addLog(time, workoutList); 
-                              toggleModal(!modalVisible); 
-                              setDisplaySetWorkout(true); 
-                              setDisplayDate(false);
-                              setDisplayTime(false); 
-                              setDate(new Date()); 
-                           }
-                        } 
-                     } else if(createRoutine){
-                        db.findOne({ routineName: routineName }, function(err, doc) {
-                           if(doc != null && createRoutine) {
-                              Alert.alert("Routine name already exists!");
-                           } else if(routineName == '' || workoutList.length == 0) {
+               <View style={styles.footer}>
+                  <Header/>
+                     <TouchableOpacity style={styles.finish} onPress={() => {
+                        if(!createRoutine && !pressedRoutine){
+                           if(time.date == '' || time.start == '' || time.end == '' || workoutList.length == 0) {
                               Alert.alert("Please fill everything out!")
                            } else {
                               { 
-                                 addRoutine(routineName, workoutList); 
+                                 addLog(time, workoutList); 
+                                 toggleModal(!modalVisible); 
+                                 setDisplaySetWorkout(true); 
+                                 setDisplayDate(false);
+                                 setDisplayTime(false); 
+                                 setDate(new Date()); 
+                              }
+                           } 
+                        } else if(createRoutine){
+                           db.findOne({ routineName: routineName }, function(err, doc) {
+                              if(doc != null && createRoutine) {
+                                 Alert.alert("Routine name already exists!");
+                              } else if(routineName == '' || workoutList.length == 0) {
+                                 Alert.alert("Please fill everything out!")
+                              } else {
+                                 { 
+                                    addRoutine(routineName, workoutList); 
+                                    toggleModal(!modalVisible); 
+                                    setDisplaySetWorkout(true); 
+                                    setDisplayDate(false); 
+                                    setDisplayTime(false); 
+                                    setDate(new Date()); 
+                                    setCreateRoutine(false);
+                                 }
+                              }
+                           })
+                        } else if(pressedRoutine) {
+                           if(time.date == '' || time.start == '' || time.end == '' || routine.workouts.length == 0) {
+                              Alert.alert("Please fill everything out!")
+                           } else {
+                              { 
+                                 addLog(time, routine.workouts);
                                  toggleModal(!modalVisible); 
                                  setDisplaySetWorkout(true); 
                                  setDisplayDate(false); 
                                  setDisplayTime(false); 
                                  setDate(new Date()); 
-                                 setCreateRoutine(false);
+                                 setPressedRoutine(false); 
                               }
-                           }
-                        })
-                     } else if(pressedRoutine) {
-                        if(time.date == '' || time.start == '' || time.end == '' || routine.workouts.length == 0) {
-                           Alert.alert("Please fill everything out!")
-                        } else {
-                           { 
-                              addLog(time, routine.workouts);
+                           } 
+                        }
+                        }}>
+                        <Text style={styles.finishText}>Finish</Text>
+                     </TouchableOpacity>
+                     <TouchableOpacity 
+                        style={styles.cancel} 
+                        onPress={() => { 
                               toggleModal(!modalVisible); 
                               setDisplaySetWorkout(true); 
                               setDisplayDate(false); 
-                              setDisplayTime(false); 
+                              setDisplayTime(false);
+                              clearNote();
                               setDate(new Date()); 
-                              setPressedRoutine(false); 
+                              setCreateRoutine(false); 
+                              setPressedRoutine(false);
                            }
-                        } 
-                     }
-                     }}>
-                     <Text style={styles.finishText}>Finish</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                     style={styles.cancel} 
-                     onPress={() => { 
-                           toggleModal(!modalVisible); 
-                           setDisplaySetWorkout(true); 
-                           setDisplayDate(false); 
-                           setDisplayTime(false);
-                           clearNote();
-                           setDate(new Date()); 
-                           setCreateRoutine(false); 
-                           setPressedRoutine(false);
                         }
-                     }
-                  >
-                     <Text style={styles.cancelText}>Cancel</Text>
-                  </TouchableOpacity>
-
+                     >
+                        <Text style={styles.cancelText}>Cancel</Text>
+                     </TouchableOpacity>
+               </View>
             </View>
          </Modal>
          
@@ -264,6 +265,12 @@ const styles = StyleSheet.create ({
       fontSize: 16,
       right: 10
    },
+   footer: { 
+      position: 'absolute', 
+      height: 60, 
+      width: 412, 
+      bottom: 0 
+   }
 });
 
 export default AddLog;
