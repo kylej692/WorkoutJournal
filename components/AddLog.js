@@ -88,22 +88,24 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                   </View>
                }
                {!pressedRoutine &&
-                  <AddLogSetWorkoutView 
-                     setList={setList}
-                     setSList={setSList}
-                     note={note}
-                     displaySetWorkout={displaySetWorkout}
-                     workoutList={workoutList}
-                     setWList={setWList}
-                     setNote={setNote}
-                     createRoutine={createRoutine}
-                     unitSystem={unitSystem}
-                     displayDate={displayDate}
-                     displayTime={displayTime}
-                     time={time}
-                     setDisplaySetWorkout={setDisplaySetWorkout}
-                     setRoutineName={setRoutineName}
-                  />
+                  <View style={createRoutine ? styles.createRoutine : styles.notCreateRoutine}>
+                     <AddLogSetWorkoutView 
+                        setList={setList}
+                        setSList={setSList}
+                        note={note}
+                        displaySetWorkout={displaySetWorkout}
+                        workoutList={workoutList}
+                        setWList={setWList}
+                        setNote={setNote}
+                        createRoutine={createRoutine}
+                        unitSystem={unitSystem}
+                        displayDate={displayDate}
+                        displayTime={displayTime}
+                        time={time}
+                        setDisplaySetWorkout={setDisplaySetWorkout}
+                        setRoutineName={setRoutineName}
+                     />
+                  </View>
                }
                <View style={styles.footer}>
                   <Header/>
@@ -270,6 +272,12 @@ const styles = StyleSheet.create ({
       height: 60, 
       width: 412, 
       bottom: 0 
+   },
+   createRoutine: {
+      marginBottom: 120
+   },
+   notCreateRoutine: {
+      maringBottom: 181
    }
 });
 
