@@ -114,6 +114,9 @@ const HomeScreen = () => {
       Alert.alert("Please enter a workout!")
     } else {
       var id = uuid()
+      workouts.forEach(function(info, index) {
+        info.name = info.name.trim();
+      });
       var newItem = {id: id, time: time, workouts: workouts, unitSystem: unitSystem};
       db.insert(newItem, function(err, newDoc) {
         if(time.date.slice(0, 3) === selectedMonthValue && time.date.slice(8, 12) === selectedYearValue && time.date.slice(4, 6) === selectedDayValue) {
@@ -126,11 +129,15 @@ const HomeScreen = () => {
   };
 
   const addRoutine = (routineName, workouts) => {
+    workouts.forEach(function(info, index) {
+      info.name = info.name.trim();
+    });
     var newItem = { id: uuid(), routineName: routineName, workouts: workouts, unitSystem: unitSystem};
     db.insert(newItem);
   };
 
   const addRoutineWorkout = (workout) => {
+    workout.name = workout.name.trim();
     db.findOne({ id: routine.id }, function(err, doc) {
       doc.workouts.push(workout)
       db.update({ id: routine.id }, { $set: { workouts: doc.workouts } })
@@ -161,7 +168,7 @@ const HomeScreen = () => {
 
   const modifyWorkout = (itemId, modifiedWorkout) => {
     db.findOne({ id: itemId }, function(err, doc) {
-
+      modifiedWorkout.name = modifiedWorkout.name.trim();
       for (var i = 0; i < doc.workouts.length; i++){
         if(doc.workouts[i].id == modifiedWorkout.id) {
           doc.workouts[i] = modifiedWorkout;
@@ -192,6 +199,7 @@ const HomeScreen = () => {
   };
 
   const modifyRoutineWorkout = (routineId, modifiedWorkout) => {
+      modifiedWorkout.name = modifiedWorkout.name.trim();
       db.findOne({ id: routineId }, function(err, doc) {
           for (var i = 0; i < doc.workouts.length; i++){
               if(doc.workouts[i].id == modifiedWorkout.id) {
