@@ -53,7 +53,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                   setCreateRoutine={setCreateRoutine} 
                   setPressedRoutine={setPressedRoutine} 
                   setRoutineName={setRoutineName}
-                  db={db} 
                />
                {(!createRoutine || pressedRoutine) &&
                   <SetDateTime 
@@ -85,7 +84,6 @@ const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRou
                         toggleInfoModal={toggleInfoModal} 
                         setRoutineModalVisible={setRoutineModalVisible}
                         unitSystem={unitSystem} 
-                        db={db}
                      />
                   </View>
                }
