@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Spinner } from 'native-base'
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import WorkoutListDisplay from './WorkoutListDisplay'
@@ -9,8 +10,17 @@ import { db } from '../Database.js';
 import { lbToKg, kgToLb } from '../utils';
 
 const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem }) => {
+    
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 200);
+    }, [])
+
+    useEffect(() => {
+        setIsLoading(true);
         db.findOne({ routineName: routineName }, function(err, doc) {
             if(doc.unitSystem == "Metric" && unitSystem == "Imperial") {
                 doc.workouts.map((workout) => {
@@ -33,44 +43,52 @@ const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineM
                 db.update({ id: doc.id }, { $set: { workouts: doc.workouts} });
                 db.update({ id: doc.id }, { $set: { unitSystem: "Metric"} });
             } 
-            setRoutine(doc)
+            setRoutine(doc);
         });
+
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 200);
+
     }, [routineName])
 
     return(
-        <View>
-            <TouchableOpacity 
-                onPress={() => {setRoutineModalVisible(true)}} 
-                style={styles.addWorkout}
-            >
-                    <Icon color="white" name="ios-add" size={35} />
-            </TouchableOpacity>    
-            <TouchableOpacity 
-                onPress={() => {
-                    db.remove({ id: routine.id }, {}, function() {
-                        setModal(false);
-                        setPressedRoutine(false);
-                    });
-                }}
-                style={styles.deleteRoutine}
-            >
-                <Icon2 color="white" name="trash" size={20} />
-            </TouchableOpacity>   
-            <View style={styles.workoutsView}>
-                <WorkoutListDisplay 
-                    item={routine} 
-                    toggleInfoModal={toggleInfoModal}
-                    unitSystem={unitSystem}
-                    key={uuid()} 
-                />
+            <View>
+                <TouchableOpacity 
+                    onPress={() => {setRoutineModalVisible(true)}} 
+                    style={styles.addWorkout}
+                >
+                        <Icon color="white" name="ios-add" size={35} />
+                </TouchableOpacity>    
+                <TouchableOpacity 
+                    onPress={() => {
+                        db.remove({ id: routine.id }, {}, function() {
+                            setModal(false);
+                            setPressedRoutine(false);
+                        });
+                    }}
+                    style={styles.deleteRoutine}
+                >
+                    <Icon2 color="white" name="trash" size={20} />
+                </TouchableOpacity>   
+                {isLoading && <Spinner style={styles.spinner} color={"#2C95FF"} />}
+                {!isLoading &&
+                    <View style={styles.workoutsView}>
+                        <WorkoutListDisplay 
+                            item={routine} 
+                            toggleInfoModal={toggleInfoModal}
+                            unitSystem={unitSystem}
+                            key={uuid()} 
+                        />
+                    </View>
+                }
             </View>
-        </View>
     )
 }
 
 const styles = StyleSheet.create({ 
     workoutsView: {
-        marginTop: 10,
+        bottom: 16,
         marginLeft: 5,
         marginRight: 5,
         height: 525
@@ -81,10 +99,13 @@ const styles = StyleSheet.create({
         right: 15
     },
     deleteRoutine: {
-        position: "absolute",
-        bottom: 650,
+        alignSelf: "flex-start",
+        bottom: 135,
         left: 15
-    }
+    },
+    spinner: { 
+        marginTop: 30 
+    },
 })
 
 export default Routine;
