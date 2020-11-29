@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Spinner } from 'native-base'
+import { Spinner } from 'native-base';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
-import WorkoutListDisplay from './WorkoutListDisplay'
+import WorkoutListDisplay from '../WorkoutListDisplay';
 import Icon from 'react-native-vector-icons/dist/Ionicons';
 import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
-import { db } from '../Database.js';
-import { lbToKg, kgToLb } from '../utils';
+import { db } from '../../Database.js';
+import { lbToKg, kgToLb } from '../../utils';
 
 const Routine = ({ setModal, routine, setPressedRoutine, setRoutine, setRoutineModalVisible, toggleInfoModal, routineName, unitSystem }) => {
     

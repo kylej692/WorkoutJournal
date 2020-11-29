@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
-import Header from '../components/Header';
-import SwipeListWorkoutView from './SwipeListWorkoutView';
+import Header from '../Header';
+import SwipeListWorkoutView from '../SwipeListWorkoutView';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 

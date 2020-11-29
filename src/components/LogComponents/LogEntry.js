@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Header, Text } from 'native-base';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import WorkoutListDisplay from './WorkoutListDisplay';
+import WorkoutListDisplay from '../WorkoutListDisplay';
 
 const LogEntry = ({ item, toggleInfoModal, toggleDateModal, unitSystem }) => {
 

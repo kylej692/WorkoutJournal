@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import StopWatch from './StopWatch';
-import Timer from './Timer';
+import StopWatch from '../components/TimerComponents/StopWatch';
+import Timer from '../components/TimerComponents/Timer';
 
 const TimeScreen = () => {
   return (

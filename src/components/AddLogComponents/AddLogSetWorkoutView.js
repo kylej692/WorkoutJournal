@@ -4,7 +4,7 @@ import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { notifyMessage } from '../utils'
+import { notifyMessage } from '../../utils';
 
 const AddLogSetWorkoutView = ({ setList, setSList, note, displaySetWorkout, setWList, workoutList, setNote, createRoutine, unitSystem, displayDate, displayTime, time, setDisplaySetWorkout, setRoutineName }) => {
     
