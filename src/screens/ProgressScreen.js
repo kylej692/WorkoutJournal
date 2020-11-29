@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, Alert, ScrollView, StyleSheet } from 'react-native';
-import Header from './Header';
+import Header from '../components/Header';
 import { db } from '../Database.js';
 import { Picker } from '@react-native-community/picker';
 import { LineChart } from 'react-native-chart-kit';

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import 'react-native-get-random-values';
-import Header from './Header';
+import Header from '../Header';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import AddLogPicker from './AddLogPicker';
-import SetDateTime from './SetDateTime'
-import Routine from './Routine'
+import SetDateTime from '../SetDateTime'
+import Routine from '../RoutineComponents/Routine'
 import AddLogSetWorkoutView from './AddLogSetWorkoutView';
-import { db } from '../Database.js';
+import { db } from '../../Database.js';
 
 const AddLog = ({ routine, setRoutine, pressedRoutine, setPressedRoutine, setRoutineModalVisible, toggleInfoModal, addLog, addRoutine, unitSystem }) => {
    

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Alert, FlatList, Text, TouchableOpacity } from 'react-native';
 import { Spinner } from 'native-base'
-import Header from './Header';
-import LogEntry from './LogEntry';
-import AddLog from './AddLog';
-import Settings from './Settings';
-import AddRoutineWorkout from './AddRoutineWorkout';
+import Header from '../components/Header';
+import LogEntry from '../components/LogComponents/LogEntry';
+import AddLog from '../components/AddLogComponents/AddLog';
+import Settings from '../components/Settings';
+import AddRoutineWorkout from '../components/RoutineComponents/AddRoutineWorkout';
 import 'react-native-get-random-values';
 import { uuid } from 'uuidv4';
-import FilterLogs from './FilterLogs';
+import FilterLogs from '../components/FilterLogs';
 import Modal from 'react-native-modal';
-import ModifyLog from '../components/ModifyLog';
-import ModifyDate from '../components/ModifyDate';
+import ModifyLog from '../components/LogComponents/ModifyLog';
+import ModifyDate from '../components//LogComponents/ModifyDate';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import { db } from '../Database.js';
 import { lbToKg, kgToLb, sortItems } from '../utils';

@@ -3,9 +3,9 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './components/HomeScreen';
-import ProgressScreen from './components/ProgressScreen';
-import TimeScreen from './components/TimeScreen';
+import HomeScreen from './screens/HomeScreen';
+import ProgressScreen from './screens/ProgressScreen';
+import TimeScreen from './screens/TimeScreen';
 
 const Tab = createBottomTabNavigator();
 

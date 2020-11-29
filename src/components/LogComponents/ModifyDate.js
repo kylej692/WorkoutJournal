@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Content, Text } from 'native-base';
-import Header from '../components/Header';
+import Header from '../Header';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { timeConvertTo12 } from '../utils';
+import { timeConvertTo12 } from '../../utils';
 
 const ModifyDate = ({ item, modifyDateTime, setDateModalVisible }) => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text } from 'native-base';
-import Header from './Header';
-import SwipeListWorkoutView from './SwipeListWorkoutView';
+import Header from '../Header';
+import SwipeListWorkoutView from '../SwipeListWorkoutView';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 
 const ModifyLog = ({ itemId, workout, modifyWorkout, deleteWorkout, setInfoModalVisible, unitSystem }) => {
