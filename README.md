@@ -5,12 +5,12 @@ A workout tracker app that allows users to log their workouts, create routines, 
 
 ## Screenshots
 <p float="left">
-  <img src="Images/HomeScreen.png" width="250">
-  <img src="Images/AddLog.png" width="250">
-  <img src="Images/ProgressTracker.png" width="250">
-  <img src="Images/TimeScreen.png" width="250">
-  <img src="Images/Routine.png" width="250">
-  <img src="Images/EditLog.png" width="250">
+  <img src="images/HomeScreen.png" width="250">
+  <img src="images/AddLog.png" width="250">
+  <img src="images/ProgressTracker.png" width="250">
+  <img src="images/TimeScreen.png" width="250">
+  <img src="images/Routine.png" width="250">
+  <img src="images/EditLog.png" width="250">
 </p>
 
 ## Features
