@@ -291,14 +291,12 @@ const HomeScreen = () => {
           addLog={addItem} 
           addRoutine={addRoutine} 
           unitSystem={unitSystem} 
-          db={db} 
         />
       </View>
       <Modal onRequestClose={() => setSettingsModalVisible(!isSettingsModalVisible)} isVisible={ isSettingsModalVisible } style={styles.settingsModal}>
         <Settings 
           unitSystem={unitSystem}
           setUnitSystem={setUnitSystem} 
-          db={db} 
           items={items} 
         />
       </Modal>
