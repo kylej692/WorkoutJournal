@@ -277,7 +277,7 @@ const styles = StyleSheet.create ({
       marginBottom: 120
    },
    notCreateRoutine: {
-      maringBottom: 181
+      marginBottom: 181
    }
 });
 
