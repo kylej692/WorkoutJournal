@@ -60,17 +60,18 @@ const StopWatch = () => {
 const styles = StyleSheet.create({
   container: { 
     alignSelf: "center",
+    marginTop: 110,
   },
   header: {
     color: 'black', 
     fontSize: 20, 
-    marginBottom: 40, 
     textAlign: 'center',
   },
   display: {
     color: 'black', 
     textDecorationLine: 'underline', 
     fontSize: 40, 
+    marginTop: 30,
     textAlign: "center",
   },
   button: {
