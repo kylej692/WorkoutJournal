@@ -1,14 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import StopWatch from '../components/TimerComponents/StopWatch';
 import Timer from '../components/TimerComponents/Timer';
 
 const TimeScreen = () => {
   return (
-      <View style={{backgroundColor: '#C8DEFF', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <ScrollView style={{backgroundColor: '#C8DEFF' }} contentContainerStyle={{paddingBottom: 50}}>
         <StopWatch/>
         <Timer/>
-      </View>
+    </ScrollView>
     );
 };
 

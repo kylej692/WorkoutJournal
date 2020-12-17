@@ -121,13 +121,13 @@ const Timer = () => {
 const styles = StyleSheet.create ({
   container: {
     borderTopWidth: 1, 
-    marginTop: 50,
+    marginTop: 60,
     alignSelf: 'center',
   },
   header: {
     color: 'black',
     fontSize: 20,
-    marginTop: 40,
+    marginTop: 70,
     textAlign: 'center',
   },
   display: {
