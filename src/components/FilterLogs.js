@@ -102,15 +102,14 @@ const styles = StyleSheet.create({
         marginTop: 7
     },
     dateView: { 
-        flex: 1,
         flexDirection: "row",
-        position: "absolute",
         justifyContent: "center", 
         alignItems: "center", 
         backgroundColor: "#9AC2FF", 
         height: 35,
-        width: 420,
-        marginTop: 52,
+        width: "139%",
+        marginTop: 16,
+        marginLeft: -10
     },
     calendarFilterBtn: {
         marginLeft: 10 
@@ -118,17 +117,20 @@ const styles = StyleSheet.create({
     calendarIcon: { 
         color: "white" 
     },
-    leftCircle: { 
-        position: "absolute", 
-        right: 20, 
+    leftCircle: {  
+        alignSelf: "flex-start",
+        right: 150,
+        top: 12,
         color: "black" 
     },
     rightCircle: { 
-        position: "absolute", 
-        left: 12, 
+        alignSelf: "flex-end",
+        left: 110,
+        bottom: 12,
         color: "black" 
     },
     dateText: { 
+        right: 15,
         fontSize: 17 
     }
 });
