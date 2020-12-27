@@ -2,7 +2,7 @@
 A workout tracker app that allows users to log their workouts, create routines, and track their progress over time.
 
 ## Installation
-Download the apk file here: https://drive.google.com/file/d/15y0McTgP3DGgfXFnu9YP9p9zqo_eRuZD/view?usp=sharing
+Download the apk file here: https://drive.google.com/file/d/1pis3rLNy_WB-javc4nNqWAge_wkpHQTC/view?usp=sharing
 
 ## Screenshots
 <p float="left">
